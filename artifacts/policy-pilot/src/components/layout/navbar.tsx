@@ -11,7 +11,6 @@ export default function Navbar() {
           PolicyPilot
         </Link>
         <div className="flex items-center gap-4 text-sm font-medium text-muted-foreground hidden sm:flex">
-          <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-primary" /> IRDAI Approved</span>
           <span>100% Secure</span>
         </div>
       </div>

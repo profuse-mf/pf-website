@@ -145,7 +145,7 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
                                 <SelectValue placeholder="Select Year" />
                               </SelectTrigger>
                             </FormControl>
-                            <SelectContent>
+                            <SelectContent className="max-h-48 overflow-y-auto">
                               {Array.from({ length: 25 }).map((_, i) => {
                                 const year = (new Date().getFullYear() - i).toString();
                                 return <SelectItem key={year} value={year}>{year}</SelectItem>;
