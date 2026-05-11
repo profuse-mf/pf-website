@@ -531,7 +531,7 @@ export const BIKE_BRANDS: Brand[] = [
   {
     id: "kawasaki",
     name: "Kawasaki",
-    logoUrl: "https://logo.clearbit.com/kawasaki.com",
+    logoUrl: "https://logo.clearbit.com/kawasaki-india.com",
     models: [
       { name: "Ninja 300", bodyType: "sports", variants: ["ABS"] },
       { name: "Ninja 400", bodyType: "sports", variants: ["ABS", "KRT Edition"] },
