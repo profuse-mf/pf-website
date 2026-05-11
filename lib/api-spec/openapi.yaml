@@ -3,13 +3,17 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: PolicyPilot API specification
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: leads
+    description: Lead capture operations
+  - name: partners
+    description: Insurance partner operations
 paths:
   /healthz:
     get:
@@ -24,6 +28,81 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /leads:
+    post:
+      operationId: submitLead
+      tags: [leads]
+      summary: Submit a lead
+      description: Capture user details and selected insurance partner
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LeadInput"
+      responses:
+        "201":
+          description: Lead created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Lead"
+        "400":
+          description: Invalid input
+
+    get:
+      operationId: listLeads
+      tags: [leads]
+      summary: List all leads
+      description: Get all captured leads
+      responses:
+        "200":
+          description: List of leads
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Lead"
+
+  /leads/stats:
+    get:
+      operationId: getLeadStats
+      tags: [leads]
+      summary: Get lead statistics
+      description: Aggregated stats about leads by insurance type and partner
+      responses:
+        "200":
+          description: Lead stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LeadStats"
+
+  /partners:
+    get:
+      operationId: listPartners
+      tags: [partners]
+      summary: List insurance partners
+      description: Get all available insurance partners filtered by vehicle type
+      parameters:
+        - name: vehicleType
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [car, bike]
+      responses:
+        "200":
+          description: List of partners
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Partner"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +113,136 @@ components:
       required:
         - status
 
+    LeadInput:
+      type: object
+      required:
+        - insuranceType
+        - registrationNumber
+        - mobileNumber
+        - pinCode
+        - policyExpiryDate
+        - registrationYear
+        - carModel
+        - partnerId
+        - partnerName
+        - partnerUrl
+      properties:
+        insuranceType:
+          type: string
+          enum: [car, bike]
+        registrationNumber:
+          type: string
+        mobileNumber:
+          type: string
+        pinCode:
+          type: string
+        policyExpiryDate:
+          type: string
+        registrationYear:
+          type: string
+        carModel:
+          type: string
+        partnerId:
+          type: string
+        partnerName:
+          type: string
+        partnerUrl:
+          type: string
+
+    Lead:
+      type: object
+      required:
+        - id
+        - insuranceType
+        - registrationNumber
+        - mobileNumber
+        - pinCode
+        - policyExpiryDate
+        - registrationYear
+        - carModel
+        - partnerId
+        - partnerName
+        - partnerUrl
+        - createdAt
+      properties:
+        id:
+          type: integer
+        insuranceType:
+          type: string
+        registrationNumber:
+          type: string
+        mobileNumber:
+          type: string
+        pinCode:
+          type: string
+        policyExpiryDate:
+          type: string
+        registrationYear:
+          type: string
+        carModel:
+          type: string
+        partnerId:
+          type: string
+        partnerName:
+          type: string
+        partnerUrl:
+          type: string
+        createdAt:
+          type: string
+
+    LeadStats:
+      type: object
+      required:
+        - totalLeads
+        - carLeads
+        - bikeLeads
+        - partnerBreakdown
+      properties:
+        totalLeads:
+          type: integer
+        carLeads:
+          type: integer
+        bikeLeads:
+          type: integer
+        partnerBreakdown:
+          type: array
+          items:
+            $ref: "#/components/schemas/PartnerStat"
+
+    PartnerStat:
+      type: object
+      required:
+        - partnerName
+        - count
+      properties:
+        partnerName:
+          type: string
+        count:
+          type: integer
+
+    Partner:
+      type: object
+      required:
+        - id
+        - name
+        - url
+        - vehicleTypes
+        - logoUrl
+        - tagline
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        url:
+          type: string
+        vehicleTypes:
+          type: array
+          items:
+            type: string
+        logoUrl:
+          type: string
+        tagline:
+          type: string
+        highlight:
+          type: ["string", "null"]

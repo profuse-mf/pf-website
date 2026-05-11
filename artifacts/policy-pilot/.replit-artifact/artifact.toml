@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "PolicyPilot"
+version = "1.0.0"
+id = "artifacts/policy-pilot"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 19160
+
+[services.development]
+run = "pnpm --filter @workspace/policy-pilot run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/policy-pilot", "run", "build" ]
+publicDir = "artifacts/policy-pilot/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "19160"
+BASE_PATH = "/"
