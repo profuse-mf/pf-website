@@ -177,7 +177,7 @@ export default function VehicleSelector({
                         <span className={`text-sm font-medium block truncate ${isSelected ? "text-primary" : "text-foreground group-hover:text-primary"}`}>
                           {model.name}
                         </span>
-                        <span className="text-xs text-muted-foreground">{typeLabel}</span>
+                        {vehicleType === "car" && <span className="text-xs text-muted-foreground">{typeLabel}</span>}
                       </div>
                     </div>
                     <div className="flex items-center gap-1.5 shrink-0 ml-2">
