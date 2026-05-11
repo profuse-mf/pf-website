@@ -166,18 +166,11 @@ export default function VehicleSelector({
                     `}
                   >
                     <div className="flex items-center gap-3 min-w-0">
-                      {vehicleType === "car" && (
-                        <VehicleTypeIcon
-                          bodyType={model.bodyType}
-                          vehicleType="car"
-                          className={`w-10 h-5 shrink-0 ${colorClass}`}
-                        />
-                      )}
                       <div className="min-w-0">
                         <span className={`text-sm font-medium block truncate ${isSelected ? "text-primary" : "text-foreground group-hover:text-primary"}`}>
                           {model.name}
                         </span>
-                        {vehicleType === "car" && <span className="text-xs text-muted-foreground">{typeLabel}</span>}
+                        <span className="text-xs text-muted-foreground">{typeLabel}</span>
                       </div>
                     </div>
                     <div className="flex items-center gap-1.5 shrink-0 ml-2">
