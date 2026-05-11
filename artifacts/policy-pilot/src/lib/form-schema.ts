@@ -8,6 +8,8 @@ export const formSchema = z.object({
   policyExpiryDate: z.string().min(1, "Expiry date is required"),
   registrationYear: z.string().min(4, "Year is required"),
   carModel: z.string().min(1, "Model is required"),
+  carVariant: z.string().optional(),
+  previousYearClaim: z.enum(["yes", "no"]).optional(),
 });
 
 export type FormValues = z.infer<typeof formSchema>;

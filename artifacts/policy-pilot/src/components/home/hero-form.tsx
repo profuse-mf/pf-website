@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { motion } from "framer-motion";
-import { Car, Bike, ShieldCheck, Zap, Users, CheckCircle2, ChevronDown } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Car, Bike, ShieldCheck, Zap, Users, CheckCircle2, ChevronDown, AlertCircle } from "lucide-react";
 import { FormValues, formSchema } from "@/lib/form-schema";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,8 @@ interface HeroFormProps {
   defaultValues: FormValues | null;
 }
 
+const CURRENT_YEAR = new Date().getFullYear();
+
 export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -26,11 +28,28 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
       policyExpiryDate: "",
       registrationYear: "",
       carModel: "",
+      carVariant: "",
+      previousYearClaim: undefined,
     },
   });
 
   const watchType = form.watch("insuranceType");
+  const watchYear = form.watch("registrationYear");
+  const watchModel = form.watch("carModel");
+  const watchVariant = form.watch("carVariant");
+  const watchClaim = form.watch("previousYearClaim");
+
+  const isOldVehicle = watchYear
+    ? CURRENT_YEAR - parseInt(watchYear) > 1
+    : false;
+
   const [selectorOpen, setSelectorOpen] = useState(false);
+
+  const modelDisplayValue = watchModel
+    ? watchVariant
+      ? `${watchModel} · ${watchVariant}`
+      : watchModel
+    : "";
 
   return (
     <div className="flex-1 flex flex-col">
@@ -47,7 +66,7 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
             <p className="text-lg text-muted-foreground">
               Compare 6+ top insurers, get unbiased recommendations, and save up to 80% on your premium. Like a sharp-suited advisor in your pocket.
             </p>
-            
+
             <div className="flex flex-wrap gap-4 pt-4">
               <div className="flex items-center gap-2 text-sm font-medium">
                 <CheckCircle2 className="w-5 h-5 text-primary" />
@@ -67,9 +86,9 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
           <div className="bg-card border shadow-xl rounded-2xl p-6 lg:p-8 relative">
             <div className="absolute -top-4 -right-4 w-20 h-20 bg-primary/10 rounded-full blur-2xl" />
             <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-primary/10 rounded-full blur-2xl" />
-            
+
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 relative z-10">
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 relative z-10">
                 <div className="space-y-4">
                   <div>
                     <h3 className="text-xl font-bold mb-4">Your Vehicle Details</h3>
@@ -84,7 +103,11 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
                                 type="button"
                                 variant="outline"
                                 className={`h-14 border-2 flex items-center justify-center gap-2 ${field.value === "car" ? "border-primary bg-primary/5 text-primary" : ""}`}
-                                onClick={() => field.onChange("car")}
+                                onClick={() => {
+                                  field.onChange("car");
+                                  form.setValue("carModel", "");
+                                  form.setValue("carVariant", "");
+                                }}
                               >
                                 <Car className="w-5 h-5" />
                                 Car
@@ -93,7 +116,11 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
                                 type="button"
                                 variant="outline"
                                 className={`h-14 border-2 flex items-center justify-center gap-2 ${field.value === "bike" ? "border-primary bg-primary/5 text-primary" : ""}`}
-                                onClick={() => field.onChange("bike")}
+                                onClick={() => {
+                                  field.onChange("bike");
+                                  form.setValue("carModel", "");
+                                  form.setValue("carVariant", "");
+                                }}
                               >
                                 <Bike className="w-5 h-5" />
                                 Bike
@@ -141,7 +168,14 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Reg. Year</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <Select
+                            onValueChange={(val) => {
+                              field.onChange(val);
+                              const isOld = CURRENT_YEAR - parseInt(val) > 1;
+                              if (!isOld) form.setValue("previousYearClaim", undefined);
+                            }}
+                            defaultValue={field.value}
+                          >
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select Year" />
@@ -149,7 +183,7 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
                             </FormControl>
                             <SelectContent className="max-h-48 overflow-y-auto">
                               {Array.from({ length: 25 }).map((_, i) => {
-                                const year = (new Date().getFullYear() - i).toString();
+                                const year = (CURRENT_YEAR - i).toString();
                                 return <SelectItem key={year} value={year}>{year}</SelectItem>;
                               })}
                             </SelectContent>
@@ -176,7 +210,7 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
                               `}
                             >
                               <span className="truncate">
-                                {field.value || (watchType === "car" ? "Select brand & model" : "Select brand & model")}
+                                {modelDisplayValue || (watchType === "car" ? "Select brand & model" : "Select brand & model")}
                               </span>
                               <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0 ml-2" />
                             </button>
@@ -187,15 +221,73 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
                             onOpenChange={setSelectorOpen}
                             vehicleType={watchType}
                             value={field.value}
+                            variant={watchVariant ?? ""}
                             onChange={(val) => {
                               field.onChange(val);
-                              setSelectorOpen(false);
+                            }}
+                            onVariantChange={(v) => {
+                              form.setValue("carVariant", v, { shouldValidate: true });
                             }}
                           />
                         </FormItem>
                       )}
                     />
                   </div>
+
+                  <AnimatePresence>
+                    {isOldVehicle && (
+                      <motion.div
+                        key="claim-question"
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.25, ease: "easeInOut" }}
+                        className="overflow-hidden"
+                      >
+                        <FormField
+                          control={form.control}
+                          name="previousYearClaim"
+                          render={({ field }) => (
+                            <FormItem>
+                              <div className="rounded-xl border bg-muted/40 p-4 space-y-3">
+                                <div className="flex items-center gap-2">
+                                  <AlertCircle className="w-4 h-4 text-primary shrink-0" />
+                                  <FormLabel className="text-sm font-semibold m-0">
+                                    Have you made a claim in your current policy?
+                                  </FormLabel>
+                                </div>
+                                <div className="grid grid-cols-2 gap-3">
+                                  <button
+                                    type="button"
+                                    onClick={() => field.onChange("yes")}
+                                    className={`py-2.5 rounded-lg border-2 text-sm font-semibold transition-all
+                                      ${field.value === "yes"
+                                        ? "border-primary bg-primary/10 text-primary"
+                                        : "border-border bg-card text-foreground hover:border-primary/50"
+                                      }`}
+                                  >
+                                    Yes
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => field.onChange("no")}
+                                    className={`py-2.5 rounded-lg border-2 text-sm font-semibold transition-all
+                                      ${field.value === "no"
+                                        ? "border-primary bg-primary/10 text-primary"
+                                        : "border-border bg-card text-foreground hover:border-primary/50"
+                                      }`}
+                                  >
+                                    No
+                                  </button>
+                                </div>
+                              </div>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
 
                   <div className="grid sm:grid-cols-2 gap-4">
                     <FormField
@@ -235,7 +327,7 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
           </div>
         </div>
       </section>
-      
+
       <section className="bg-white py-12 border-t">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="grid md:grid-cols-3 gap-8 text-center">
