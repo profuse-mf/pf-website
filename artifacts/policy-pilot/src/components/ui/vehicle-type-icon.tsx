@@ -52,330 +52,142 @@ interface IconProps {
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
-   CAR ICONS  –  smooth bezier-curve side-profile silhouettes, nose right
+   CAR ICONS — clean minimal line drawings, no body fill, front faces RIGHT.
+   Stroke-only body; glass area gets a very subtle transparent fill only.
+   Wheels: open circles with small hub dot.
 ───────────────────────────────────────────────────────────────────────────── */
 
+const STROKE = { stroke: "currentColor", strokeWidth: 1.5, strokeLinejoin: "round" as const, strokeLinecap: "round" as const, fill: "none" };
+const GLASS = { fill: "currentColor", fillOpacity: 0.13, stroke: "currentColor", strokeWidth: 1, strokeLinejoin: "round" as const };
+const WHEEL_OUTER = { fill: "none", stroke: "currentColor", strokeWidth: 1.5 };
+const WHEEL_HUB = { fill: "currentColor", fillOpacity: 0.55 };
+
 function HatchbackIcon({ className = "w-8 h-4" }: IconProps) {
+  // Compact, steep angled rear (2-box). Roof sits between y=5–6.
   return (
-    <svg viewBox="0 0 64 32" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M4,26 C4,24 5,21 8,19 L16,11 C19,8 26,6 36,5.5 C46,5 54,6.5 58,9 C61,11 63,15 63,19 L63,26 Z"
-        fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
-      <path d="M16,11 C19,8 26,6 36,5.5 C46,5 54,6.5 58,9 C61,11 62,15 62,19 L9,19 Z"
-        fill="currentColor" fillOpacity="0.4"/>
-      <circle cx="14" cy="26" r="5.5" fill="white" stroke="currentColor" strokeWidth="1.4"/>
-      <circle cx="14" cy="26" r="1.8" fill="currentColor" fillOpacity="0.5"/>
-      <circle cx="52" cy="26" r="5.5" fill="white" stroke="currentColor" strokeWidth="1.4"/>
-      <circle cx="52" cy="26" r="1.8" fill="currentColor" fillOpacity="0.5"/>
+    <svg viewBox="0 0 58 28" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path {...STROKE} d="M4,23 L4,20 L8,14 L14,6 L42,6 L50,14 L54,20 L54,23 Z" />
+      <path {...GLASS} d="M14,6 L42,6 L50,14 L8,14 Z" />
+      <circle {...WHEEL_OUTER} cx="13" cy="23" r="5" />
+      <circle {...WHEEL_HUB} cx="13" cy="23" r="1.7" />
+      <circle {...WHEEL_OUTER} cx="45" cy="23" r="5" />
+      <circle {...WHEEL_HUB} cx="45" cy="23" r="1.7" />
     </svg>
   );
 }
 
 function SedanIcon({ className = "w-9 h-4" }: IconProps) {
+  // 3-box: distinct trunk behind the C-pillar line. Longer roof.
   return (
-    <svg viewBox="0 0 72 32" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M4,26 C4,24 5,22 7,21 L10,21 L19,12 C22,9 29,7 40,6.5 C52,6 61,7 66,9.5 C69,11 70,15 70,20 L70,26 Z"
-        fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
-      <path d="M19,12 C22,9 29,7 40,6.5 C52,6 61,7 66,9.5 C69,11 69.5,15 69.5,20 L12,20 L10,21 Z"
-        fill="currentColor" fillOpacity="0.4"/>
-      <circle cx="15" cy="26" r="5.5" fill="white" stroke="currentColor" strokeWidth="1.4"/>
-      <circle cx="15" cy="26" r="1.8" fill="currentColor" fillOpacity="0.5"/>
-      <circle cx="58" cy="26" r="5.5" fill="white" stroke="currentColor" strokeWidth="1.4"/>
-      <circle cx="58" cy="26" r="1.8" fill="currentColor" fillOpacity="0.5"/>
+    <svg viewBox="0 0 66 28" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path {...STROKE} d="M4,23 L4,20 L10,17 L14,14 L19,6 L47,6 L55,14 L60,20 L60,23 Z" />
+      {/* trunk lid horizontal gives the 3-box look: from x=4–14 below beltline */}
+      <path {...GLASS} d="M19,6 L47,6 L55,14 L14,14 Z" />
+      <circle {...WHEEL_OUTER} cx="14" cy="23" r="5" />
+      <circle {...WHEEL_HUB} cx="14" cy="23" r="1.7" />
+      <circle {...WHEEL_OUTER} cx="52" cy="23" r="5" />
+      <circle {...WHEEL_HUB} cx="52" cy="23" r="1.7" />
     </svg>
   );
 }
 
 function SuvIcon({ className = "w-8 h-4" }: IconProps) {
+  // Tall, boxy, near-vertical sides. Roof at y=3 (tallest body type).
   return (
-    <svg viewBox="0 0 66 32" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M4,25 C4,23 5,20 7,18 L8,7 C8,5 11,3.5 15,3.5 L51,3.5 C55,3.5 58,5.5 60,8.5 L62,14 L63,19 L63,25 Z"
-        fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
-      <path d="M8,7 C8,5 11,4 15,4 L51,4 C55,4 58,6 59.5,9 L61.5,14 L62,19 L7,19 Z"
-        fill="currentColor" fillOpacity="0.4"/>
-      <circle cx="16" cy="25" r="6" fill="white" stroke="currentColor" strokeWidth="1.4"/>
-      <circle cx="16" cy="25" r="2" fill="currentColor" fillOpacity="0.5"/>
-      <circle cx="52" cy="25" r="6" fill="white" stroke="currentColor" strokeWidth="1.4"/>
-      <circle cx="52" cy="25" r="2" fill="currentColor" fillOpacity="0.5"/>
+    <svg viewBox="0 0 58 28" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path {...STROKE} d="M4,23 L4,19 L6,3 L52,3 L54,19 L54,23 Z" />
+      <path {...GLASS} d="M6,3 L52,3 L54,14 L6,14 Z" />
+      <circle {...WHEEL_OUTER} cx="13" cy="23" r="5.5" />
+      <circle {...WHEEL_HUB} cx="13" cy="23" r="1.9" />
+      <circle {...WHEEL_OUTER} cx="45" cy="23" r="5.5" />
+      <circle {...WHEEL_HUB} cx="45" cy="23" r="1.9" />
     </svg>
   );
 }
 
 function CompactSuvIcon({ className = "w-8 h-4" }: IconProps) {
+  // Slightly lower than full SUV. Rear has a gentle slope inward.
   return (
-    <svg viewBox="0 0 62 32" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M4,25 C4,23 5,20 7,18 L10,9 C11,7 14.5,5 18.5,4.5 L44,4.5 C48,4.5 51,6.5 54,10 L57,16 L58,21 L58,25 Z"
-        fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
-      <path d="M10,9 C11,7 14.5,5.5 18.5,5 L44,5 C48,5 51,7 53.5,10 L56.5,16 L56.5,19 L7,19 Z"
-        fill="currentColor" fillOpacity="0.4"/>
-      <circle cx="15" cy="25" r="5.5" fill="white" stroke="currentColor" strokeWidth="1.4"/>
-      <circle cx="15" cy="25" r="1.8" fill="currentColor" fillOpacity="0.5"/>
-      <circle cx="47" cy="25" r="5.5" fill="white" stroke="currentColor" strokeWidth="1.4"/>
-      <circle cx="47" cy="25" r="1.8" fill="currentColor" fillOpacity="0.5"/>
+    <svg viewBox="0 0 58 28" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path {...STROKE} d="M4,23 L4,19 L8,5 L48,5 L54,18 L54,23 Z" />
+      <path {...GLASS} d="M8,5 L48,5 L54,15 L8,15 Z" />
+      <circle {...WHEEL_OUTER} cx="13" cy="23" r="5" />
+      <circle {...WHEEL_HUB} cx="13" cy="23" r="1.7" />
+      <circle {...WHEEL_OUTER} cx="45" cy="23" r="5" />
+      <circle {...WHEEL_HUB} cx="45" cy="23" r="1.7" />
     </svg>
   );
 }
 
-function MuvIcon({ className = "w-9 h-4" }: IconProps) {
+function MuvIcon({ className = "w-8 h-4" }: IconProps) {
+  // Van/people-carrier: very tall, flat roof, nearly vertical windscreen & rear.
+  // B and C pillars visible as internal lines.
   return (
-    <svg viewBox="0 0 72 32" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M4,25 L4,8 C4,5.5 6.5,4 10,4 L62,4 C65.5,4 68,6 68,9 L68,25 Z"
-        fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
-      <rect x="9"  y="6.5" width="13" height="10" rx="1.5" fill="currentColor" fillOpacity="0.4"/>
-      <rect x="25" y="6.5" width="16" height="10" rx="1.5" fill="currentColor" fillOpacity="0.4"/>
-      <rect x="45" y="6.5" width="14" height="10" rx="1.5" fill="currentColor" fillOpacity="0.4"/>
-      <circle cx="15" cy="25" r="5.5" fill="white" stroke="currentColor" strokeWidth="1.4"/>
-      <circle cx="15" cy="25" r="1.8" fill="currentColor" fillOpacity="0.5"/>
-      <circle cx="57" cy="25" r="5.5" fill="white" stroke="currentColor" strokeWidth="1.4"/>
-      <circle cx="57" cy="25" r="1.8" fill="currentColor" fillOpacity="0.5"/>
+    <svg viewBox="0 0 58 28" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path {...STROKE} d="M4,23 L4,18 L6,2 L52,2 L54,18 L54,23 Z" />
+      {/* Three window bays separated by pillars */}
+      <path {...GLASS} d="M6,2 L52,2 L54,14 L6,14 Z" />
+      <line {...STROKE} strokeWidth={1} x1="21" y1="2" x2="21" y2="14" />
+      <line {...STROKE} strokeWidth={1} x1="37" y1="2" x2="37" y2="14" />
+      <circle {...WHEEL_OUTER} cx="13" cy="23" r="5" />
+      <circle {...WHEEL_HUB} cx="13" cy="23" r="1.7" />
+      <circle {...WHEEL_OUTER} cx="45" cy="23" r="5" />
+      <circle {...WHEEL_HUB} cx="45" cy="23" r="1.7" />
     </svg>
   );
 }
 
 function CrossoverIcon({ className = "w-8 h-4" }: IconProps) {
+  // Raised hatchback — slightly taller body than hatchback, rear slopes like a hatch.
   return (
-    <svg viewBox="0 0 66 32" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M4,25 C4,23 5,20 7,18 L10,10 C11,7.5 14,5.5 19,5 L37,4 C48,4 57,7 62,14 L63,20 L63,25 Z"
-        fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
-      <path d="M10,10 C11,7.5 14,5.5 19,5.5 L37,4.5 C48,4.5 57,7.5 61.5,14 L62,19 L7,19 Z"
-        fill="currentColor" fillOpacity="0.4"/>
-      <circle cx="15" cy="25" r="5.5" fill="white" stroke="currentColor" strokeWidth="1.4"/>
-      <circle cx="15" cy="25" r="1.8" fill="currentColor" fillOpacity="0.5"/>
-      <circle cx="52" cy="25" r="5.5" fill="white" stroke="currentColor" strokeWidth="1.4"/>
-      <circle cx="52" cy="25" r="1.8" fill="currentColor" fillOpacity="0.5"/>
+    <svg viewBox="0 0 58 28" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path {...STROKE} d="M4,23 L4,19 L8,13 L14,5 L44,5 L52,13 L54,19 L54,23 Z" />
+      <path {...GLASS} d="M14,5 L44,5 L52,13 L8,13 Z" />
+      <circle {...WHEEL_OUTER} cx="13" cy="23" r="5.5" />
+      <circle {...WHEEL_HUB} cx="13" cy="23" r="1.9" />
+      <circle {...WHEEL_OUTER} cx="45" cy="23" r="5.5" />
+      <circle {...WHEEL_HUB} cx="45" cy="23" r="1.9" />
     </svg>
   );
 }
 
 function ElectricIcon({ className = "w-8 h-4" }: IconProps) {
+  // Aerodynamic hatchback/crossover silhouette + lightning bolt on body.
   return (
-    <svg viewBox="0 0 66 32" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M4,26 C4,24 5,22 7,21 L10,21 L19,11 C22,8.5 29,7 39,6.5 C51,6 61,7 65,10 C66,12 66,16 66,21 L66,26 Z"
-        fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
-      <path d="M19,11 C22,8.5 29,7 39,6.5 C51,6 61,7 65,10 C65.5,12 65.5,15 65.5,21 L12,21 L10,21 Z"
-        fill="currentColor" fillOpacity="0.38"/>
-      <path d="M33,9 L30,16 L34,16 L31,23 L39,14 L35,14 Z" fill="white" fillOpacity="0.9"/>
-      <circle cx="15" cy="26" r="5.5" fill="white" stroke="currentColor" strokeWidth="1.4"/>
-      <circle cx="15" cy="26" r="1.8" fill="currentColor" fillOpacity="0.5"/>
-      <circle cx="55" cy="26" r="5.5" fill="white" stroke="currentColor" strokeWidth="1.4"/>
-      <circle cx="55" cy="26" r="1.8" fill="currentColor" fillOpacity="0.5"/>
+    <svg viewBox="0 0 58 28" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path {...STROKE} d="M4,23 L4,20 L9,14 L15,6 L44,6 L52,14 L54,20 L54,23 Z" />
+      <path {...GLASS} d="M15,6 L44,6 L52,14 L9,14 Z" />
+      {/* Lightning bolt centred in body */}
+      <path fill="currentColor" fillOpacity={0.75} d="M26,9 L23,15 L27,15 L24,22 L32,14 L28,14 Z" />
+      <circle {...WHEEL_OUTER} cx="13" cy="23" r="5" />
+      <circle {...WHEEL_HUB} cx="13" cy="23" r="1.7" />
+      <circle {...WHEEL_OUTER} cx="45" cy="23" r="5" />
+      <circle {...WHEEL_HUB} cx="45" cy="23" r="1.7" />
     </svg>
   );
 }
 
 function LuxuryIcon({ className = "w-10 h-4" }: IconProps) {
+  // Very long wheelbase, very low roofline (3-box, but stretched).
   return (
-    <svg viewBox="0 0 80 32" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M4,26 C4,24 5,22 7,21 L10,21 L21,12 C24,9.5 32,7.5 44,7 C57,6.5 67,7.5 72,10.5 C75,12.5 76,16 76,21 L76,26 Z"
-        fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
-      <path d="M21,12 C24,9.5 32,7.5 44,7 C57,6.5 67,7.5 72,10.5 C75,12.5 75.5,16 75.5,21 L14,21 L10,21 Z"
-        fill="currentColor" fillOpacity="0.4"/>
-      <circle cx="16" cy="26" r="5.5" fill="white" stroke="currentColor" strokeWidth="1.4"/>
-      <circle cx="16" cy="26" r="1.8" fill="currentColor" fillOpacity="0.5"/>
-      <circle cx="65" cy="26" r="5.5" fill="white" stroke="currentColor" strokeWidth="1.4"/>
-      <circle cx="65" cy="26" r="1.8" fill="currentColor" fillOpacity="0.5"/>
+    <svg viewBox="0 0 76 28" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path {...STROKE} d="M4,23 L4,20 L10,17 L14,14 L20,7 L56,7 L64,14 L70,20 L70,23 Z" />
+      <path {...GLASS} d="M20,7 L56,7 L64,14 L14,14 Z" />
+      <circle {...WHEEL_OUTER} cx="14" cy="23" r="5" />
+      <circle {...WHEEL_HUB} cx="14" cy="23" r="1.7" />
+      <circle {...WHEEL_OUTER} cx="60" cy="23" r="5" />
+      <circle {...WHEEL_HUB} cx="60" cy="23" r="1.7" />
     </svg>
   );
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
-   BIKE ICONS  –  professional smooth-curve filled silhouettes, front wheel right
-   All viewBox="0 0 56 28" (2:1) to match w-7 h-3.5 badge container.
-   Body filled at 0.15 opacity + stroke; seat/tank at 0.4; wheels white + hub.
+   BIKE ICONS — kept in the map for data consistency; vehicle-selector
+   does NOT render them for the bike model step (bikes show label text only).
 ───────────────────────────────────────────────────────────────────────────── */
 
-function CommuterIcon({ className = "w-7 h-3.5" }: IconProps) {
-  // Naked standard bike: upright stance, clear tank hump, neutral proportions
-  return (
-    <svg viewBox="0 0 56 28" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Body: from rear wheel over tank to front fork */}
-      <path
-        d="M11,22 C11,17 15,13 20,10 C24,8.5 30,7.5 36,7.5 C40,7 43,8.5 46,12 L47,18 L47,22 L38,24 L16,24 Z"
-        fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round"
-      />
-      {/* Tank + seat area */}
-      <path
-        d="M20,10 L36,7.5 C40,7 43,8.5 44,11 L44,14 L20,14 Z"
-        fill="currentColor" fillOpacity="0.42"
-      />
-      {/* Handlebars */}
-      <line x1="40" y1="5.5" x2="49" y2="5.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
-      {/* Front fork */}
-      <line x1="45" y1="11" x2="47.5" y2="5.5" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/>
-      {/* Rear wheel */}
-      <circle cx="11" cy="22" r="5.5" fill="white" stroke="currentColor" strokeWidth="1.4"/>
-      <circle cx="11" cy="22" r="1.8" fill="currentColor" fillOpacity="0.5"/>
-      {/* Front wheel */}
-      <circle cx="45" cy="22" r="5.5" fill="white" stroke="currentColor" strokeWidth="1.4"/>
-      <circle cx="45" cy="22" r="1.8" fill="currentColor" fillOpacity="0.5"/>
-    </svg>
-  );
-}
-
-function ScooterIcon({ className = "w-7 h-3.5" }: IconProps) {
-  // Step-through scooter: rounded cowl, floorboard gap, front shield, small wheels
-  return (
-    <svg viewBox="0 0 50 28" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Rear cowl (seat + tail section) */}
-      <path
-        d="M8,22 C8,18 10,13 14,10 C17,8.5 22,8 26,8 L26,21 C22,21 14,21 8,22 Z"
-        fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round"
-      />
-      {/* Front shield / apron */}
-      <path
-        d="M26,8 C30,7.5 35,9 39,12 C42,15 43,19 43,22 L35,22 L26,22 Z"
-        fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round"
-      />
-      {/* Seat */}
-      <path
-        d="M14,10 C17,8.5 22,8 26,8 L26,11.5 C22,11 17,10.5 14,13 Z"
-        fill="currentColor" fillOpacity="0.42"
-      />
-      {/* Front panel highlight */}
-      <path
-        d="M28,9 C32,8.5 36,10 39,13 L37,14 C34,11 30,9.5 28,9 Z"
-        fill="currentColor" fillOpacity="0.25"
-      />
-      {/* Handlebars */}
-      <line x1="33" y1="7" x2="43" y2="7" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
-      {/* Front fork */}
-      <line x1="39" y1="11" x2="41" y2="7" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/>
-      {/* Rear wheel (small) */}
-      <circle cx="9" cy="22" r="5" fill="white" stroke="currentColor" strokeWidth="1.4"/>
-      <circle cx="9" cy="22" r="1.6" fill="currentColor" fillOpacity="0.5"/>
-      {/* Front wheel (small) */}
-      <circle cx="41" cy="22" r="5" fill="white" stroke="currentColor" strokeWidth="1.4"/>
-      <circle cx="41" cy="22" r="1.6" fill="currentColor" fillOpacity="0.5"/>
-    </svg>
-  );
-}
-
-function SportsIcon({ className = "w-7 h-3.5" }: IconProps) {
-  // Full-fairing sportbike: low aggressive profile, enclosed body, windscreen
-  return (
-    <svg viewBox="0 0 56 28" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Full fairing body — smooth, enclosed shape */}
-      <path
-        d="M11,22 C11,18 14,14 19,12 L26,11 C30,10.5 34,10.5 38,11 C43,12 47,16 47,22 L38,24 C34,25 18,25 14,24 Z"
-        fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round"
-      />
-      {/* Windscreen / nose fairing */}
-      <path
-        d="M38,11 C42,8.5 47,10.5 47,15 L44,14 Z"
-        fill="currentColor" fillOpacity="0.38"
-      />
-      {/* Seat hump (rear, higher than tank) */}
-      <path
-        d="M19,12 L26,11 L26,14 L19,15 Z"
-        fill="currentColor" fillOpacity="0.42"
-      />
-      {/* Low clip-on handlebars */}
-      <line x1="37" y1="10" x2="46" y2="11" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
-      {/* Front fork (steeply angled for sportbike) */}
-      <line x1="44" y1="13" x2="46.5" y2="9.5" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/>
-      {/* Rear wheel */}
-      <circle cx="11" cy="22" r="5.5" fill="white" stroke="currentColor" strokeWidth="1.4"/>
-      <circle cx="11" cy="22" r="1.8" fill="currentColor" fillOpacity="0.5"/>
-      {/* Front wheel */}
-      <circle cx="45" cy="22" r="5.5" fill="white" stroke="currentColor" strokeWidth="1.4"/>
-      <circle cx="45" cy="22" r="1.8" fill="currentColor" fillOpacity="0.5"/>
-    </svg>
-  );
-}
-
-function CruiserIcon({ className = "w-8 h-3.5" }: IconProps) {
-  // Royal Enfield / Avenger style: long wheelbase, low flat seat, wide swept bars
-  return (
-    <svg viewBox="0 0 64 28" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Body: long, low, flat profile */}
-      <path
-        d="M12,22 C12,18 15,15 20,13 L30,12 C36,11.5 44,11.5 48,12 C52,13 55,16 55,22 L46,24 L16,24 Z"
-        fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round"
-      />
-      {/* Wide flat seat + tank */}
-      <path
-        d="M22,13 L44,12 C48,11.5 51,12.5 52,14.5 L52,17 L22,17 Z"
-        fill="currentColor" fillOpacity="0.42"
-      />
-      {/* Wide swept-back handlebars (signature cruiser look) */}
-      <line x1="44" y1="9" x2="57" y2="8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
-      {/* Front fork */}
-      <line x1="52" y1="13" x2="55" y2="8" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/>
-      {/* Rear wheel (large) */}
-      <circle cx="12" cy="22" r="6" fill="white" stroke="currentColor" strokeWidth="1.4"/>
-      <circle cx="12" cy="22" r="2" fill="currentColor" fillOpacity="0.5"/>
-      {/* Front wheel (large) */}
-      <circle cx="52" cy="22" r="6" fill="white" stroke="currentColor" strokeWidth="1.4"/>
-      <circle cx="52" cy="22" r="2" fill="currentColor" fillOpacity="0.5"/>
-    </svg>
-  );
-}
-
-function AdventureIcon({ className = "w-7 h-3.5" }: IconProps) {
-  // RE Himalayan / KTM Adventure: tall stance, large front wheel, upright, beak
-  return (
-    <svg viewBox="0 0 56 28" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Tall body — significantly higher roofline */}
-      <path
-        d="M11,22 C11,16 14,11 19,8.5 L28,7 C32,6.5 36,7 40,9 C44,11 47.5,15 48,22 L38,24 L16,24 Z"
-        fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round"
-      />
-      {/* ADV beak / front fairing piece */}
-      <path
-        d="M38,9 C42,6.5 48,9 48,13.5 L44.5,12 Z"
-        fill="currentColor" fillOpacity="0.38"
-      />
-      {/* High narrow seat */}
-      <path
-        d="M19,8.5 L28,7 L28,10.5 L19,12 Z"
-        fill="currentColor" fillOpacity="0.42"
-      />
-      {/* High wide handlebars */}
-      <line x1="38" y1="6" x2="50" y2="6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
-      {/* Upright front fork */}
-      <line x1="45" y1="9.5" x2="48" y2="6" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/>
-      {/* Rear wheel */}
-      <circle cx="11" cy="22" r="5.5" fill="white" stroke="currentColor" strokeWidth="1.4"/>
-      <circle cx="11" cy="22" r="1.8" fill="currentColor" fillOpacity="0.5"/>
-      {/* Front wheel (larger, off-road ready) */}
-      <circle cx="46" cy="22" r="6" fill="white" stroke="currentColor" strokeWidth="1.4"/>
-      <circle cx="46" cy="22" r="2" fill="currentColor" fillOpacity="0.5"/>
-    </svg>
-  );
-}
-
-function ElectricBikeIcon({ className = "w-7 h-3.5" }: IconProps) {
-  // EV scooter (Ola S1 / Ather style): scooter silhouette + lightning bolt
-  return (
-    <svg viewBox="0 0 50 28" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Rear cowl */}
-      <path
-        d="M8,22 C8,18 10,13 14,10 C17,8.5 22,8 26,8 L26,21 C22,21 14,21 8,22 Z"
-        fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round"
-      />
-      {/* Front shield */}
-      <path
-        d="M26,8 C30,7.5 35,9 39,12 C42,15 43,19 43,22 L35,22 L26,22 Z"
-        fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round"
-      />
-      {/* Seat */}
-      <path
-        d="M14,10 C17,8.5 22,8 26,8 L26,11.5 C22,11 17,10.5 14,13 Z"
-        fill="currentColor" fillOpacity="0.42"
-      />
-      {/* Lightning bolt on front panel */}
-      <path d="M32,10 L30,15 L33,15 L31,21 L37,14 L34,14 Z" fill="currentColor" fillOpacity="0.8"/>
-      {/* Handlebars */}
-      <line x1="33" y1="7" x2="43" y2="7" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
-      {/* Front fork */}
-      <line x1="39" y1="11" x2="41" y2="7" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/>
-      {/* Rear wheel */}
-      <circle cx="9" cy="22" r="5" fill="white" stroke="currentColor" strokeWidth="1.4"/>
-      <circle cx="9" cy="22" r="1.6" fill="currentColor" fillOpacity="0.5"/>
-      {/* Front wheel */}
-      <circle cx="41" cy="22" r="5" fill="white" stroke="currentColor" strokeWidth="1.4"/>
-      <circle cx="41" cy="22" r="1.6" fill="currentColor" fillOpacity="0.5"/>
-    </svg>
-  );
+function PlaceholderBikeIcon({ className = "w-7 h-3.5" }: IconProps) {
+  return <span className={className} />;
 }
 
 const ICON_MAP: Record<BodyType, (props: IconProps) => React.ReactElement> = {
@@ -387,11 +199,11 @@ const ICON_MAP: Record<BodyType, (props: IconProps) => React.ReactElement> = {
   crossover: CrossoverIcon,
   electric: ElectricIcon,
   luxury: LuxuryIcon,
-  scooter: ScooterIcon,
-  sports: SportsIcon,
-  cruiser: CruiserIcon,
-  adventure: AdventureIcon,
-  commuter: CommuterIcon,
+  scooter: PlaceholderBikeIcon,
+  sports: PlaceholderBikeIcon,
+  cruiser: PlaceholderBikeIcon,
+  adventure: PlaceholderBikeIcon,
+  commuter: PlaceholderBikeIcon,
 };
 
 interface VehicleTypeIconProps {
@@ -401,9 +213,7 @@ interface VehicleTypeIconProps {
 }
 
 export default function VehicleTypeIcon({ bodyType, vehicleType, className }: VehicleTypeIconProps) {
-  const Icon =
-    bodyType === "electric" && vehicleType === "bike"
-      ? ElectricBikeIcon
-      : ICON_MAP[bodyType];
+  if (vehicleType === "bike") return <span />;
+  const Icon = ICON_MAP[bodyType];
   return <Icon className={className} />;
 }

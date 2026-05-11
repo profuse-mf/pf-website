@@ -26,12 +26,12 @@ function buildSources(logoUrl: string): string[] {
   if (!domain) return logoUrl ? [logoUrl] : [];
 
   return [
-    // 1. Google Favicons 256 px — fast, covers all domains including Indian brands
-    `https://www.google.com/s2/favicons?domain=${domain}&sz=256`,
-    // 2. Clearbit — curated high-quality logos for global brands; runs in browser
+    // 1. Brandfetch CDN — high-quality curated brand logos, publicly accessible
+    `https://cdn.brandfetch.io/${domain}/w/256/h/256`,
+    // 2. Clearbit — well-curated global brands, widely cached
     `https://logo.clearbit.com/${domain}`,
-    // 3. DuckDuckGo — independent resolver, good fallback
-    `https://icons.duckduckgo.com/ip3/${domain}.ico`,
+    // 3. Google Favicons 256 px — universal fallback for any domain
+    `https://www.google.com/s2/favicons?domain=${domain}&sz=256`,
   ];
 }
 
@@ -59,7 +59,7 @@ export default function BrandLogo({
       key={sources[srcIndex]}
       src={sources[srcIndex]}
       alt={`${name} logo`}
-      className={`object-contain rounded-lg ${className}`}
+      className={`object-contain ${className}`}
       referrerPolicy="no-referrer"
       onError={() => setSrcIndex((i) => i + 1)}
     />

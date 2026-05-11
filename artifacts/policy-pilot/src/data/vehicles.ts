@@ -161,7 +161,7 @@ export const CAR_BRANDS: Brand[] = [
   {
     id: "skoda",
     name: "Skoda",
-    logoUrl: "https://logo.clearbit.com/skoda.com",
+    logoUrl: "https://logo.clearbit.com/skoda-auto.com",
     models: [
       { name: "Slavia", bodyType: "sedan", variants: ["Active 1.0 MT", "Ambition 1.0 MT", "Ambition 1.0 AT", "Style 1.0 MT", "Style 1.0 AT", "Style 1.5 DSG", "Monte Carlo 1.5 DSG"] },
       { name: "Kushaq", bodyType: "compact-suv", variants: ["Active 1.0 MT", "Ambition 1.0 MT", "Ambition 1.0 AT", "Style 1.0 MT", "Style 1.0 AT", "Style 1.5 DSG", "Monte Carlo 1.5 DSG"] },
@@ -187,7 +187,7 @@ export const CAR_BRANDS: Brand[] = [
   {
     id: "jeep",
     name: "Jeep",
-    logoUrl: "https://logo.clearbit.com/jeep.com",
+    logoUrl: "https://logo.clearbit.com/jeepindia.com",
     models: [
       { name: "Compass", bodyType: "suv", variants: ["Sport", "Sport Plus", "Longitude", "Longitude Plus", "Limited", "Limited Plus", "Night Eagle", "Trailhawk"] },
       { name: "Meridian", bodyType: "suv", variants: ["Longitude", "Longitude Plus", "Limited 4x4"] },
@@ -364,7 +364,7 @@ export const CAR_BRANDS: Brand[] = [
   {
     id: "isuzu",
     name: "Isuzu",
-    logoUrl: "https://logo.clearbit.com/isuzu.com",
+    logoUrl: "https://logo.clearbit.com/isuzu.co.in",
     models: [
       { name: "D-Max", bodyType: "suv", variants: ["S", "V-Cross", "Hi-Lander", "Z-Prestige 4x2 AT", "Z-Prestige 4x4 AT"] },
       { name: "MU-X", bodyType: "suv", variants: ["4x2 AT", "4x4 AT"] },
@@ -517,7 +517,7 @@ export const BIKE_BRANDS: Brand[] = [
   {
     id: "suzuki",
     name: "Suzuki",
-    logoUrl: "https://logo.clearbit.com/suzuki.com",
+    logoUrl: "https://logo.clearbit.com/suzuki-motorcycle.com",
     models: [
       { name: "Gixxer 150", bodyType: "sports", variants: ["STD", "SF"] },
       { name: "Gixxer SF 150", bodyType: "sports", variants: ["STD", "MotoGP Edition"] },
