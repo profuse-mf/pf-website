@@ -59,7 +59,7 @@ export const CAR_BRANDS: Brand[] = [
   {
     id: "tata",
     name: "Tata",
-    logoUrl: "https://logo.clearbit.com/tatamotors.com",
+    logoUrl: "/logos/tata.png",
     models: [
       { name: "Tiago", bodyType: "hatchback", variants: ["XE", "XM", "XT", "XZ", "XZ+", "XZA", "XZA+"] },
       { name: "Tiago EV", bodyType: "electric", variants: ["XE", "XT", "XZ+", "XZ+ Tech Lux", "Long Range XZ+", "Long Range XZ+ Tech Lux"] },
@@ -187,7 +187,7 @@ export const CAR_BRANDS: Brand[] = [
   {
     id: "jeep",
     name: "Jeep",
-    logoUrl: "https://logo.clearbit.com/jeepindia.com",
+    logoUrl: "/logos/jeep.jpeg",
     models: [
       { name: "Compass", bodyType: "suv", variants: ["Sport", "Sport Plus", "Longitude", "Longitude Plus", "Limited", "Limited Plus", "Night Eagle", "Trailhawk"] },
       { name: "Meridian", bodyType: "suv", variants: ["Longitude", "Longitude Plus", "Limited 4x4"] },
@@ -208,7 +208,7 @@ export const CAR_BRANDS: Brand[] = [
   {
     id: "bmw",
     name: "BMW",
-    logoUrl: "https://logo.clearbit.com/bmw.com",
+    logoUrl: "/logos/bmw.jpeg",
     models: [
       { name: "2 Series", bodyType: "sedan", variants: ["220d Sport", "220i M Sport"] },
       { name: "3 Series", bodyType: "sedan", variants: ["320d Sport", "320d M Sport", "330i M Sport"] },
@@ -364,7 +364,7 @@ export const CAR_BRANDS: Brand[] = [
   {
     id: "isuzu",
     name: "Isuzu",
-    logoUrl: "https://logo.clearbit.com/isuzu.co.in",
+    logoUrl: "/logos/isuzu.png",
     models: [
       { name: "D-Max", bodyType: "suv", variants: ["S", "V-Cross", "Hi-Lander", "Z-Prestige 4x2 AT", "Z-Prestige 4x4 AT"] },
       { name: "MU-X", bodyType: "suv", variants: ["4x2 AT", "4x4 AT"] },
@@ -517,7 +517,7 @@ export const BIKE_BRANDS: Brand[] = [
   {
     id: "suzuki",
     name: "Suzuki",
-    logoUrl: "https://logo.clearbit.com/suzuki-motorcycle.com",
+    logoUrl: "/logos/suzuki.jpeg",
     models: [
       { name: "Gixxer 150", bodyType: "sports", variants: ["STD", "SF"] },
       { name: "Gixxer SF 150", bodyType: "sports", variants: ["STD", "MotoGP Edition"] },
