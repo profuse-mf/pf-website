@@ -16,12 +16,46 @@ function getInitials(name: string): string {
     .toUpperCase();
 }
 
-export default function BrandLogo({ logoUrl, name, className = "w-10 h-10", fallbackClassName = "" }: BrandLogoProps) {
-  const [error, setError] = useState(false);
+/**
+ * Extract domain from a Clearbit-format URL like
+ * "https://logo.clearbit.com/hyundai.com" → "hyundai.com"
+ */
+function extractDomain(logoUrl: string): string | null {
+  const m = logoUrl.match(/logo\.clearbit\.com\/([^?#]+)/);
+  return m ? m[1] : null;
+}
 
-  if (!logoUrl || error) {
+/**
+ * Build an ordered list of image sources to try.
+ * We skip Clearbit (unreliable for Indian brands) and go straight to
+ * Google's high-res favicon service which covers every public domain.
+ */
+function buildSources(logoUrl: string): string[] {
+  const domain = extractDomain(logoUrl);
+  if (!domain) return logoUrl ? [logoUrl] : [];
+
+  return [
+    // 1. Google Favicons — 256 px PNG, works for any domain
+    `https://www.google.com/s2/favicons?domain=${domain}&sz=256`,
+    // 2. DuckDuckGo icon service — different resolver, good for Indian sites
+    `https://icons.duckduckgo.com/ip3/${domain}.ico`,
+  ];
+}
+
+export default function BrandLogo({
+  logoUrl,
+  name,
+  className = "w-10 h-10",
+  fallbackClassName = "",
+}: BrandLogoProps) {
+  const [srcIndex, setSrcIndex] = useState(0);
+  const sources = buildSources(logoUrl);
+
+  if (srcIndex >= sources.length || !logoUrl) {
     return (
-      <div className={`flex items-center justify-center rounded-lg bg-muted text-muted-foreground text-xs font-bold ${className} ${fallbackClassName}`}>
+      <div
+        className={`flex items-center justify-center rounded-lg bg-muted text-muted-foreground text-xs font-bold ${className} ${fallbackClassName}`}
+      >
         {getInitials(name)}
       </div>
     );
@@ -29,10 +63,12 @@ export default function BrandLogo({ logoUrl, name, className = "w-10 h-10", fall
 
   return (
     <img
-      src={logoUrl}
+      key={sources[srcIndex]}
+      src={sources[srcIndex]}
       alt={`${name} logo`}
       className={`object-contain rounded-lg ${className}`}
-      onError={() => setError(true)}
+      referrerPolicy="no-referrer"
+      onError={() => setSrcIndex((i) => i + 1)}
     />
   );
 }
