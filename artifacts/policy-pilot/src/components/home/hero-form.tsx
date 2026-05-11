@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { Car, Bike, ShieldCheck, Zap, Users, CheckCircle2, ChevronDown } from "lucide-react";
-import { FormValues, formSchema } from "@/pages/home";
+import { FormValues, formSchema } from "@/lib/form-schema";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";

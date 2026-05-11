@@ -3,6 +3,7 @@ import Footer from "@/components/layout/footer";
 import { ALL_PARTNERS } from "@/data/partners";
 import { Badge } from "@/components/ui/badge";
 import { ExternalLink } from "lucide-react";
+import BrandLogo from "@/components/ui/brand-logo";
 
 export default function OurPartnersPage() {
   return (
@@ -28,9 +29,12 @@ export default function OurPartnersPage() {
               className="group flex flex-col gap-3 p-6 bg-card border rounded-2xl hover:border-primary/50 hover:shadow-md transition-all"
             >
               <div className="flex items-center justify-between">
-                <div className="w-12 h-12 rounded-xl bg-muted border flex items-center justify-center text-lg font-bold text-muted-foreground">
-                  {partner.name.substring(0, 2).toUpperCase()}
-                </div>
+                <BrandLogo
+                  logoUrl={partner.logoUrl}
+                  name={partner.name}
+                  className="w-14 h-14 rounded-xl border bg-white p-1.5 shadow-sm object-contain"
+                  fallbackClassName="text-xl font-bold text-muted-foreground"
+                />
                 <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
               </div>
               <div>

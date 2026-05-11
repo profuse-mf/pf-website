@@ -1,22 +1,12 @@
 import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { z } from "zod";
 import HeroForm from "@/components/home/hero-form";
 import PartnersScreen from "@/components/home/partners-screen";
 import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
+import type { FormValues } from "@/lib/form-schema";
 
-export const formSchema = z.object({
-  insuranceType: z.enum(["car", "bike"]),
-  registrationNumber: z.string().min(4, "Registration number is required").toUpperCase(),
-  mobileNumber: z.string().regex(/^[0-9]{10}$/, "Must be a valid 10-digit number"),
-  pinCode: z.string().regex(/^[0-9]{6}$/, "Must be a valid 6-digit pin code"),
-  policyExpiryDate: z.string().min(1, "Expiry date is required"),
-  registrationYear: z.string().min(4, "Year is required"),
-  carModel: z.string().min(1, "Model is required"),
-});
-
-export type FormValues = z.infer<typeof formSchema>;
+export type { FormValues };
 
 export default function Home() {
   const [step, setStep] = useState<1 | 2>(1);
@@ -36,7 +26,7 @@ export default function Home() {
   return (
     <div className="min-h-[100dvh] flex flex-col bg-muted/30">
       <Navbar />
-      
+
       <main className="flex-1 flex flex-col relative overflow-hidden">
         <AnimatePresence mode="wait" initial={false}>
           {step === 1 && (

@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { ChevronRight, ChevronLeft, Check } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { getBrands, type VehicleType, type Brand } from "@/data/vehicles";
+import BrandLogo from "@/components/ui/brand-logo";
+import VehicleTypeIcon, { BODY_TYPE_LABEL, BODY_TYPE_COLOR } from "@/components/ui/vehicle-type-icon";
 
 interface VehicleSelectorProps {
   open: boolean;
@@ -11,46 +12,6 @@ interface VehicleSelectorProps {
   vehicleType: VehicleType;
   value: string;
   onChange: (value: string) => void;
-}
-
-const BRAND_COLORS: Record<string, string> = {
-  maruti: "bg-blue-100 text-blue-700",
-  hyundai: "bg-sky-100 text-sky-700",
-  tata: "bg-indigo-100 text-indigo-700",
-  honda: "bg-red-100 text-red-700",
-  mahindra: "bg-red-100 text-red-800",
-  toyota: "bg-rose-100 text-rose-700",
-  kia: "bg-orange-100 text-orange-700",
-  renault: "bg-yellow-100 text-yellow-800",
-  volkswagen: "bg-blue-100 text-blue-800",
-  skoda: "bg-green-100 text-green-700",
-  mg: "bg-purple-100 text-purple-700",
-  jeep: "bg-amber-100 text-amber-800",
-  nissan: "bg-gray-100 text-gray-700",
-  bmw: "bg-blue-100 text-blue-900",
-  audi: "bg-gray-100 text-gray-800",
-  mercedes: "bg-slate-100 text-slate-700",
-  ford: "bg-blue-100 text-blue-700",
-  citroen: "bg-gray-100 text-gray-600",
-  hero: "bg-red-100 text-red-700",
-  bajaj: "bg-blue-100 text-blue-700",
-  tvs: "bg-yellow-100 text-yellow-800",
-  royalenfield: "bg-green-100 text-green-800",
-  yamaha: "bg-blue-100 text-blue-800",
-  ktm: "bg-orange-100 text-orange-700",
-  suzuki: "bg-blue-100 text-blue-700",
-  kawasaki: "bg-green-100 text-green-700",
-  ola: "bg-gray-100 text-gray-700",
-  ather: "bg-teal-100 text-teal-700",
-};
-
-function getInitials(name: string): string {
-  return name
-    .split(" ")
-    .map((w) => w[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
 }
 
 export default function VehicleSelector({
@@ -67,8 +28,8 @@ export default function VehicleSelector({
     setSelectedBrand(brand);
   }
 
-  function handleModelClick(model: string) {
-    onChange(`${selectedBrand!.name} ${model}`);
+  function handleModelClick(modelName: string) {
+    onChange(`${selectedBrand!.name} ${modelName}`);
     setSelectedBrand(null);
     onOpenChange(false);
   }
@@ -87,29 +48,28 @@ export default function VehicleSelector({
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="max-w-lg p-0 gap-0 overflow-hidden">
-        <DialogHeader className="px-6 pt-6 pb-4 border-b">
+        <DialogHeader className="px-6 pt-5 pb-4 border-b">
           <DialogTitle className="flex items-center gap-2 text-lg font-bold">
-            {selectedBrand ? (
+            {selectedBrand && (
               <button
                 onClick={handleBack}
-                className="flex items-center gap-1 text-primary hover:underline text-base font-semibold"
+                className="flex items-center gap-1 text-primary hover:underline text-base font-semibold mr-1"
                 data-testid="button-back-to-brands"
               >
                 <ChevronLeft className="w-4 h-4" />
                 Back
               </button>
-            ) : null}
+            )}
             {selectedBrand
-              ? `Select ${label} Model — ${selectedBrand.name}`
+              ? `${selectedBrand.name} — Select Model`
               : `Select your ${label} brand`}
           </DialogTitle>
         </DialogHeader>
 
         {!selectedBrand ? (
-          <ScrollArea className="h-[420px]">
-            <div className="grid grid-cols-3 gap-3 p-6">
+          <ScrollArea className="h-[440px]">
+            <div className="grid grid-cols-3 gap-3 p-5">
               {brands.map((brand) => {
-                const colorClass = BRAND_COLORS[brand.id] ?? "bg-gray-100 text-gray-700";
                 const isSelected = value.startsWith(brand.name);
                 return (
                   <button
@@ -117,15 +77,18 @@ export default function VehicleSelector({
                     data-testid={`button-brand-${brand.id}`}
                     onClick={() => handleBrandClick(brand)}
                     className={`
-                      flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all
+                      flex flex-col items-center gap-2.5 p-4 rounded-xl border-2 transition-all
                       hover:border-primary hover:shadow-md hover:shadow-primary/10
                       ${isSelected ? "border-primary bg-primary/5" : "border-border bg-card"}
                     `}
                   >
-                    <div className={`w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold ${colorClass}`}>
-                      {getInitials(brand.name)}
-                    </div>
-                    <span className="text-xs font-medium text-center leading-tight">{brand.name}</span>
+                    <BrandLogo
+                      logoUrl={brand.logoUrl}
+                      name={brand.name}
+                      className="w-12 h-12 object-contain"
+                      fallbackClassName="rounded-full text-sm font-bold bg-muted"
+                    />
+                    <span className="text-xs font-medium text-center leading-tight line-clamp-2">{brand.name}</span>
                     {isSelected && <Check className="w-3.5 h-3.5 text-primary" />}
                   </button>
                 );
@@ -133,27 +96,37 @@ export default function VehicleSelector({
             </div>
           </ScrollArea>
         ) : (
-          <ScrollArea className="h-[420px]">
-            <div className="flex flex-col gap-1 p-4">
+          <ScrollArea className="h-[440px]">
+            <div className="flex flex-col gap-0.5 p-3">
               {selectedBrand.models.map((model) => {
-                const fullValue = `${selectedBrand.name} ${model}`;
+                const fullValue = `${selectedBrand.name} ${model.name}`;
                 const isSelected = value === fullValue;
+                const colorClass = BODY_TYPE_COLOR[model.bodyType];
+                const typeLabel = BODY_TYPE_LABEL[model.bodyType];
                 return (
                   <button
-                    key={model}
-                    data-testid={`button-model-${model.replace(/\s+/g, "-").toLowerCase()}`}
-                    onClick={() => handleModelClick(model)}
+                    key={model.name}
+                    data-testid={`button-model-${model.name.replace(/\s+/g, "-").toLowerCase()}`}
+                    onClick={() => handleModelClick(model.name)}
                     className={`
                       flex items-center justify-between px-4 py-3 rounded-lg text-left
-                      transition-all hover:bg-primary/5 hover:text-primary
-                      ${isSelected ? "bg-primary/10 text-primary font-semibold" : "text-foreground"}
+                      transition-all hover:bg-primary/5 group
+                      ${isSelected ? "bg-primary/10" : ""}
                     `}
                   >
-                    <span className="text-sm">{model}</span>
+                    <div className="flex items-center gap-3 min-w-0">
+                      <span className={`flex items-center gap-1.5 px-2 py-0.5 rounded-md border text-xs font-medium shrink-0 ${colorClass}`}>
+                        <VehicleTypeIcon bodyType={model.bodyType} className="w-7 h-3.5" />
+                        {typeLabel}
+                      </span>
+                      <span className={`text-sm font-medium truncate ${isSelected ? "text-primary" : "text-foreground group-hover:text-primary"}`}>
+                        {model.name}
+                      </span>
+                    </div>
                     {isSelected ? (
-                      <Check className="w-4 h-4 text-primary" />
+                      <Check className="w-4 h-4 text-primary shrink-0 ml-2" />
                     ) : (
-                      <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                      <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0 ml-2 group-hover:text-primary" />
                     )}
                   </button>
                 );

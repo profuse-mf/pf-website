@@ -5,6 +5,7 @@ import { getPartnersByType, type Partner } from "@/data/partners";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import BrandLogo from "@/components/ui/brand-logo";
 
 interface PartnersScreenProps {
   formData: FormValues;
@@ -20,10 +21,6 @@ export default function PartnersScreen({ formData, onBack }: PartnersScreenProps
     setRedirectingTo(partner.name);
     window.open(partner.url, "_blank");
     setTimeout(() => setRedirectingTo(null), 2000);
-  };
-
-  const getPartnerInitials = (name: string) => {
-    return name.substring(0, 2).toUpperCase();
   };
 
   return (
@@ -80,9 +77,12 @@ export default function PartnersScreen({ formData, onBack }: PartnersScreenProps
 
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
-                  <div className="w-14 h-14 rounded-xl border bg-muted flex items-center justify-center text-xl font-bold text-muted-foreground shrink-0 shadow-sm">
-                    {getPartnerInitials(partner.name)}
-                  </div>
+                  <BrandLogo
+                    logoUrl={partner.logoUrl}
+                    name={partner.name}
+                    className="w-14 h-14 shrink-0 rounded-xl border bg-white p-1.5 shadow-sm"
+                    fallbackClassName="text-xl font-bold text-muted-foreground"
+                  />
 
                   <div className="flex-1 min-w-0 space-y-1">
                     <h3 className="font-bold text-xl truncate pr-8">{partner.name}</h3>
