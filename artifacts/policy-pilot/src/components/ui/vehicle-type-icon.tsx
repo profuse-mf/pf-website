@@ -32,162 +32,160 @@ export const BODY_TYPE_LABEL: Record<BodyType, string> = {
 };
 
 export const BODY_TYPE_COLOR: Record<BodyType, string> = {
-  hatchback: "bg-blue-50 text-blue-600 border-blue-200",
-  sedan: "bg-purple-50 text-purple-600 border-purple-200",
-  suv: "bg-green-50 text-green-700 border-green-200",
-  "compact-suv": "bg-teal-50 text-teal-600 border-teal-200",
-  muv: "bg-orange-50 text-orange-600 border-orange-200",
-  crossover: "bg-indigo-50 text-indigo-600 border-indigo-200",
-  electric: "bg-emerald-50 text-emerald-600 border-emerald-200",
-  luxury: "bg-amber-50 text-amber-700 border-amber-200",
-  scooter: "bg-pink-50 text-pink-600 border-pink-200",
-  sports: "bg-red-50 text-red-600 border-red-200",
-  cruiser: "bg-amber-50 text-amber-700 border-amber-200",
-  adventure: "bg-orange-50 text-orange-700 border-orange-200",
-  commuter: "bg-slate-50 text-slate-600 border-slate-200",
+  hatchback: "text-blue-600",
+  sedan: "text-purple-600",
+  suv: "text-green-700",
+  "compact-suv": "text-teal-600",
+  muv: "text-orange-600",
+  crossover: "text-indigo-600",
+  electric: "text-emerald-600",
+  luxury: "text-amber-700",
+  scooter: "text-pink-600",
+  sports: "text-red-600",
+  cruiser: "text-amber-700",
+  adventure: "text-orange-700",
+  commuter: "text-slate-600",
 };
 
 interface IconProps {
   className?: string;
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   CAR ICONS — clean minimal line drawings, no body fill, front faces RIGHT.
-   Stroke-only body; glass area gets a very subtle transparent fill only.
-   Wheels: open circles with small hub dot.
-───────────────────────────────────────────────────────────────────────────── */
+/*
+  All car icons are flat filled silhouettes — fill="currentColor", no stroke, no fills with opacity.
+  The path traces the full car outline (roof shape is the key differentiator) and integrates
+  wheel arch cutouts as concave arcs at the bottom. Front of car faces RIGHT.
 
-const STROKE = { stroke: "currentColor", strokeWidth: 1.5, strokeLinejoin: "round" as const, strokeLinecap: "round" as const, fill: "none" };
-const GLASS = { fill: "currentColor", fillOpacity: 0.13, stroke: "currentColor", strokeWidth: 1, strokeLinejoin: "round" as const };
-const WHEEL_OUTER = { fill: "none", stroke: "currentColor", strokeWidth: 1.5 };
-const WHEEL_HUB = { fill: "currentColor", fillOpacity: 0.55 };
+  Wheel arch arcs use SVG arc: A 6 6 0 0 0 <end-x>,20
+    sweep=0 → counter-clockwise → curves UPWARD into the body (correct concave cutout).
+  
+  Rear wheel arch  : centre x=13, edges x=7  and x=19
+  Front wheel arch : centre x=43, edges x=37 and x=49
+*/
 
 function HatchbackIcon({ className = "w-8 h-4" }: IconProps) {
-  // Compact, steep angled rear (2-box). Roof sits between y=5–6.
+  // Compact body, steeply sloped rear window (2-box). Distinct from crossover by steeper rear.
   return (
-    <svg viewBox="0 0 58 28" className={className} xmlns="http://www.w3.org/2000/svg">
-      <path {...STROKE} d="M4,23 L4,20 L8,14 L14,6 L42,6 L50,14 L54,20 L54,23 Z" />
-      <path {...GLASS} d="M14,6 L42,6 L50,14 L8,14 Z" />
-      <circle {...WHEEL_OUTER} cx="13" cy="23" r="5" />
-      <circle {...WHEEL_HUB} cx="13" cy="23" r="1.7" />
-      <circle {...WHEEL_OUTER} cx="45" cy="23" r="5" />
-      <circle {...WHEEL_HUB} cx="45" cy="23" r="1.7" />
+    <svg viewBox="0 0 56 24" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path
+        fill="currentColor"
+        d="M2,20 L2,16 L8,14 L14,4 L42,4 L50,12 L54,16 L54,20
+           L49,20 A6,6,0,0,0 37,20
+           L19,20 A6,6,0,0,0 7,20
+           L2,20 Z"
+      />
     </svg>
   );
 }
 
 function SedanIcon({ className = "w-9 h-4" }: IconProps) {
-  // 3-box: distinct trunk behind the C-pillar line. Longer roof.
+  // 3-box: the horizontal trunk lid (2,16)→(8,16) before the C-pillar makes it a sedan.
   return (
-    <svg viewBox="0 0 66 28" className={className} xmlns="http://www.w3.org/2000/svg">
-      <path {...STROKE} d="M4,23 L4,20 L10,17 L14,14 L19,6 L47,6 L55,14 L60,20 L60,23 Z" />
-      {/* trunk lid horizontal gives the 3-box look: from x=4–14 below beltline */}
-      <path {...GLASS} d="M19,6 L47,6 L55,14 L14,14 Z" />
-      <circle {...WHEEL_OUTER} cx="14" cy="23" r="5" />
-      <circle {...WHEEL_HUB} cx="14" cy="23" r="1.7" />
-      <circle {...WHEEL_OUTER} cx="52" cy="23" r="5" />
-      <circle {...WHEEL_HUB} cx="52" cy="23" r="1.7" />
+    <svg viewBox="0 0 56 24" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path
+        fill="currentColor"
+        d="M2,20 L2,16 L8,16 L11,12 L17,4 L43,4 L52,12 L54,16 L54,20
+           L49,20 A6,6,0,0,0 37,20
+           L19,20 A6,6,0,0,0 7,20
+           L2,20 Z"
+      />
     </svg>
   );
 }
 
 function SuvIcon({ className = "w-8 h-4" }: IconProps) {
-  // Tall, boxy, near-vertical sides. Roof at y=3 (tallest body type).
+  // Tall, boxy, near-vertical sides. Roof at y=2 — clearly the tallest body type.
   return (
-    <svg viewBox="0 0 58 28" className={className} xmlns="http://www.w3.org/2000/svg">
-      <path {...STROKE} d="M4,23 L4,19 L6,3 L52,3 L54,19 L54,23 Z" />
-      <path {...GLASS} d="M6,3 L52,3 L54,14 L6,14 Z" />
-      <circle {...WHEEL_OUTER} cx="13" cy="23" r="5.5" />
-      <circle {...WHEEL_HUB} cx="13" cy="23" r="1.9" />
-      <circle {...WHEEL_OUTER} cx="45" cy="23" r="5.5" />
-      <circle {...WHEEL_HUB} cx="45" cy="23" r="1.9" />
+    <svg viewBox="0 0 56 24" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path
+        fill="currentColor"
+        d="M2,20 L2,15 L5,2 L51,2 L54,15 L54,20
+           L49,20 A6,6,0,0,0 37,20
+           L19,20 A6,6,0,0,0 7,20
+           L2,20 Z"
+      />
     </svg>
   );
 }
 
 function CompactSuvIcon({ className = "w-8 h-4" }: IconProps) {
-  // Slightly lower than full SUV. Rear has a gentle slope inward.
+  // Slightly lower roof (y=4) than full SUV, with a gentle rear slope.
   return (
-    <svg viewBox="0 0 58 28" className={className} xmlns="http://www.w3.org/2000/svg">
-      <path {...STROKE} d="M4,23 L4,19 L8,5 L48,5 L54,18 L54,23 Z" />
-      <path {...GLASS} d="M8,5 L48,5 L54,15 L8,15 Z" />
-      <circle {...WHEEL_OUTER} cx="13" cy="23" r="5" />
-      <circle {...WHEEL_HUB} cx="13" cy="23" r="1.7" />
-      <circle {...WHEEL_OUTER} cx="45" cy="23" r="5" />
-      <circle {...WHEEL_HUB} cx="45" cy="23" r="1.7" />
+    <svg viewBox="0 0 56 24" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path
+        fill="currentColor"
+        d="M2,20 L2,15 L6,4 L50,4 L54,15 L54,20
+           L49,20 A6,6,0,0,0 37,20
+           L19,20 A6,6,0,0,0 7,20
+           L2,20 Z"
+      />
     </svg>
   );
 }
 
 function MuvIcon({ className = "w-8 h-4" }: IconProps) {
-  // Van/people-carrier: very tall, flat roof, nearly vertical windscreen & rear.
-  // B and C pillars visible as internal lines.
+  // Van / MPV: extreme height (y=1), very short hood, near-vertical windscreen & rear.
   return (
-    <svg viewBox="0 0 58 28" className={className} xmlns="http://www.w3.org/2000/svg">
-      <path {...STROKE} d="M4,23 L4,18 L6,2 L52,2 L54,18 L54,23 Z" />
-      {/* Three window bays separated by pillars */}
-      <path {...GLASS} d="M6,2 L52,2 L54,14 L6,14 Z" />
-      <line {...STROKE} strokeWidth={1} x1="21" y1="2" x2="21" y2="14" />
-      <line {...STROKE} strokeWidth={1} x1="37" y1="2" x2="37" y2="14" />
-      <circle {...WHEEL_OUTER} cx="13" cy="23" r="5" />
-      <circle {...WHEEL_HUB} cx="13" cy="23" r="1.7" />
-      <circle {...WHEEL_OUTER} cx="45" cy="23" r="5" />
-      <circle {...WHEEL_HUB} cx="45" cy="23" r="1.7" />
+    <svg viewBox="0 0 56 24" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path
+        fill="currentColor"
+        d="M2,20 L2,15 L4,1 L52,1 L54,15 L54,20
+           L49,20 A6,6,0,0,0 37,20
+           L19,20 A6,6,0,0,0 7,20
+           L2,20 Z"
+      />
+      {/* B-pillar & C-pillar as recessed white lines to show multi-row cabin */}
+      <line x1="20" y1="1" x2="20" y2="15" stroke="white" strokeWidth="1.5"/>
+      <line x1="36" y1="1" x2="36" y2="15" stroke="white" strokeWidth="1.5"/>
     </svg>
   );
 }
 
 function CrossoverIcon({ className = "w-8 h-4" }: IconProps) {
-  // Raised hatchback — slightly taller body than hatchback, rear slopes like a hatch.
+  // Raised-hatchback crossover: taller stance (y=3) than hatchback, same sloped rear style.
   return (
-    <svg viewBox="0 0 58 28" className={className} xmlns="http://www.w3.org/2000/svg">
-      <path {...STROKE} d="M4,23 L4,19 L8,13 L14,5 L44,5 L52,13 L54,19 L54,23 Z" />
-      <path {...GLASS} d="M14,5 L44,5 L52,13 L8,13 Z" />
-      <circle {...WHEEL_OUTER} cx="13" cy="23" r="5.5" />
-      <circle {...WHEEL_HUB} cx="13" cy="23" r="1.9" />
-      <circle {...WHEEL_OUTER} cx="45" cy="23" r="5.5" />
-      <circle {...WHEEL_HUB} cx="45" cy="23" r="1.9" />
+    <svg viewBox="0 0 56 24" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path
+        fill="currentColor"
+        d="M2,20 L2,15 L7,12 L14,3 L42,3 L50,12 L54,15 L54,20
+           L49,20 A6,6,0,0,0 37,20
+           L19,20 A6,6,0,0,0 7,20
+           L2,20 Z"
+      />
     </svg>
   );
 }
 
 function ElectricIcon({ className = "w-8 h-4" }: IconProps) {
-  // Aerodynamic hatchback/crossover silhouette + lightning bolt on body.
+  // Aerodynamic crossover silhouette + white lightning bolt marking it as EV.
   return (
-    <svg viewBox="0 0 58 28" className={className} xmlns="http://www.w3.org/2000/svg">
-      <path {...STROKE} d="M4,23 L4,20 L9,14 L15,6 L44,6 L52,14 L54,20 L54,23 Z" />
-      <path {...GLASS} d="M15,6 L44,6 L52,14 L9,14 Z" />
-      {/* Lightning bolt centred in body */}
-      <path fill="currentColor" fillOpacity={0.75} d="M26,9 L23,15 L27,15 L24,22 L32,14 L28,14 Z" />
-      <circle {...WHEEL_OUTER} cx="13" cy="23" r="5" />
-      <circle {...WHEEL_HUB} cx="13" cy="23" r="1.7" />
-      <circle {...WHEEL_OUTER} cx="45" cy="23" r="5" />
-      <circle {...WHEEL_HUB} cx="45" cy="23" r="1.7" />
+    <svg viewBox="0 0 56 24" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path
+        fill="currentColor"
+        d="M2,20 L2,15 L7,12 L14,3 L42,3 L50,12 L54,15 L54,20
+           L49,20 A6,6,0,0,0 37,20
+           L19,20 A6,6,0,0,0 7,20
+           L2,20 Z"
+      />
+      {/* Lightning bolt centred inside the body */}
+      <path fill="white" d="M26,6 L23,13 L27,13 L24,19 L33,11 L29,11 Z" />
     </svg>
   );
 }
 
 function LuxuryIcon({ className = "w-10 h-4" }: IconProps) {
-  // Very long wheelbase, very low roofline (3-box, but stretched).
+  // Very long wheelbase sedan, notably lower roofline (y=6). Wider viewBox to show length.
   return (
-    <svg viewBox="0 0 76 28" className={className} xmlns="http://www.w3.org/2000/svg">
-      <path {...STROKE} d="M4,23 L4,20 L10,17 L14,14 L20,7 L56,7 L64,14 L70,20 L70,23 Z" />
-      <path {...GLASS} d="M20,7 L56,7 L64,14 L14,14 Z" />
-      <circle {...WHEEL_OUTER} cx="14" cy="23" r="5" />
-      <circle {...WHEEL_HUB} cx="14" cy="23" r="1.7" />
-      <circle {...WHEEL_OUTER} cx="60" cy="23" r="5" />
-      <circle {...WHEEL_HUB} cx="60" cy="23" r="1.7" />
+    <svg viewBox="0 0 72 24" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path
+        fill="currentColor"
+        d="M2,20 L2,16 L8,16 L12,12 L18,6 L56,6 L64,12 L68,16 L70,20
+           L65,20 A6,6,0,0,0 53,20
+           L27,20 A6,6,0,0,0 15,20
+           L2,20 Z"
+      />
     </svg>
   );
-}
-
-/* ─────────────────────────────────────────────────────────────────────────────
-   BIKE ICONS — kept in the map for data consistency; vehicle-selector
-   does NOT render them for the bike model step (bikes show label text only).
-───────────────────────────────────────────────────────────────────────────── */
-
-function PlaceholderBikeIcon({ className = "w-7 h-3.5" }: IconProps) {
-  return <span className={className} />;
 }
 
 const ICON_MAP: Record<BodyType, (props: IconProps) => React.ReactElement> = {
@@ -199,11 +197,11 @@ const ICON_MAP: Record<BodyType, (props: IconProps) => React.ReactElement> = {
   crossover: CrossoverIcon,
   electric: ElectricIcon,
   luxury: LuxuryIcon,
-  scooter: PlaceholderBikeIcon,
-  sports: PlaceholderBikeIcon,
-  cruiser: PlaceholderBikeIcon,
-  adventure: PlaceholderBikeIcon,
-  commuter: PlaceholderBikeIcon,
+  scooter: () => <span />,
+  sports: () => <span />,
+  cruiser: () => <span />,
+  adventure: () => <span />,
+  commuter: () => <span />,
 };
 
 interface VehicleTypeIconProps {

@@ -5,6 +5,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { getBrands, type VehicleType, type Brand, type Model } from "@/data/vehicles";
 import BrandLogo from "@/components/ui/brand-logo";
 import VehicleTypeIcon, { BODY_TYPE_LABEL, BODY_TYPE_COLOR } from "@/components/ui/vehicle-type-icon";
+// BODY_TYPE_COLOR retained for potential future use
 
 interface VehicleSelectorProps {
   open: boolean;
@@ -165,15 +166,19 @@ export default function VehicleSelector({
                     `}
                   >
                     <div className="flex items-center gap-3 min-w-0">
-                      <span className={`flex items-center gap-1.5 px-2 py-0.5 rounded-md border text-xs font-medium shrink-0 ${colorClass}`}>
-                        {vehicleType === "car" && (
-                          <VehicleTypeIcon bodyType={model.bodyType} vehicleType="car" className="w-7 h-3.5" />
-                        )}
-                        {typeLabel}
-                      </span>
-                      <span className={`text-sm font-medium truncate ${isSelected ? "text-primary" : "text-foreground group-hover:text-primary"}`}>
-                        {model.name}
-                      </span>
+                      {vehicleType === "car" && (
+                        <VehicleTypeIcon
+                          bodyType={model.bodyType}
+                          vehicleType="car"
+                          className={`w-10 h-5 shrink-0 ${colorClass}`}
+                        />
+                      )}
+                      <div className="min-w-0">
+                        <span className={`text-sm font-medium block truncate ${isSelected ? "text-primary" : "text-foreground group-hover:text-primary"}`}>
+                          {model.name}
+                        </span>
+                        <span className="text-xs text-muted-foreground">{typeLabel}</span>
+                      </div>
                     </div>
                     <div className="flex items-center gap-1.5 shrink-0 ml-2">
                       {model.variants.length > 0 && (
