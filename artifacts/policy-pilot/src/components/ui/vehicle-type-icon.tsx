@@ -131,6 +131,19 @@ function ElectricIcon({ className = "w-8 h-4" }: IconProps) {
   );
 }
 
+function ElectricBikeIcon({ className = "w-6 h-4" }: IconProps) {
+  return (
+    <svg viewBox="0 0 48 32" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M22 6 L16 14 L10 14 L8 20 L14 20 L14 22" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M22 6 L30 8 L36 14 L36 20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M14 14 L36 14" stroke="currentColor" strokeWidth="1.5"/>
+      <circle cx="10" cy="24" r="5" fill="white" stroke="currentColor" strokeWidth="1.5"/>
+      <circle cx="38" cy="24" r="5" fill="white" stroke="currentColor" strokeWidth="1.5"/>
+      <path d="M24 7 L22 11 L25 11 L23 16 L28 10 L25 10 Z" fill="currentColor" opacity="0.8"/>
+    </svg>
+  );
+}
+
 function ScooterIcon({ className = "w-6 h-4" }: IconProps) {
   return (
     <svg viewBox="0 0 48 32" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -209,10 +222,14 @@ const ICON_MAP: Record<BodyType, (props: IconProps) => React.ReactElement> = {
 
 interface VehicleTypeIconProps {
   bodyType: BodyType;
+  vehicleType?: "car" | "bike";
   className?: string;
 }
 
-export default function VehicleTypeIcon({ bodyType, className }: VehicleTypeIconProps) {
-  const Icon = ICON_MAP[bodyType];
+export default function VehicleTypeIcon({ bodyType, vehicleType, className }: VehicleTypeIconProps) {
+  const Icon =
+    bodyType === "electric" && vehicleType === "bike"
+      ? ElectricBikeIcon
+      : ICON_MAP[bodyType];
   return <Icon className={className} />;
 }

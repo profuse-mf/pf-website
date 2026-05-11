@@ -166,7 +166,7 @@ export default function VehicleSelector({
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <span className={`flex items-center gap-1.5 px-2 py-0.5 rounded-md border text-xs font-medium shrink-0 ${colorClass}`}>
-                        <VehicleTypeIcon bodyType={model.bodyType} className="w-7 h-3.5" />
+                        <VehicleTypeIcon bodyType={model.bodyType} vehicleType={vehicleType} className="w-7 h-3.5" />
                         {typeLabel}
                       </span>
                       <span className={`text-sm font-medium truncate ${isSelected ? "text-primary" : "text-foreground group-hover:text-primary"}`}>
