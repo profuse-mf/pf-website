@@ -16,28 +16,21 @@ function getInitials(name: string): string {
     .toUpperCase();
 }
 
-/**
- * Extract domain from a Clearbit-format URL like
- * "https://logo.clearbit.com/hyundai.com" → "hyundai.com"
- */
 function extractDomain(logoUrl: string): string | null {
   const m = logoUrl.match(/logo\.clearbit\.com\/([^?#]+)/);
   return m ? m[1] : null;
 }
 
-/**
- * Build an ordered list of image sources to try.
- * We skip Clearbit (unreliable for Indian brands) and go straight to
- * Google's high-res favicon service which covers every public domain.
- */
 function buildSources(logoUrl: string): string[] {
   const domain = extractDomain(logoUrl);
   if (!domain) return logoUrl ? [logoUrl] : [];
 
   return [
-    // 1. Google Favicons — 256 px PNG, works for any domain
+    // 1. Google Favicons 256 px — fast, covers all domains including Indian brands
     `https://www.google.com/s2/favicons?domain=${domain}&sz=256`,
-    // 2. DuckDuckGo icon service — different resolver, good for Indian sites
+    // 2. Clearbit — curated high-quality logos for global brands; runs in browser
+    `https://logo.clearbit.com/${domain}`,
+    // 3. DuckDuckGo — independent resolver, good fallback
     `https://icons.duckduckgo.com/ip3/${domain}.ico`,
   ];
 }
