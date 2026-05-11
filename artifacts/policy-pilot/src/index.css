@@ -68,39 +68,39 @@
   --elevate-1: rgba(0,0,0, .03);
   --elevate-2: rgba(0,0,0, .08);
 
-  --background: 180 20% 99%;
+  --background: 214 30% 99%;
   --foreground: 220 40% 10%;
-  --border: 220 20% 90%;
+  --border: 214 20% 89%;
   --card: 0 0% 100%;
   --card-foreground: 220 40% 10%;
-  --card-border: 220 20% 90%;
+  --card-border: 214 20% 89%;
   
-  --sidebar: 180 20% 99%;
+  --sidebar: 214 30% 99%;
   --sidebar-foreground: 220 40% 10%;
-  --sidebar-border: 220 20% 90%;
-  --sidebar-primary: 167 100% 39%;
+  --sidebar-border: 214 20% 89%;
+  --sidebar-primary: 214 74% 41%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 220 20% 96%;
+  --sidebar-accent: 214 20% 96%;
   --sidebar-accent-foreground: 220 40% 10%;
-  --sidebar-ring: 167 100% 39%;
+  --sidebar-ring: 214 74% 41%;
 
   --popover: 0 0% 100%;
   --popover-foreground: 220 40% 10%;
-  --popover-border: 220 20% 90%;
+  --popover-border: 214 20% 89%;
 
-  --primary: 167 100% 39%;
+  --primary: 214 74% 41%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 220 20% 90%;
+  --secondary: 214 20% 90%;
   --secondary-foreground: 220 40% 10%;
-  --muted: 220 20% 96%;
+  --muted: 214 20% 96%;
   --muted-foreground: 220 15% 40%;
-  --accent: 167 20% 96%;
-  --accent-foreground: 167 100% 25%;
+  --accent: 214 60% 95%;
+  --accent-foreground: 214 74% 28%;
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 100%;
 
-  --input: 220 20% 90%;
-  --ring: 167 100% 39%;
+  --input: 214 20% 89%;
+  --ring: 214 74% 41%;
 
   --app-font-sans: 'Plus Jakarta Sans', sans-serif;
   --app-font-serif: Georgia, serif;
@@ -133,29 +133,29 @@
   --sidebar: 220 40% 4%;
   --sidebar-foreground: 220 20% 96%;
   --sidebar-border: 220 20% 15%;
-  --sidebar-primary: 167 100% 39%;
+  --sidebar-primary: 214 80% 60%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 220 20% 10%;
+  --sidebar-accent: 214 30% 12%;
   --sidebar-accent-foreground: 220 20% 96%;
-  --sidebar-ring: 167 100% 39%;
+  --sidebar-ring: 214 80% 60%;
 
   --popover: 220 40% 6%;
   --popover-foreground: 220 20% 96%;
   --popover-border: 220 20% 15%;
 
-  --primary: 167 100% 39%;
+  --primary: 214 80% 60%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 220 20% 15%;
+  --secondary: 214 20% 15%;
   --secondary-foreground: 220 20% 96%;
-  --muted: 220 20% 10%;
+  --muted: 214 20% 10%;
   --muted-foreground: 220 15% 60%;
-  --accent: 167 30% 10%;
-  --accent-foreground: 167 100% 45%;
+  --accent: 214 50% 14%;
+  --accent-foreground: 214 80% 70%;
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 100%;
 
-  --input: 220 20% 15%;
-  --ring: 167 100% 39%;
+  --input: 214 20% 15%;
+  --ring: 214 80% 60%;
 }
 
 @layer base {
