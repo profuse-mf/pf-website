@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
-import { Car, Bike, ShieldCheck, Zap, Users, CheckCircle2 } from "lucide-react";
+import { Car, Bike, ShieldCheck, Zap, Users, CheckCircle2, ChevronDown } from "lucide-react";
 import { FormValues, formSchema } from "@/pages/home";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import VehicleSelector from "@/components/home/vehicle-selector";
 
 interface HeroFormProps {
   onSubmit: (data: FormValues) => void;
@@ -29,6 +30,7 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
   });
 
   const watchType = form.watch("insuranceType");
+  const [selectorOpen, setSelectorOpen] = useState(false);
 
   return (
     <div className="flex-1 flex flex-col">
@@ -161,11 +163,35 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
                       name="carModel"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{watchType === "car" ? "Car Model" : "Bike Model"}</FormLabel>
+                          <FormLabel>{watchType === "car" ? "Car Brand & Model" : "Bike Brand & Model"}</FormLabel>
                           <FormControl>
-                            <Input placeholder={watchType === "car" ? "e.g. Swift Dzire" : "e.g. Activa 6G"} {...field} />
+                            <button
+                              type="button"
+                              data-testid="button-open-vehicle-selector"
+                              onClick={() => setSelectorOpen(true)}
+                              className={`
+                                flex items-center justify-between w-full h-10 px-3 py-2 rounded-md border border-input bg-background text-sm ring-offset-background
+                                hover:border-primary transition-colors text-left
+                                ${!field.value ? "text-muted-foreground" : "text-foreground"}
+                              `}
+                            >
+                              <span className="truncate">
+                                {field.value || (watchType === "car" ? "Select brand & model" : "Select brand & model")}
+                              </span>
+                              <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0 ml-2" />
+                            </button>
                           </FormControl>
                           <FormMessage />
+                          <VehicleSelector
+                            open={selectorOpen}
+                            onOpenChange={setSelectorOpen}
+                            vehicleType={watchType}
+                            value={field.value}
+                            onChange={(val) => {
+                              field.onChange(val);
+                              setSelectorOpen(false);
+                            }}
+                          />
                         </FormItem>
                       )}
                     />

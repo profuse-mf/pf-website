@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { ArrowLeft, Loader2, CheckCircle2, ChevronRight, Star } from "lucide-react";
-import { SiAcko, SiBajaj, SiHdfc, SiPolicybazaar } from "react-icons/si"; // wait, some might not exist. We'll fallback gracefully.
 import { FormValues } from "@/pages/home";
 import { useSubmitLead, useListPartners, getListPartnersQueryKey } from "@workspace/api-client-react";
 import { Button } from "@/components/ui/button";
