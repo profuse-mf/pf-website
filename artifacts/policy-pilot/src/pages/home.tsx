@@ -4,6 +4,7 @@ import { z } from "zod";
 import HeroForm from "@/components/home/hero-form";
 import PartnersScreen from "@/components/home/partners-screen";
 import Navbar from "@/components/layout/navbar";
+import Footer from "@/components/layout/footer";
 
 export const formSchema = z.object({
   insuranceType: z.enum(["car", "bike"]),
@@ -64,6 +65,7 @@ export default function Home() {
           )}
         </AnimatePresence>
       </main>
+      <Footer />
     </div>
   );
 }
