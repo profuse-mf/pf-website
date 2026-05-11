@@ -1,3 +1,16 @@
 <svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="180" height="180" rx="36" fill="#FF3C00"/>
+  <!-- Rounded square background in brand teal -->
+  <rect width="180" height="180" rx="40" fill="#00C896"/>
+  <!-- Shield silhouette (white) — matches the Shield lucide icon shape -->
+  <path
+    d="M90 28 L134 46 L134 96 C134 120 115 140 90 152 C65 140 46 120 46 96 L46 46 Z"
+    fill="white"
+    opacity="0.95"
+  />
+  <!-- Inner shield highlight to give depth -->
+  <path
+    d="M90 44 L122 58 L122 96 C122 114 108 130 90 140 C72 130 58 114 58 96 L58 58 Z"
+    fill="#00C896"
+    opacity="0.35"
+  />
 </svg>
