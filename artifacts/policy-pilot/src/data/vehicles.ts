@@ -431,7 +431,7 @@ export const BIKE_BRANDS: Brand[] = [
   {
     id: "bajaj",
     name: "Bajaj",
-    logoUrl: "https://logo.clearbit.com/bajajauto.com",
+    logoUrl: "/logos/bajaj.png",
     models: [
       { name: "CT100", bodyType: "commuter", variants: ["Kick", "Self"] },
       { name: "Platina 100", bodyType: "commuter", variants: ["Kick", "Self"] },
@@ -531,7 +531,7 @@ export const BIKE_BRANDS: Brand[] = [
   {
     id: "kawasaki",
     name: "Kawasaki",
-    logoUrl: "https://logo.clearbit.com/kawasaki-india.com",
+    logoUrl: "/logos/kawasaki.png",
     models: [
       { name: "Ninja 300", bodyType: "sports", variants: ["ABS"] },
       { name: "Ninja 400", bodyType: "sports", variants: ["ABS", "KRT Edition"] },
@@ -556,7 +556,7 @@ export const BIKE_BRANDS: Brand[] = [
   {
     id: "ather",
     name: "Ather",
-    logoUrl: "https://logo.clearbit.com/atherenergy.com",
+    logoUrl: "/logos/ather.png",
     models: [
       { name: "450S", bodyType: "electric", variants: ["2.9 kWh", "3.7 kWh"] },
       { name: "450X", bodyType: "electric", variants: ["2.9 kWh", "3.7 kWh", "Pro Pack"] },
