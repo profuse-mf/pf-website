@@ -75,10 +75,10 @@ export default function HowItWorksPage() {
             <Zap className="w-3.5 h-3.5" />
             Simple. Fast. Transparent.
           </div>
-          <h1 className="mt-3 text-4xl font-extrabold tracking-tight sm:text-5xl">
+          <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">
             How PolicyPilot works
           </h1>
-          <p className="mt-4 text-lg text-muted-foreground max-w-2xl">
+          <p className="mt-4 text-lg text-muted-foreground type-body max-w-2xl">
             Finding the right motor insurance should take minutes, not hours. Here's exactly
             how we help you get the best quote — at no cost to you.
           </p>
@@ -109,9 +109,9 @@ export default function HowItWorksPage() {
 
                   {/* Content */}
                   <div>
-                    <h2 className="text-xl font-bold mb-2">{step.title}</h2>
-                    <p className="text-muted-foreground leading-relaxed">{step.description}</p>
-                    <p className="mt-3 text-xs text-primary font-medium flex items-center gap-1.5">
+                    <h2 className="text-xl mb-2">{step.title}</h2>
+                    <p className="text-muted-foreground leading-relaxed type-body">{step.description}</p>
+                    <p className="mt-3 text-xs text-primary type-notes flex items-center gap-1.5">
                       <ShieldCheck className="w-3.5 h-3.5" />
                       {step.detail}
                     </p>
@@ -125,8 +125,8 @@ export default function HowItWorksPage() {
         {/* Why PolicyPilot */}
         <section className="bg-card border-y">
           <div className="container mx-auto max-w-4xl px-4 py-16">
-            <h2 className="text-2xl font-extrabold tracking-tight mb-2">Why choose PolicyPilot?</h2>
-            <p className="text-muted-foreground mb-10">
+            <h2 className="text-2xl tracking-tight mb-2">Why choose PolicyPilot?</h2>
+            <p className="text-muted-foreground type-body mb-10">
               We're built for the Indian vehicle owner — straightforward, unbiased, and completely free.
             </p>
             <div className="grid sm:grid-cols-2 gap-5">
@@ -141,8 +141,8 @@ export default function HowItWorksPage() {
                       <Icon className="w-4.5 h-4.5" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-sm">{b.title}</h3>
-                      <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                      <h3 className="text-sm">{b.title}</h3>
+                      <p className="text-xs text-muted-foreground type-notes mt-1 leading-relaxed">
                         {b.description}
                       </p>
                     </div>
@@ -155,10 +155,10 @@ export default function HowItWorksPage() {
 
         {/* CTA */}
         <section className="container mx-auto max-w-4xl px-4 py-16 text-center">
-          <h2 className="text-2xl font-extrabold tracking-tight mb-3">
+          <h2 className="text-2xl tracking-tight mb-3">
             Ready to find the right plan?
           </h2>
-          <p className="text-muted-foreground mb-6">
+          <p className="text-muted-foreground type-body mb-6">
             Compare quotes from 6+ insurers in under 2 minutes — completely free.
           </p>
           <Link href="/">

@@ -3,7 +3,7 @@ import { Link } from "wouter";
 export default function Footer() {
   return (
     <footer className="w-full bg-[#111] text-gray-400 py-5 px-4">
-      <div className="container mx-auto max-w-6xl flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm">
+      <div className="container mx-auto max-w-6xl flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm type-micro">
         <Link href="/how-it-works" className="hover:text-white transition-colors" data-testid="link-how-it-works">
           How It Works
         </Link>

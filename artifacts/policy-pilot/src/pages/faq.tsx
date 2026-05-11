@@ -100,10 +100,10 @@ export default function FaqPage() {
             <HelpCircle className="w-3.5 h-3.5" />
             Got questions? We've got answers.
           </div>
-          <h1 className="mt-3 text-4xl font-extrabold tracking-tight sm:text-5xl">
+          <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">
             Frequently asked questions
           </h1>
-          <p className="mt-4 text-lg text-muted-foreground">
+          <p className="mt-4 text-lg text-muted-foreground type-body">
             Everything you need to know about motor insurance in India and how PolicyPilot works.
           </p>
         </section>
@@ -112,7 +112,7 @@ export default function FaqPage() {
         <section className="container mx-auto max-w-3xl px-4 pb-16 flex flex-col gap-10">
           {FAQ_SECTIONS.map((section) => (
             <div key={section.title}>
-              <h2 className="text-lg font-bold mb-4 text-foreground">{section.title}</h2>
+              <h2 className="text-lg mb-4 text-foreground">{section.title}</h2>
               <Accordion type="single" collapsible className="flex flex-col gap-2">
                 {section.faqs.map((faq, idx) => (
                   <AccordionItem
@@ -120,10 +120,10 @@ export default function FaqPage() {
                     value={`${section.title}-${idx}`}
                     className="rounded-xl border bg-card px-5 shadow-sm data-[state=open]:shadow-md transition-shadow"
                   >
-                    <AccordionTrigger className="text-sm font-semibold text-left py-4 hover:no-underline">
+                    <AccordionTrigger className="text-sm type-subheading text-left py-4 hover:no-underline">
                       {faq.q}
                     </AccordionTrigger>
-                    <AccordionContent className="text-sm text-muted-foreground leading-relaxed pb-4 whitespace-pre-line">
+                    <AccordionContent className="text-sm text-muted-foreground type-notes leading-relaxed pb-4 whitespace-pre-line">
                       {faq.a}
                     </AccordionContent>
                   </AccordionItem>
@@ -136,8 +136,8 @@ export default function FaqPage() {
         {/* Still have questions */}
         <section className="bg-card border-t">
           <div className="container mx-auto max-w-3xl px-4 py-14 text-center">
-            <h2 className="text-xl font-extrabold tracking-tight mb-2">Still have questions?</h2>
-            <p className="text-muted-foreground mb-6 text-sm">
+            <h2 className="text-xl tracking-tight mb-2">Still have questions?</h2>
+            <p className="text-muted-foreground type-notes mb-6 text-sm">
               The fastest way to get an answer is to compare quotes and speak directly with your chosen insurer.
             </p>
             <Link href="/">

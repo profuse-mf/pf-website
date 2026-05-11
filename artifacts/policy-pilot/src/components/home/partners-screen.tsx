@@ -48,10 +48,10 @@ export default function PartnersScreen({ formData, onBack }: PartnersScreenProps
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Details
         </Button>
-        <h2 className="text-3xl font-extrabold tracking-tight">
+        <h2 className="text-3xl tracking-tight">
           Best plans for {formData.registrationNumber.toUpperCase()}
         </h2>
-        <p className="text-muted-foreground mt-2 text-lg">
+        <p className="text-muted-foreground type-body mt-2 text-lg">
           We found these top-rated insurers for your {formData.carModel}.
         </p>
       </div>
@@ -85,8 +85,8 @@ export default function PartnersScreen({ formData, onBack }: PartnersScreenProps
                   />
 
                   <div className="flex-1 min-w-0 space-y-1">
-                    <h3 className="font-bold text-xl truncate pr-8">{partner.name}</h3>
-                    <p className="text-sm text-muted-foreground line-clamp-1">{partner.tagline}</p>
+                    <h3 className="text-xl truncate pr-8">{partner.name}</h3>
+                    <p className="text-sm text-muted-foreground type-notes line-clamp-1">{partner.tagline}</p>
 
                     <div className="pt-3 flex flex-wrap gap-2">
                       {partner.highlight && (

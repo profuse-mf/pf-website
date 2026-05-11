@@ -60,10 +60,10 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
               <Zap className="w-4 h-4" />
               India's Smartest Insurance Aggregator
             </div>
-            <h1 className="text-4xl lg:text-6xl font-extrabold tracking-tight text-foreground leading-[1.1]">
+            <h1 className="text-4xl lg:text-6xl font-bold tracking-tight text-foreground leading-[1.1]">
               Find the right motor insurance in <span className="text-primary">under 2 minutes.</span>
             </h1>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-lg text-muted-foreground type-body">
               Compare 6+ top insurers, get unbiased recommendations, and save up to 80% on your premium. Like a sharp-suited advisor in your pocket.
             </p>
 
@@ -91,7 +91,7 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 relative z-10">
                 <div className="space-y-4">
                   <div>
-                    <h3 className="text-xl font-bold mb-4">Your Vehicle Details</h3>
+                    <h3 className="text-xl mb-4">Your Vehicle Details</h3>
                     <FormField
                       control={form.control}
                       name="insuranceType"
@@ -335,22 +335,22 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
               <div className="w-12 h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto">
                 <ShieldCheck className="w-6 h-6" />
               </div>
-              <h4 className="font-bold text-lg">Unbiased Comparison</h4>
-              <p className="text-sm text-muted-foreground">We compare across 6+ top insurers to find you the best coverage at the lowest price.</p>
+              <h4 className="text-lg">Unbiased Comparison</h4>
+              <p className="text-sm text-muted-foreground type-notes">We compare across 6+ top insurers to find you the best coverage at the lowest price.</p>
             </div>
             <div className="space-y-3">
               <div className="w-12 h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto">
                 <Zap className="w-6 h-6" />
               </div>
-              <h4 className="font-bold text-lg">Instant Policy Issuance</h4>
-              <p className="text-sm text-muted-foreground">No paperwork, no inspections in most cases. Get your policy document via email instantly.</p>
+              <h4 className="text-lg">Instant Policy Issuance</h4>
+              <p className="text-sm text-muted-foreground type-notes">No paperwork, no inspections in most cases. Get your policy document via email instantly.</p>
             </div>
             <div className="space-y-3">
               <div className="w-12 h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto">
                 <Users className="w-6 h-6" />
               </div>
-              <h4 className="font-bold text-lg">Dedicated Claims Support</h4>
-              <p className="text-sm text-muted-foreground">Our sharp-suited advisors stay with you even when things go wrong to help with claims.</p>
+              <h4 className="text-lg">Dedicated Claims Support</h4>
+              <p className="text-sm text-muted-foreground type-notes">Our sharp-suited advisors stay with you even when things go wrong to help with claims.</p>
             </div>
           </div>
         </div>
