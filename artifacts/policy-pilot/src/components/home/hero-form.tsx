@@ -53,37 +53,39 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
 
   return (
     <div className="flex-1 flex flex-col">
-      <section className="relative pt-12 pb-20 lg:pt-20 lg:pb-32 px-4 flex-1 flex items-center bg-gradient-to-b from-primary/5 to-background">
-        <div className="container mx-auto max-w-6xl grid lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6 max-w-xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium">
+      <section className="relative pt-4 pb-8 lg:pt-20 lg:pb-32 px-4 flex-1 flex items-center bg-gradient-to-b from-primary/5 to-background">
+        <div className="container mx-auto max-w-6xl grid lg:grid-cols-2 gap-6 lg:gap-12 items-center">
+          {/* Hero text — shown below form on mobile, left column on desktop */}
+          <div className="space-y-4 lg:space-y-6 max-w-xl order-2 lg:order-1">
+            <div className="hidden lg:inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium">
               <Zap className="w-4 h-4" />
               India's Smartest Insurance Aggregator
             </div>
-            <h1 className="text-4xl lg:text-6xl font-bold tracking-tight text-foreground leading-[1.1]">
+            <h1 className="text-2xl lg:text-6xl font-bold tracking-tight text-foreground leading-[1.15]">
               Find the right motor insurance in <span className="text-primary">under 2 minutes.</span>
             </h1>
-            <p className="text-lg text-muted-foreground type-body">
+            <p className="hidden lg:block text-lg text-muted-foreground type-body">
               Compare 6+ top insurers, get unbiased recommendations, and save up to 80% on your premium. Like a sharp-suited advisor in your pocket.
             </p>
 
-            <div className="flex flex-wrap gap-4 pt-4">
-              <div className="flex items-center gap-2 text-sm font-medium">
-                <CheckCircle2 className="w-5 h-5 text-primary" />
+            <div className="flex flex-wrap gap-3 lg:gap-4 lg:pt-4">
+              <div className="flex items-center gap-1.5 text-xs lg:text-sm font-medium">
+                <CheckCircle2 className="w-4 h-4 lg:w-5 lg:h-5 text-primary" />
                 <span>10,000+ Insured</span>
               </div>
-              <div className="flex items-center gap-2 text-sm font-medium">
-                <CheckCircle2 className="w-5 h-5 text-primary" />
+              <div className="flex items-center gap-1.5 text-xs lg:text-sm font-medium">
+                <CheckCircle2 className="w-4 h-4 lg:w-5 lg:h-5 text-primary" />
                 <span>Zero Hidden Fees</span>
               </div>
-              <div className="flex items-center gap-2 text-sm font-medium">
-                <CheckCircle2 className="w-5 h-5 text-primary" />
+              <div className="flex items-center gap-1.5 text-xs lg:text-sm font-medium">
+                <CheckCircle2 className="w-4 h-4 lg:w-5 lg:h-5 text-primary" />
                 <span>Instant Policy</span>
               </div>
             </div>
           </div>
 
-          <div className="bg-card border shadow-xl rounded-2xl p-6 lg:p-8 relative">
+          {/* Form — always first on mobile */}
+          <div className="bg-card border shadow-xl rounded-2xl p-5 lg:p-8 relative order-1 lg:order-2">
             <div className="absolute -top-4 -right-4 w-20 h-20 bg-primary/10 rounded-full blur-2xl" />
             <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-primary/10 rounded-full blur-2xl" />
 
