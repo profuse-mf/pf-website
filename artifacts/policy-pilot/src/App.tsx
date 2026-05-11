@@ -6,12 +6,16 @@ import Home from "@/pages/home";
 import OurPartnersPage from "@/pages/our-partners";
 import PrivacyPage from "@/pages/privacy";
 import TermsPage from "@/pages/terms";
+import HowItWorksPage from "@/pages/how-it-works";
+import FaqPage from "@/pages/faq";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/partners" component={OurPartnersPage} />
+      <Route path="/how-it-works" component={HowItWorksPage} />
+      <Route path="/faq" component={FaqPage} />
       <Route path="/privacy" component={PrivacyPage} />
       <Route path="/terms" component={TermsPage} />
       <Route component={NotFound} />

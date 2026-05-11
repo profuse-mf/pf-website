@@ -4,6 +4,14 @@ export default function Footer() {
   return (
     <footer className="w-full bg-[#111] text-gray-400 py-5 px-4">
       <div className="container mx-auto max-w-6xl flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm">
+        <Link href="/how-it-works" className="hover:text-white transition-colors" data-testid="link-how-it-works">
+          How It Works
+        </Link>
+        <span className="text-gray-600">·</span>
+        <Link href="/faq" className="hover:text-white transition-colors" data-testid="link-faq">
+          FAQ
+        </Link>
+        <span className="text-gray-600">·</span>
         <Link href="/partners" className="hover:text-white transition-colors" data-testid="link-our-partners">
           Our Partners
         </Link>
