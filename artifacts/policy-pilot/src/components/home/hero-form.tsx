@@ -28,47 +28,41 @@ const COVERAGE_ITEMS = [
     description: "Covers damages caused by accidents and collisions.",
     bg: "bg-orange-50",
     color: "text-orange-500",
-    border: "border-orange-100",
   },
   {
     icon: Key,
     label: "Theft",
     description: "Protection against vehicle theft or loss.",
-    bg: "bg-slate-50",
+    bg: "bg-slate-100",
     color: "text-slate-500",
-    border: "border-slate-100",
   },
   {
     icon: Flame,
     label: "Fire",
     description: "Covers damages caused due to accidental fire.",
     bg: "bg-red-50",
-    color: "text-red-500",
-    border: "border-red-100",
+    color: "text-red-400",
   },
   {
     icon: CloudLightning,
     label: "Natural Disasters",
     description: "Protection from floods, cyclones, and other natural calamities.",
     bg: "bg-blue-50",
-    color: "text-blue-500",
-    border: "border-blue-100",
+    color: "text-blue-400",
   },
   {
     icon: UserRound,
     label: "Personal Accident",
     description: "Financial support for accident-related injuries or loss.",
     bg: "bg-purple-50",
-    color: "text-purple-500",
-    border: "border-purple-100",
+    color: "text-purple-400",
   },
   {
     icon: Scale,
     label: "Third-Party Losses",
     description: "Covers damages caused to others or their property.",
     bg: "bg-teal-50",
-    color: "text-teal-600",
-    border: "border-teal-100",
+    color: "text-teal-500",
   },
 ];
 
@@ -146,9 +140,9 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
             {/* Hero photo */}
             <div className="relative rounded-2xl overflow-hidden bg-primary min-h-[240px] lg:min-h-0 order-2 lg:order-1">
               <img
-                src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=700&q=80"
+                src="/hero-man.png"
                 alt="Happy customer with car"
-                className="w-full h-full object-cover object-center"
+                className="w-full h-full object-cover object-top"
                 loading="eager"
               />
               {/* Subtle blue overlay at bottom */}
@@ -357,10 +351,10 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
             What's Covered in PolicyPilot Car Insurance
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
-            {COVERAGE_ITEMS.map(({ icon: Icon, label, description, bg, color, border }) => (
-              <div key={label} className={`rounded-2xl border ${border} bg-white p-6 flex flex-col items-center text-center gap-4 shadow-sm hover:shadow-md transition-shadow`}>
-                <div className={`w-16 h-16 ${bg} ${color} rounded-2xl flex items-center justify-center`}>
-                  <Icon className="w-8 h-8" strokeWidth={1.5} />
+            {COVERAGE_ITEMS.map(({ icon: Icon, label, description, bg, color }) => (
+              <div key={label} className="rounded-2xl border border-gray-100 bg-white p-6 flex flex-col items-center text-center gap-4 shadow-sm hover:shadow-md transition-shadow">
+                <div className={`w-14 h-14 ${bg} ${color} rounded-2xl flex items-center justify-center`}>
+                  <Icon className="w-7 h-7" strokeWidth={1.5} />
                 </div>
                 <div>
                   <h3 className="font-semibold text-base mb-1">{label}</h3>
