@@ -4,8 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Car, Bike, ShieldCheck, Zap, Users, CheckCircle2,
-  ChevronDown, AlertCircle, Star, CloudLightning, Flame,
-  CarFront, Key, UserRound, Scale,
+  ChevronDown, AlertCircle, Star,
 } from "lucide-react";
 import { FormValues, formSchema } from "@/lib/form-schema";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -23,46 +22,34 @@ const CURRENT_YEAR = new Date().getFullYear();
 
 const COVERAGE_ITEMS = [
   {
-    icon: CarFront,
+    img: "/coverage/accidents.png",
     label: "Accidents",
     description: "Covers damages caused by accidents and collisions.",
-    bg: "bg-orange-50",
-    color: "text-orange-500",
   },
   {
-    icon: Key,
+    img: "/coverage/theft.png",
     label: "Theft",
     description: "Protection against vehicle theft or loss.",
-    bg: "bg-slate-100",
-    color: "text-slate-500",
   },
   {
-    icon: Flame,
+    img: "/coverage/fire.png",
     label: "Fire",
     description: "Covers damages caused due to accidental fire.",
-    bg: "bg-red-50",
-    color: "text-red-400",
   },
   {
-    icon: CloudLightning,
+    img: "/coverage/natural.png",
     label: "Natural Disasters",
     description: "Protection from floods, cyclones, and other natural calamities.",
-    bg: "bg-blue-50",
-    color: "text-blue-400",
   },
   {
-    icon: UserRound,
+    img: "/coverage/personal.png",
     label: "Personal Accident",
     description: "Financial support for accident-related injuries or loss.",
-    bg: "bg-purple-50",
-    color: "text-purple-400",
   },
   {
-    icon: Scale,
+    img: "/coverage/thirdparty.png",
     label: "Third-Party Losses",
     description: "Covers damages caused to others or their property.",
-    bg: "bg-teal-50",
-    color: "text-teal-500",
   },
 ];
 
@@ -351,15 +338,17 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
             What's Covered in PolicyPilot Car Insurance
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
-            {COVERAGE_ITEMS.map(({ icon: Icon, label, description, bg, color }) => (
-              <div key={label} className="rounded-2xl border border-gray-100 bg-white p-6 flex flex-col items-center text-center gap-4 shadow-sm hover:shadow-md transition-shadow">
-                <div className={`w-14 h-14 ${bg} ${color} rounded-2xl flex items-center justify-center`}>
-                  <Icon className="w-7 h-7" strokeWidth={1.5} />
+            {COVERAGE_ITEMS.map(({ img, label, description }) => (
+              <div key={label} className="rounded-2xl border border-gray-100 bg-white p-5 flex flex-col items-center text-center shadow-sm hover:shadow-md transition-shadow">
+                <div className="w-full h-36 flex items-center justify-center mb-4 overflow-hidden">
+                  <img
+                    src={img}
+                    alt={label}
+                    className="max-h-36 w-auto object-contain"
+                  />
                 </div>
-                <div>
-                  <h3 className="font-semibold text-base mb-1">{label}</h3>
-                  <p className="text-xs text-muted-foreground type-notes leading-relaxed">{description}</p>
-                </div>
+                <h3 className="font-semibold text-base mb-1">{label}</h3>
+                <p className="text-xs text-muted-foreground type-notes leading-relaxed">{description}</p>
               </div>
             ))}
           </div>
