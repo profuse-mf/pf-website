@@ -5,6 +5,7 @@ import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
 import { CheckCircle2, PhoneCall } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { createApplication } from "@/lib/application-api";
 
 type InstantValues = {
   registrationNumber: string;
@@ -53,6 +54,17 @@ export default function InstantApplyPage() {
   const [formData, setFormData] = useState<InstantValues | null>(null);
 
   const handleFormSubmit = (data: InstantValues) => {
+    createApplication({
+      vehicle_type: null,
+      reg_no: data.registrationNumber || null,
+      pincode: null,
+      reg_year: null,
+      model: null,
+      brand: null,
+      mobile_no: data.mobileNumber || null,
+      expiry_date: null,
+      email: data.email || null,
+    });
     setFormData(data);
     setStep(2);
     window.scrollTo({ top: 0, behavior: "smooth" });

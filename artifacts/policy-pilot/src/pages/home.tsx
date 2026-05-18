@@ -5,6 +5,7 @@ import PartnersScreen from "@/components/home/partners-screen";
 import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
 import type { FormValues } from "@/lib/form-schema";
+import { createApplication } from "@/lib/application-api";
 
 export type { FormValues };
 
@@ -13,6 +14,17 @@ export default function Home() {
   const [formData, setFormData] = useState<FormValues | null>(null);
 
   const handleFormSubmit = (data: FormValues) => {
+    createApplication({
+      vehicle_type: data.insuranceType === "car" ? "Car" : "Bike",
+      reg_no: data.registrationNumber || null,
+      pincode: data.pinCode || null,
+      reg_year: data.registrationYear ? parseInt(data.registrationYear) : null,
+      model: data.carModel || null,
+      brand: null,
+      mobile_no: data.mobileNumber || null,
+      expiry_date: data.policyExpiryDate || null,
+      email: null,
+    });
     setFormData(data);
     setStep(2);
     window.scrollTo({ top: 0, behavior: "smooth" });
