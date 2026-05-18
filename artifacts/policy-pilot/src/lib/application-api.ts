@@ -12,12 +12,12 @@ export interface ApplicationPayload {
 
 export async function createApplication(payload: ApplicationPayload): Promise<void> {
   try {
-    await fetch("https://pp.moneyfatafat.com/application/create", {
+    await fetch("/api/application/create", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
-  } catch {
-    // fire-and-forget — never block the UI
+  } catch (err) {
+    console.error("[application-api] failed to submit:", err);
   }
 }
