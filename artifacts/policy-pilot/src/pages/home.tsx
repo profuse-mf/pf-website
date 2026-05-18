@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useLocation } from "wouter";
 import HeroForm from "@/components/home/hero-form";
 import Navbar from "@/components/layout/navbar";
@@ -10,6 +10,24 @@ export type { FormValues };
 
 export default function Home() {
   const [, navigate] = useLocation();
+
+  const utmDefaults = useMemo<FormValues | null>(() => {
+    const params = new URLSearchParams(window.location.search);
+    const reg = params.get("utm_reg")?.trim().toUpperCase() ?? "";
+    const mobile = params.get("utm_mobile")?.trim() ?? "";
+    if (!reg && !mobile) return null;
+    return {
+      insuranceType: "car",
+      registrationNumber: reg,
+      mobileNumber: mobile,
+      pinCode: "",
+      policyExpiryDate: "",
+      registrationYear: "",
+      carModel: "",
+      carVariant: "",
+      previousYearClaim: undefined,
+    };
+  }, []);
 
   const handleFormSubmit = (data: FormValues) => {
     createApplication({
@@ -36,7 +54,7 @@ export default function Home() {
     <div className="min-h-[100dvh] flex flex-col bg-muted/30">
       <Navbar />
       <main className="flex-1 flex flex-col">
-        <HeroForm onSubmit={handleFormSubmit} defaultValues={null} />
+        <HeroForm onSubmit={handleFormSubmit} defaultValues={utmDefaults} />
       </main>
       <Footer />
     </div>
