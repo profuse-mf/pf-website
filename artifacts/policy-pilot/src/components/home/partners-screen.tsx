@@ -72,41 +72,41 @@ export default function PartnersScreen({ vehicleType, registrationNumber, model,
               <Star className="w-3 h-3 fill-current" /> Recommended
             </div>
 
-            <CardContent className="p-7">
-              <div className="flex flex-col sm:flex-row sm:items-center gap-6">
-                {/* Logo + name */}
-                <div className="flex items-center gap-5 flex-1">
-                  <BrandLogo
-                    logoUrl={featured.logoUrl}
-                    name={featured.name}
-                    className="w-20 h-20 shrink-0 rounded-2xl border-2 border-primary/20 bg-white p-2 shadow-md"
-                    fallbackClassName="text-2xl font-bold text-muted-foreground"
-                  />
-                  <div className="space-y-2">
-                    <h3 className="text-2xl font-semibold">{featured.name}</h3>
-                    <p className="text-muted-foreground">{featured.tagline}</p>
-                    <div className="flex flex-wrap gap-2 pt-1">
-                      <Badge className="bg-primary text-primary-foreground border-0">
-                        {featured.highlight}
-                      </Badge>
-                      <Badge variant="outline" className="text-muted-foreground">Cashless claims</Badge>
-                      <Badge variant="outline" className="text-green-700 border-green-200 bg-green-50">
-                        <Zap className="w-3 h-3 mr-1" /> Instant Policy
-                      </Badge>
-                    </div>
-                  </div>
+            <CardContent className="p-5 sm:p-7">
+              {/* Logo + name row — always horizontal */}
+              <div className="flex items-center gap-4 mb-4">
+                <BrandLogo
+                  logoUrl={featured.logoUrl}
+                  name={featured.name}
+                  className="w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-2xl border-2 border-primary/20 bg-white p-1.5 sm:p-2 shadow-md"
+                  fallbackClassName="text-2xl font-bold text-muted-foreground"
+                />
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-xl sm:text-2xl font-semibold leading-tight">{featured.name}</h3>
+                  <p className="text-sm sm:text-base text-muted-foreground mt-0.5">{featured.tagline}</p>
                 </div>
-
-                {/* CTA */}
-                <Button
-                  size="lg"
-                  className="shrink-0 h-12 px-8 text-base font-semibold shadow-md shadow-primary/20 group-hover:shadow-lg transition-all"
-                  onClick={(e) => { e.stopPropagation(); handlePartnerClick(featured); }}
-                >
-                  View Plan Details
-                  <ChevronRight className="w-5 h-5 ml-1" />
-                </Button>
               </div>
+
+              {/* Badges */}
+              <div className="flex flex-wrap gap-2 mb-5">
+                <Badge className="bg-primary text-primary-foreground border-0">
+                  {featured.highlight}
+                </Badge>
+                <Badge variant="outline" className="text-muted-foreground">Cashless claims</Badge>
+                <Badge variant="outline" className="text-green-700 border-green-200 bg-green-50">
+                  <Zap className="w-3 h-3 mr-1" /> Instant Policy
+                </Badge>
+              </div>
+
+              {/* CTA — full width on mobile, auto on desktop */}
+              <Button
+                size="lg"
+                className="w-full sm:w-auto h-12 px-8 text-base font-semibold shadow-md shadow-primary/20 group-hover:shadow-lg transition-all"
+                onClick={(e) => { e.stopPropagation(); handlePartnerClick(featured); }}
+              >
+                View Plan Details
+                <ChevronRight className="w-5 h-5 ml-1" />
+              </Button>
             </CardContent>
           </Card>
         )}
