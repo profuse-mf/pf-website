@@ -10,6 +10,45 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import VehicleSelector from "@/components/home/vehicle-selector";
 
+const DAYS = Array.from({ length: 31 }, (_, i) => String(i + 1).padStart(2, "0"));
+const MONTHS: [string, string][] = [
+  ["01","Jan"],["02","Feb"],["03","Mar"],["04","Apr"],
+  ["05","May"],["06","Jun"],["07","Jul"],["08","Aug"],
+  ["09","Sep"],["10","Oct"],["11","Nov"],["12","Dec"],
+];
+
+function DateDropdowns({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const parts = value ? value.split("-") : ["", "", ""];
+  const [year, setYear] = useState(parts[0] ?? "");
+  const [month, setMonth] = useState(parts[1] ?? "");
+  const [day, setDay] = useState(parts[2] ?? "");
+
+  const emit = (y: string, m: string, d: string) => {
+    if (y && m && d) onChange(`${y}-${m}-${d}`);
+    else onChange("");
+  };
+
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 10 }, (_, i) => String(currentYear + i));
+
+  return (
+    <div className="grid grid-cols-3 gap-2">
+      <Select value={day} onValueChange={(v) => { setDay(v); emit(year, month, v); }}>
+        <SelectTrigger><SelectValue placeholder="Day" /></SelectTrigger>
+        <SelectContent>{DAYS.map(d => <SelectItem key={d} value={d}>{d}</SelectItem>)}</SelectContent>
+      </Select>
+      <Select value={month} onValueChange={(v) => { setMonth(v); emit(year, v, day); }}>
+        <SelectTrigger><SelectValue placeholder="Month" /></SelectTrigger>
+        <SelectContent>{MONTHS.map(([v, l]) => <SelectItem key={v} value={v}>{l}</SelectItem>)}</SelectContent>
+      </Select>
+      <Select value={year} onValueChange={(v) => { setYear(v); emit(v, month, day); }}>
+        <SelectTrigger><SelectValue placeholder="Year" /></SelectTrigger>
+        <SelectContent>{years.map(y => <SelectItem key={y} value={y}>{y}</SelectItem>)}</SelectContent>
+      </Select>
+    </div>
+  );
+}
+
 interface HeroFormProps {
   onSubmit: (data: FormValues) => void;
   defaultValues: FormValues | null;
@@ -307,41 +346,13 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
                     <FormField
                       control={form.control}
                       name="policyExpiryDate"
-                      render={({ field }) => {
-                        const parts = field.value ? field.value.split("-") : ["", "", ""];
-                        const [yy, mm, dd] = parts;
-                        const update = (y: string, m: string, d: string) => {
-                          if (y && m && d) field.onChange(`${y}-${m}-${d}`);
-                          else field.onChange("");
-                        };
-                        const days = Array.from({ length: 31 }, (_, i) => String(i + 1).padStart(2, "0"));
-                        const months = [
-                          ["01", "Jan"], ["02", "Feb"], ["03", "Mar"], ["04", "Apr"],
-                          ["05", "May"], ["06", "Jun"], ["07", "Jul"], ["08", "Aug"],
-                          ["09", "Sep"], ["10", "Oct"], ["11", "Nov"], ["12", "Dec"],
-                        ];
-                        const years = Array.from({ length: 10 }, (_, i) => String(CURRENT_YEAR + i));
-                        return (
-                          <FormItem>
-                            <FormLabel>Policy Expiry</FormLabel>
-                            <div className="grid grid-cols-3 gap-2">
-                              <Select value={dd || ""} onValueChange={(v) => update(yy, mm, v)}>
-                                <SelectTrigger><SelectValue placeholder="Day" /></SelectTrigger>
-                                <SelectContent>{days.map(d => <SelectItem key={d} value={d}>{d}</SelectItem>)}</SelectContent>
-                              </Select>
-                              <Select value={mm || ""} onValueChange={(v) => update(yy, v, dd)}>
-                                <SelectTrigger><SelectValue placeholder="Month" /></SelectTrigger>
-                                <SelectContent>{months.map(([v, l]) => <SelectItem key={v} value={v}>{l}</SelectItem>)}</SelectContent>
-                              </Select>
-                              <Select value={yy || ""} onValueChange={(v) => update(v, mm, dd)}>
-                                <SelectTrigger><SelectValue placeholder="Year" /></SelectTrigger>
-                                <SelectContent>{years.map(y => <SelectItem key={y} value={y}>{y}</SelectItem>)}</SelectContent>
-                              </Select>
-                            </div>
-                            <FormMessage />
-                          </FormItem>
-                        );
-                      }}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Policy Expiry</FormLabel>
+                          <DateDropdowns value={field.value} onChange={field.onChange} />
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
                   </div>
                 </div>
