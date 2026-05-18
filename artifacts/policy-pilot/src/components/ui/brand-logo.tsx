@@ -42,7 +42,10 @@ export default function BrandLogo({
   fallbackClassName = "",
 }: BrandLogoProps) {
   const [srcIndex, setSrcIndex] = useState(0);
-  const sources = buildSources(logoUrl);
+
+  // Local paths (start with /) are served immediately with no CDN fallback needed
+  const isLocal = logoUrl?.startsWith("/");
+  const sources = isLocal ? [logoUrl] : buildSources(logoUrl);
 
   if (srcIndex >= sources.length || !logoUrl) {
     return (
