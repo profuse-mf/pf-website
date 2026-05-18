@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { ArrowLeft, Loader2, ChevronRight, Star } from "lucide-react";
-import { FormValues } from "@/pages/home";
 import { getPartnersByType, type Partner } from "@/data/partners";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -8,14 +7,16 @@ import { Badge } from "@/components/ui/badge";
 import BrandLogo from "@/components/ui/brand-logo";
 
 interface PartnersScreenProps {
-  formData: FormValues;
+  vehicleType: "car" | "bike";
+  registrationNumber: string;
+  model?: string;
   onBack: () => void;
 }
 
-export default function PartnersScreen({ formData, onBack }: PartnersScreenProps) {
+export default function PartnersScreen({ vehicleType, registrationNumber, model, onBack }: PartnersScreenProps) {
   const [redirectingTo, setRedirectingTo] = useState<string | null>(null);
 
-  const partners = getPartnersByType(formData.insuranceType);
+  const partners = getPartnersByType(vehicleType);
 
   const handlePartnerClick = (partner: Partner) => {
     setRedirectingTo(partner.name);
@@ -49,10 +50,10 @@ export default function PartnersScreen({ formData, onBack }: PartnersScreenProps
           Back to Details
         </Button>
         <h2 className="text-3xl tracking-tight">
-          Best plans for {formData.registrationNumber.toUpperCase()}
+          Best plans for {registrationNumber.toUpperCase()}
         </h2>
         <p className="text-muted-foreground type-body mt-2 text-lg">
-          We found these top-rated insurers for your {formData.carModel}.
+          {model ? `We found these top-rated insurers for your ${model}.` : "We found these top-rated insurers for you."}
         </p>
       </div>
 
