@@ -1,24 +1,24 @@
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  Car, Bike, ShieldCheck, Zap, Users, CheckCircle2,
-  ChevronDown, AlertCircle, Star,
-} from "lucide-react";
-import { FormValues, formSchema } from "@/lib/form-schema";
+import { z } from "zod";
+import { ShieldCheck, Zap, Users, CheckCircle2, Star } from "lucide-react";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import VehicleSelector from "@/components/home/vehicle-selector";
+
+const instantSchema = z.object({
+  registrationNumber: z.string().min(4, "Registration number is required"),
+  mobileNumber: z.string().regex(/^[0-9]{10}$/, "Must be a valid 10-digit number"),
+  email: z.string().email("Must be a valid email address"),
+});
+
+type InstantValues = z.infer<typeof instantSchema>;
 
 interface PolicyHeroFormProps {
-  onSubmit: (data: FormValues) => void;
-  defaultValues: FormValues | null;
+  onSubmit: (data: InstantValues) => void;
+  defaultValues?: Partial<InstantValues> | null;
 }
-
-const CURRENT_YEAR = new Date().getFullYear();
 
 const COVERAGE_ITEMS = [
   {
@@ -57,32 +57,14 @@ const AVATAR_COLORS = ["bg-primary", "bg-indigo-400", "bg-pink-400", "bg-amber-4
 const AVATAR_INITIALS = ["R", "P", "A", "M"];
 
 export default function PolicyHeroForm({ onSubmit, defaultValues }: PolicyHeroFormProps) {
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<InstantValues>({
+    resolver: zodResolver(instantSchema),
     defaultValues: defaultValues || {
-      insuranceType: "car",
       registrationNumber: "",
       mobileNumber: "",
-      pinCode: "",
-      policyExpiryDate: "",
-      registrationYear: "",
-      carModel: "",
-      carVariant: "",
-      previousYearClaim: undefined,
+      email: "",
     },
   });
-
-  const watchType = form.watch("insuranceType");
-  const watchYear = form.watch("registrationYear");
-  const watchModel = form.watch("carModel");
-  const watchVariant = form.watch("carVariant");
-
-  const isOldVehicle = watchYear ? CURRENT_YEAR - parseInt(watchYear) > 1 : false;
-  const [selectorOpen, setSelectorOpen] = useState(false);
-
-  const modelDisplayValue = watchModel
-    ? watchVariant ? `${watchModel} · ${watchVariant}` : watchModel
-    : "";
 
   return (
     <div className="flex-1 flex flex-col">
@@ -98,7 +80,6 @@ export default function PolicyHeroForm({ onSubmit, defaultValues }: PolicyHeroFo
               under <span className="text-primary">2 minutes.</span>
             </h1>
 
-            {/* Trust badge — desktop only */}
             <div className="hidden md:flex flex-col items-end gap-1 shrink-0">
               <div className="flex items-center gap-2">
                 <div className="flex -space-x-2">
@@ -140,143 +121,39 @@ export default function PolicyHeroForm({ onSubmit, defaultValues }: PolicyHeroFo
               <div className="bg-white border shadow-lg rounded-2xl p-5 lg:p-6">
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                    <div className="space-y-4">
-                      <div>
-                        <h3 className="text-lg mb-3">Your Vehicle Details</h3>
-                        <FormField
-                          control={form.control}
-                          name="insuranceType"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormControl>
-                                <div className="grid grid-cols-2 gap-3">
-                                  <Button
-                                    type="button"
-                                    variant="outline"
-                                    className={`h-12 border-2 flex items-center justify-center gap-2 ${field.value === "car" ? "border-primary bg-primary/5 text-primary" : ""}`}
-                                    onClick={() => { field.onChange("car"); form.setValue("carModel", ""); form.setValue("carVariant", ""); }}
-                                  >
-                                    <Car className="w-4 h-4" /> Car
-                                  </Button>
-                                  <Button
-                                    type="button"
-                                    variant="outline"
-                                    className={`h-12 border-2 flex items-center justify-center gap-2 ${field.value === "bike" ? "border-primary bg-primary/5 text-primary" : ""}`}
-                                    onClick={() => { field.onChange("bike"); form.setValue("carModel", ""); form.setValue("carVariant", ""); }}
-                                  >
-                                    <Bike className="w-4 h-4" /> Bike
-                                  </Button>
-                                </div>
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        />
-                      </div>
+                    <h3 className="text-lg mb-1">Your Vehicle Details</h3>
 
-                      <div className="grid grid-cols-2 gap-3">
-                        <FormField control={form.control} name="registrationNumber" render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Registration Number</FormLabel>
-                            <FormControl><Input placeholder="MH12AB1234" {...field} className="uppercase" /></FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )} />
-                        <FormField control={form.control} name="pinCode" render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Pin Code</FormLabel>
-                            <FormControl><Input placeholder="400001" maxLength={6} {...field} /></FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )} />
-                      </div>
+                    <FormField control={form.control} name="registrationNumber" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Registration Number</FormLabel>
+                        <FormControl>
+                          <Input placeholder="MH12AB1234" {...field} className="uppercase h-11" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )} />
 
-                      <div className="grid grid-cols-2 gap-3">
-                        <FormField control={form.control} name="registrationYear" render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Reg. Year</FormLabel>
-                            <Select onValueChange={(val) => { field.onChange(val); if (CURRENT_YEAR - parseInt(val) <= 1) form.setValue("previousYearClaim", undefined); }} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger><SelectValue placeholder="Select Year" /></SelectTrigger>
-                              </FormControl>
-                              <SelectContent className="max-h-48 overflow-y-auto">
-                                {Array.from({ length: 25 }).map((_, i) => {
-                                  const year = (CURRENT_YEAR - i).toString();
-                                  return <SelectItem key={year} value={year}>{year}</SelectItem>;
-                                })}
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )} />
-                        <FormField control={form.control} name="carModel" render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>{watchType === "car" ? "Car Brand & Model" : "Bike Brand & Model"}</FormLabel>
-                            <FormControl>
-                              <button
-                                type="button"
-                                data-testid="button-open-vehicle-selector"
-                                onClick={() => setSelectorOpen(true)}
-                                className={`flex items-center justify-between w-full h-10 px-3 py-2 rounded-md border border-input bg-background text-sm ring-offset-background hover:border-primary transition-colors text-left ${!field.value ? "text-muted-foreground" : "text-foreground"}`}
-                              >
-                                <span className="truncate">{modelDisplayValue || "Select brand & model"}</span>
-                                <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0 ml-2" />
-                              </button>
-                            </FormControl>
-                            <FormMessage />
-                            <VehicleSelector
-                              open={selectorOpen}
-                              onOpenChange={setSelectorOpen}
-                              vehicleType={watchType}
-                              value={field.value}
-                              variant={watchVariant ?? ""}
-                              onChange={(val) => field.onChange(val)}
-                              onVariantChange={(v) => form.setValue("carVariant", v, { shouldValidate: true })}
-                            />
-                          </FormItem>
-                        )} />
-                      </div>
+                    <FormField control={form.control} name="mobileNumber" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Mobile Number</FormLabel>
+                        <FormControl>
+                          <Input placeholder="9876543210" maxLength={10} {...field} className="h-11" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )} />
 
-                      <AnimatePresence>
-                        {isOldVehicle && (
-                          <motion.div key="claim-question" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.25, ease: "easeInOut" }} className="overflow-hidden">
-                            <FormField control={form.control} name="previousYearClaim" render={({ field }) => (
-                              <FormItem>
-                                <div className="rounded-xl border bg-muted/40 p-4 space-y-3">
-                                  <div className="flex items-center gap-2">
-                                    <AlertCircle className="w-4 h-4 text-primary shrink-0" />
-                                    <FormLabel className="text-sm font-semibold m-0">Have you made a claim in your current policy?</FormLabel>
-                                  </div>
-                                  <div className="grid grid-cols-2 gap-3">
-                                    <button type="button" onClick={() => field.onChange("yes")} className={`py-2.5 rounded-lg border-2 text-sm font-semibold transition-all ${field.value === "yes" ? "border-primary bg-primary/10 text-primary" : "border-border bg-card text-foreground hover:border-primary/50"}`}>Yes</button>
-                                    <button type="button" onClick={() => field.onChange("no")} className={`py-2.5 rounded-lg border-2 text-sm font-semibold transition-all ${field.value === "no" ? "border-primary bg-primary/10 text-primary" : "border-border bg-card text-foreground hover:border-primary/50"}`}>No</button>
-                                  </div>
-                                </div>
-                                <FormMessage />
-                              </FormItem>
-                            )} />
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
+                    <FormField control={form.control} name="email" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email ID</FormLabel>
+                        <FormControl>
+                          <Input type="email" placeholder="you@example.com" {...field} className="h-11" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )} />
 
-                      <div className="grid grid-cols-2 gap-3">
-                        <FormField control={form.control} name="mobileNumber" render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Mobile Number</FormLabel>
-                            <FormControl><Input placeholder="9876543210" maxLength={10} {...field} /></FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )} />
-                        <FormField control={form.control} name="policyExpiryDate" render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Policy Expiry</FormLabel>
-                            <FormControl><Input type="date" {...field} /></FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )} />
-                      </div>
-                    </div>
-
-                    <Button type="submit" size="lg" className="w-full text-base h-12 font-semibold shadow-lg shadow-primary/20">
+                    <Button type="submit" size="lg" className="w-full text-base h-12 font-semibold shadow-lg shadow-primary/20 mt-2">
                       View Insurance Plans
                     </Button>
                   </form>
