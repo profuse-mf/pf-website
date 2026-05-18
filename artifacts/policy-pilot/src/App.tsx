@@ -3,6 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
+import PolicyPage from "@/pages/policy";
 import OurPartnersPage from "@/pages/our-partners";
 import PrivacyPage from "@/pages/privacy";
 import TermsPage from "@/pages/terms";
@@ -13,6 +14,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/policy" component={PolicyPage} />
       <Route path="/partners" component={OurPartnersPage} />
       <Route path="/how-it-works" component={HowItWorksPage} />
       <Route path="/faq" component={FaqPage} />
