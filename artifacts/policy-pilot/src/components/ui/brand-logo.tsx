@@ -26,12 +26,10 @@ function buildSources(logoUrl: string): string[] {
   if (!domain) return logoUrl ? [logoUrl] : [];
 
   return [
-    // 1. Brandfetch CDN — high-quality curated brand logos, publicly accessible
-    `https://cdn.brandfetch.io/${domain}/w/256/h/256`,
-    // 2. Clearbit — well-curated global brands, widely cached
-    `https://logo.clearbit.com/${domain}`,
-    // 3. Google Favicons 256 px — universal fallback for any domain
+    // 1. Google Favicons — served from Google CDN, fast and reliable
     `https://www.google.com/s2/favicons?domain=${domain}&sz=256`,
+    // 2. Clearbit — fallback for brands not in Google's index
+    `https://logo.clearbit.com/${domain}`,
   ];
 }
 
