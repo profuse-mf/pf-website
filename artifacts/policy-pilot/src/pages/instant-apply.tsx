@@ -27,11 +27,12 @@ export default function InstantApplyPage() {
       expiry_date: null,
       email: data.email || null,
     });
-    const params = new URLSearchParams({
+    sessionStorage.setItem("offersData", JSON.stringify({
       vehicleType: data.vehicleType,
-      reg: data.registrationNumber,
-    });
-    navigate(`/offers?${params.toString()}`);
+      registrationNumber: data.registrationNumber,
+      model: "",
+    }));
+    navigate("/offers");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 

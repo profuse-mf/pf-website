@@ -23,12 +23,12 @@ export default function Home() {
       expiry_date: data.policyExpiryDate || null,
       email: null,
     });
-    const params = new URLSearchParams({
+    sessionStorage.setItem("offersData", JSON.stringify({
       vehicleType: data.insuranceType,
-      reg: data.registrationNumber,
-      ...(data.carModel ? { model: data.carModel } : {}),
-    });
-    navigate(`/offers?${params.toString()}`);
+      registrationNumber: data.registrationNumber,
+      model: data.carModel ?? "",
+    }));
+    navigate("/offers");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
