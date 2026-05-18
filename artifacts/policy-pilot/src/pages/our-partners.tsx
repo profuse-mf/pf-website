@@ -22,7 +22,7 @@ export default function OurPartnersPage() {
           {ALL_PARTNERS.map((partner) => (
             <a
               key={partner.id}
-              href={partner.url}
+              href={partner.urlTemplate}
               target="_blank"
               rel="noopener noreferrer"
               data-testid={`card-partner-${partner.id}`}
