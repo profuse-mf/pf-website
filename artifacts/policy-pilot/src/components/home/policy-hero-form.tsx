@@ -2,12 +2,13 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { ShieldCheck, Zap, Users, CheckCircle2, Star } from "lucide-react";
+import { Car, Bike, ShieldCheck, Zap, Users, CheckCircle2, Star } from "lucide-react";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 const instantSchema = z.object({
+  vehicleType: z.enum(["car", "bike"]),
   registrationNumber: z.string().min(4, "Registration number is required"),
   mobileNumber: z.string().regex(/^[0-9]{10}$/, "Must be a valid 10-digit number"),
   email: z.string().email("Must be a valid email address"),
@@ -60,6 +61,7 @@ export default function PolicyHeroForm({ onSubmit, defaultValues }: PolicyHeroFo
   const form = useForm<InstantValues>({
     resolver: zodResolver(instantSchema),
     defaultValues: defaultValues || {
+      vehicleType: "car",
       registrationNumber: "",
       mobileNumber: "",
       email: "",
@@ -122,6 +124,31 @@ export default function PolicyHeroForm({ onSubmit, defaultValues }: PolicyHeroFo
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                     <h3 className="text-lg mb-1">Your Vehicle Details</h3>
+
+                    <FormField control={form.control} name="vehicleType" render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <div className="grid grid-cols-2 gap-3">
+                            <Button
+                              type="button"
+                              variant="outline"
+                              className={`h-12 border-2 flex items-center justify-center gap-2 ${field.value === "car" ? "border-primary bg-primary/5 text-primary" : ""}`}
+                              onClick={() => field.onChange("car")}
+                            >
+                              <Car className="w-4 h-4" /> Car
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              className={`h-12 border-2 flex items-center justify-center gap-2 ${field.value === "bike" ? "border-primary bg-primary/5 text-primary" : ""}`}
+                              onClick={() => field.onChange("bike")}
+                            >
+                              <Bike className="w-4 h-4" /> Bike
+                            </Button>
+                          </div>
+                        </FormControl>
+                      </FormItem>
+                    )} />
 
                     <FormField control={form.control} name="registrationNumber" render={({ field }) => (
                       <FormItem>

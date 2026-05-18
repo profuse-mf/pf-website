@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { createApplication } from "@/lib/application-api";
 
 type InstantValues = {
+  vehicleType: "car" | "bike";
   registrationNumber: string;
   mobileNumber: string;
   email: string;
@@ -55,7 +56,7 @@ export default function InstantApplyPage() {
 
   const handleFormSubmit = (data: InstantValues) => {
     createApplication({
-      vehicle_type: null,
+      vehicle_type: data.vehicleType === "car" ? "Car" : "Bike",
       reg_no: data.registrationNumber || null,
       pincode: null,
       reg_year: null,
