@@ -237,8 +237,8 @@ export default function PolicyHeroForm({ onSubmit, defaultValues }: PolicyHeroFo
         <div className="container mx-auto max-w-6xl px-4">
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
             {COVERAGE_ITEMS.map(({ img, label }) => (
-              <div key={label} className="rounded-2xl border border-gray-100 bg-white flex items-center justify-center shadow-sm hover:shadow-md transition-shadow overflow-hidden" style={{ height: "160px" }}>
-                <img src={img} alt={label} className="h-full w-full object-contain p-4" />
+              <div key={label} className="rounded-2xl border border-gray-100 bg-slate-50 overflow-hidden shadow-sm hover:shadow-md transition-shadow" style={{ height: "150px" }}>
+                <img src={img} alt={label} className="w-full object-cover object-center" style={{ height: "130%", marginTop: "-10%" }} />
               </div>
             ))}
           </div>
