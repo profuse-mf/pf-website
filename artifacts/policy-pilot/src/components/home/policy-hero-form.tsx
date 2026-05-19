@@ -110,7 +110,7 @@ export default function PolicyHeroForm({ onSubmit, defaultValues }: PolicyHeroFo
             {/* Hero photo */}
             <div className="relative rounded-2xl overflow-hidden bg-primary min-h-[240px] lg:min-h-0 order-2 lg:order-1">
               <img
-                src="/hero-man.png"
+                src="/hero-insurance.png"
                 alt="Happy customer with car"
                 className="w-full h-full object-cover object-top"
                 loading="eager"
