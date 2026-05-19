@@ -19,23 +19,6 @@ export default function Navbar() {
           PolicyPilot
         </Link>
 
-        {/* Desktop nav links */}
-        <nav className="hidden md:flex items-center gap-1">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`px-3 py-1.5 rounded-md text-sm type-notes transition-colors
-                ${location === link.href
-                  ? "text-primary bg-primary/8 font-medium"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                }`}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
-
         {/* Right: secure badge */}
         <div className="flex items-center gap-1.5 text-xs type-notes text-muted-foreground shrink-0 bg-muted px-3 py-1.5 rounded-full border">
           <Lock className="w-3 h-3 text-primary" />
