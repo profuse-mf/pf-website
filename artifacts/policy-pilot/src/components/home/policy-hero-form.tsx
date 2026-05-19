@@ -236,13 +236,9 @@ export default function PolicyHeroForm({ onSubmit, defaultValues }: PolicyHeroFo
       <section className="bg-white py-16 border-t">
         <div className="container mx-auto max-w-6xl px-4">
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
-            {COVERAGE_ITEMS.map(({ img, label, description }) => (
-              <div key={label} className="rounded-2xl border border-gray-100 bg-white p-5 flex flex-col items-center text-center shadow-sm hover:shadow-md transition-shadow">
-                <div className="w-full h-36 mb-4 rounded-xl overflow-hidden bg-slate-50 flex items-center justify-center">
-                  <img src={img} alt={label} className="h-full w-full object-contain p-2" />
-                </div>
-                <h3 className="font-semibold text-base mb-1">{label}</h3>
-                <p className="text-xs text-muted-foreground type-notes leading-relaxed">{description}</p>
+            {COVERAGE_ITEMS.map(({ img, label }) => (
+              <div key={label} className="rounded-2xl border border-gray-100 bg-white flex items-center justify-center shadow-sm hover:shadow-md transition-shadow overflow-hidden" style={{ height: "160px" }}>
+                <img src={img} alt={label} className="h-full w-full object-contain p-4" />
               </div>
             ))}
           </div>
