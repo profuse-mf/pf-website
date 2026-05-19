@@ -72,7 +72,7 @@ export default function PolicyHeroForm({ onSubmit, defaultValues }: PolicyHeroFo
     <div className="flex-1 flex flex-col">
 
       {/* ── HERO ── */}
-      <section className="bg-white px-4 pt-6 lg:pt-10 pb-0">
+      <section className="bg-white px-4 pt-10 lg:pt-16 pb-0">
         <div className="container mx-auto max-w-6xl">
 
           {/* Top row: headline + trust widget */}
