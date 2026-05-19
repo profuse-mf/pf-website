@@ -108,11 +108,11 @@ export default function PolicyHeroForm({ onSubmit, defaultValues }: PolicyHeroFo
           <div className="grid lg:grid-cols-2 gap-5 items-stretch">
 
             {/* Hero photo */}
-            <div className="relative rounded-2xl overflow-hidden bg-primary min-h-[240px] lg:min-h-0 order-2 lg:order-1">
+            <div className="relative rounded-2xl overflow-hidden bg-primary order-2 lg:order-1 mb-4 lg:mb-0">
               <img
                 src="/hero-insurance.png"
                 alt="Happy customer with car"
-                className="w-full h-full object-cover object-top"
+                className="w-full max-h-64 lg:max-h-80 object-cover object-center"
                 loading="eager"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-primary/40 via-transparent to-transparent" />
