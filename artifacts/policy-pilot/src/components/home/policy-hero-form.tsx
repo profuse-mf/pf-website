@@ -112,7 +112,7 @@ export default function PolicyHeroForm({ onSubmit, defaultValues }: PolicyHeroFo
               <img
                 src="/hero-insurance.png"
                 alt="Happy customer with car"
-                className="w-full h-full object-cover object-left"
+                className="w-full h-full object-cover object-center"
                 loading="eager"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
