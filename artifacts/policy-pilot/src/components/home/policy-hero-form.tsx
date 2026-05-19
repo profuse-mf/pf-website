@@ -235,9 +235,6 @@ export default function PolicyHeroForm({ onSubmit, defaultValues }: PolicyHeroFo
       {/* ── WHAT'S COVERED ── */}
       <section className="bg-white py-16 border-t">
         <div className="container mx-auto max-w-6xl px-4">
-          <h2 className="text-2xl lg:text-3xl text-center text-primary mb-10">
-            What's Covered in PolicyPilot Car Insurance
-          </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
             {COVERAGE_ITEMS.map(({ img, label, description }) => (
               <div key={label} className="rounded-2xl border border-gray-100 bg-white p-5 flex flex-col items-center text-center shadow-sm hover:shadow-md transition-shadow">
