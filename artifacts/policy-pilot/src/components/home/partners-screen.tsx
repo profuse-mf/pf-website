@@ -95,11 +95,6 @@ export default function PartnersScreen({ vehicleType, registrationNumber, model,
         </div>
       )}
 
-      {/* Disclaimer */}
-      <p className="mb-5 text-xs text-muted-foreground/70 text-center">
-        Results and recommendations are based on your vehicle details. Final premium may vary after insurer verification.
-      </p>
-
       {/* Header */}
       <div className="mb-6">
         <Button
@@ -119,6 +114,11 @@ export default function PartnersScreen({ vehicleType, registrationNumber, model,
           {model ? `Top-rated insurers for your ${model}` : "Top-rated insurers matched for you"}
         </p>
       </div>
+
+      {/* Disclaimer */}
+      <p className="mb-4 text-sm text-muted-foreground">
+        Results and recommendations are based on your vehicle details. Final premium may vary after insurer verification.
+      </p>
 
       <div className="flex flex-col gap-4">
         {/* ── Featured card ── */}
