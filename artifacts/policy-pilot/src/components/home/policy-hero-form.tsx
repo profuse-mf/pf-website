@@ -164,7 +164,7 @@ export default function PolicyHeroForm({ onSubmit, defaultValues }: PolicyHeroFo
 
                     <FormField control={form.control} name="registrationNumber" render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Registration Number</FormLabel>
+                        <FormLabel>Registration Number <span className="text-red-500">*</span></FormLabel>
                         <FormControl>
                           <Input placeholder="MH12AB1234" {...field} className="uppercase h-11" />
                         </FormControl>
@@ -174,7 +174,7 @@ export default function PolicyHeroForm({ onSubmit, defaultValues }: PolicyHeroFo
 
                     <FormField control={form.control} name="mobileNumber" render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Mobile Number</FormLabel>
+                        <FormLabel>Mobile Number <span className="text-red-500">*</span></FormLabel>
                         <FormControl>
                           <Input placeholder="9876543210" maxLength={10} {...field} className="h-11" />
                         </FormControl>
@@ -184,7 +184,7 @@ export default function PolicyHeroForm({ onSubmit, defaultValues }: PolicyHeroFo
 
                     <FormField control={form.control} name="email" render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Email ID</FormLabel>
+                        <FormLabel>Email ID <span className="text-red-500">*</span></FormLabel>
                         <FormControl>
                           <Input type="email" placeholder="you@example.com" {...field} className="h-11" />
                         </FormControl>

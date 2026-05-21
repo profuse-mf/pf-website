@@ -195,7 +195,7 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
                       name="registrationNumber"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Registration Number</FormLabel>
+                          <FormLabel>Registration Number <span className="text-red-500">*</span></FormLabel>
                           <FormControl>
                             <Input placeholder="MH12AB1234" {...field} className="uppercase" />
                           </FormControl>
@@ -208,7 +208,7 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
                       name="pinCode"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Pin Code</FormLabel>
+                          <FormLabel>Pin Code <span className="text-red-500">*</span></FormLabel>
                           <FormControl>
                             <Input placeholder="400001" maxLength={6} {...field} />
                           </FormControl>
@@ -224,7 +224,7 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
                       name="registrationYear"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Reg. Year</FormLabel>
+                          <FormLabel>Reg. Year <span className="text-red-500">*</span></FormLabel>
                           <Select
                             onValueChange={(val) => {
                               field.onChange(val);
@@ -254,7 +254,7 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
                       name="carModel"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{watchType === "car" ? "Car Brand & Model" : "Bike Brand & Model"}</FormLabel>
+                          <FormLabel>{watchType === "car" ? "Car Brand & Model" : "Bike Brand & Model"} <span className="text-red-500">*</span></FormLabel>
                           <FormControl>
                             <button
                               type="button"
@@ -352,7 +352,7 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
                       name="mobileNumber"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Mobile Number</FormLabel>
+                          <FormLabel>Mobile Number <span className="text-red-500">*</span></FormLabel>
                           <FormControl>
                             <Input placeholder="9876543210" maxLength={10} {...field} />
                           </FormControl>
@@ -365,7 +365,7 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
                       name="policyExpiryDate"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Policy Expiry</FormLabel>
+                          <FormLabel>Policy Expiry <span className="text-muted-foreground text-xs font-normal">(Optional)</span></FormLabel>
                           <DateDropdowns value={field.value} onChange={field.onChange} />
                           <FormMessage />
                         </FormItem>
