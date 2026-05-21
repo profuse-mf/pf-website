@@ -8,6 +8,9 @@ export interface Partner {
   logoUrl: string;
   tagline: string;
   highlight: string | null;
+  premiumFrom: number;
+  premiumSave: number;
+  features: string[];
 }
 
 export const ALL_PARTNERS: Partner[] = [
@@ -19,6 +22,9 @@ export const ALL_PARTNERS: Partner[] = [
     logoUrl: "https://www.google.com/s2/favicons?domain=acko.com&sz=256",
     tagline: "Direct insurer with zero paperwork",
     highlight: "Lowest Premium",
+    premiumFrom: 6499,
+    premiumSave: 35,
+    features: ["Zero paperwork", "Cashless claims", "Instant policy"],
   },
   {
     id: "policybazaar",
@@ -28,6 +34,9 @@ export const ALL_PARTNERS: Partner[] = [
     logoUrl: "https://www.google.com/s2/favicons?domain=policybazaar.com&sz=256",
     tagline: "India's largest insurance marketplace",
     highlight: "Most Popular",
+    premiumFrom: 7299,
+    premiumSave: 28,
+    features: ["25+ insurers", "Cashless claims", "24x7 support"],
   },
   {
     id: "zurich-kotak",
@@ -37,6 +46,9 @@ export const ALL_PARTNERS: Partner[] = [
     logoUrl: "https://www.google.com/s2/favicons?domain=zurichkotak.com&sz=256",
     tagline: "Global expertise, local trust",
     highlight: null,
+    premiumFrom: 7899,
+    premiumSave: 20,
+    features: ["Global network", "Cashless claims", "Quick settlement"],
   },
 ];
 
