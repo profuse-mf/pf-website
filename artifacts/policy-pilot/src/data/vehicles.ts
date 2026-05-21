@@ -19,7 +19,7 @@ export const CAR_BRANDS: Brand[] = [
   {
     id: "maruti",
     name: "Maruti Suzuki",
-    logoUrl: "https://logo.clearbit.com/marutisuzuki.com",
+    logoUrl: "/logos/suzuki.png",
     models: [
       { name: "Alto", bodyType: "hatchback", variants: ["Std", "LXi", "VXi", "VXi+"] },
       { name: "Alto K10", bodyType: "hatchback", variants: ["Std MT", "LXi MT", "VXi MT", "VXi+ MT", "VXi+ AMT"] },
