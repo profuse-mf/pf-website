@@ -26,6 +26,21 @@ function StarRating({ rating }: { rating: number }) {
   );
 }
 
+function CsrHero({ ratio, size = "lg" }: { ratio: number; size?: "lg" | "sm" }) {
+  return (
+    <div className={`flex items-stretch gap-3 ${size === "lg" ? "py-1" : ""}`}>
+      <div className={`bg-green-50 border border-green-200 rounded-xl flex flex-col items-center justify-center ${size === "lg" ? "px-6 py-3" : "px-4 py-2"}`}>
+        <span className={`font-extrabold text-green-700 leading-none ${size === "lg" ? "text-4xl" : "text-2xl"}`}>
+          {ratio}%
+        </span>
+        <span className={`text-green-600 font-medium mt-1 text-center leading-tight ${size === "lg" ? "text-xs" : "text-[10px]"}`}>
+          Claim Settlement<br />Ratio
+        </span>
+      </div>
+    </div>
+  );
+}
+
 function StatPill({ label, value, icon: Icon }: { label: string; value: string; icon: React.ElementType }) {
   return (
     <div className="flex items-center gap-1.5 bg-muted/60 rounded-lg px-2.5 py-1.5">
@@ -115,17 +130,12 @@ export default function PartnersScreen({ vehicleType, registrationNumber, model,
             {/* Body */}
             <div className="bg-white px-5 py-4 space-y-4">
               {/* Key stats row */}
-              <div className="grid grid-cols-2 gap-2">
-                <StatPill
-                  icon={ShieldCheck}
-                  value={`${featured.claimSettlementRatio}%`}
-                  label="Claim Settlement"
-                />
-                <StatPill
-                  icon={Building2}
-                  value={featured.networkGarages}
-                  label="Network Garages"
-                />
+              <div className="flex items-center gap-3">
+                <CsrHero ratio={featured.claimSettlementRatio} size="lg" />
+                <div className="flex flex-col gap-2 flex-1">
+                  <StatPill icon={Building2} value={featured.networkGarages} label="Network Garages" />
+                  <StatPill icon={ShieldCheck} value={`${featured.rating}/5`} label="Customer Rating" />
+                </div>
               </div>
 
               {/* Badges */}
@@ -188,16 +198,16 @@ export default function PartnersScreen({ vehicleType, registrationNumber, model,
                       <div className="min-w-0 flex-1">
                         <h3 className="font-semibold text-sm leading-tight truncate pr-10">{partner.name}</h3>
                         <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{partner.tagline}</p>
-                        <div className="mt-1">
-                          <StarRating rating={partner.rating} />
-                        </div>
                       </div>
                     </div>
 
                     {/* Stats */}
-                    <div className="grid grid-cols-2 gap-1.5">
-                      <StatPill icon={ShieldCheck} value={`${partner.claimSettlementRatio}%`} label="Claim Settlement" />
-                      <StatPill icon={Building2} value={partner.networkGarages} label="Network Garages" />
+                    <div className="flex items-center gap-2">
+                      <CsrHero ratio={partner.claimSettlementRatio} size="sm" />
+                      <div className="flex flex-col gap-1.5 flex-1">
+                        <StatPill icon={Building2} value={partner.networkGarages} label="Network Garages" />
+                        <StatPill icon={ShieldCheck} value={`${partner.rating}/5`} label="Customer Rating" />
+                      </div>
                     </div>
 
                     {/* Features */}
