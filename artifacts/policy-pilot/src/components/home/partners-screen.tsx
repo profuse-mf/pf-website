@@ -116,8 +116,8 @@ export default function PartnersScreen({ vehicleType, registrationNumber, model,
       </div>
 
       {/* Disclaimer */}
-      <p className="mb-4 text-base text-foreground/75">
-        Results and recommendations are based on your vehicle details. Final premium may vary after insurer verification.
+      <p className="mb-4 text-base font-medium text-foreground/80">
+        ★ Results and recommendations are based on your vehicle details. Final premium may vary after insurer verification.
       </p>
 
       <div className="flex flex-col gap-4">
