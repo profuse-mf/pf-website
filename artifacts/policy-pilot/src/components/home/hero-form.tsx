@@ -381,7 +381,7 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
                       type="checkbox"
                       checked={agreedToTerms}
                       onChange={e => { setAgreedToTerms(e.target.checked); if (e.target.checked) setTermsError(false); }}
-                      className="mt-0.5 w-[18px] h-[18px] shrink-0 rounded accent-[#e8622a]"
+                      className="mt-0.5 w-[18px] h-[18px] shrink-0 rounded accent-[#1b5fb8]"
                     />
                     <span className="text-sm text-foreground leading-snug">
                       I agree to the{" "}
@@ -395,7 +395,7 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
                       type="checkbox"
                       checked={wantsWhatsApp}
                       onChange={e => setWantsWhatsApp(e.target.checked)}
-                      className="mt-0.5 w-[18px] h-[18px] shrink-0 rounded accent-[#e8622a]"
+                      className="mt-0.5 w-[18px] h-[18px] shrink-0 rounded accent-[#1b5fb8]"
                     />
                     <span className="text-sm text-foreground leading-snug flex items-center gap-1.5 flex-wrap">
                       I want to receive updates on <WhatsAppIcon /><strong className="font-semibold">WhatsApp</strong>
