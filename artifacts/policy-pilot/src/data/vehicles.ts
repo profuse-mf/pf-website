@@ -161,7 +161,7 @@ export const CAR_BRANDS: Brand[] = [
   {
     id: "skoda",
     name: "Skoda",
-    logoUrl: "https://logo.clearbit.com/skoda-auto.com",
+    logoUrl: "/logos/skoda.png",
     models: [
       { name: "Slavia", bodyType: "sedan", variants: ["Active 1.0 MT", "Ambition 1.0 MT", "Ambition 1.0 AT", "Style 1.0 MT", "Style 1.0 AT", "Style 1.5 DSG", "Monte Carlo 1.5 DSG"] },
       { name: "Kushaq", bodyType: "compact-suv", variants: ["Active 1.0 MT", "Ambition 1.0 MT", "Ambition 1.0 AT", "Style 1.0 MT", "Style 1.0 AT", "Style 1.5 DSG", "Monte Carlo 1.5 DSG"] },
