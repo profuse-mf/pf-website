@@ -95,6 +95,12 @@ export default function PartnersScreen({ vehicleType, registrationNumber, model,
         </div>
       )}
 
+      {/* Disclaimer banner */}
+      <div className="mb-5 flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-amber-800 text-xs leading-relaxed">
+        <span className="mt-0.5 shrink-0">ℹ️</span>
+        <span>Results and recommendations are based on your vehicle details. Final premium may vary after insurer verification.</span>
+      </div>
+
       {/* Header */}
       <div className="mb-6">
         <Button
