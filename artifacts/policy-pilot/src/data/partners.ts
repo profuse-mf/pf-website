@@ -1,4 +1,11 @@
 export type VehicleType = "car" | "bike";
+export type StatIcon = "building" | "clock" | "shield" | "trending-up" | "file-text" | "headphones";
+
+export interface PartnerStat {
+  value: string;
+  label: string;
+  icon: StatIcon;
+}
 
 export interface Partner {
   id: string;
@@ -8,9 +15,8 @@ export interface Partner {
   logoUrl: string;
   tagline: string;
   highlight: string | null;
-  claimSettlementRatio: number;
-  networkGarages: string;
-  claimTime: string;
+  claimSettlementRatio: number | null;
+  stats: PartnerStat[];
   planTypes: string[];
   features: string[];
 }
@@ -24,9 +30,11 @@ export const ALL_PARTNERS: Partner[] = [
     logoUrl: "https://www.google.com/s2/favicons?domain=acko.com&sz=256",
     tagline: "Direct insurer with zero paperwork",
     highlight: "Lowest Premium",
-    claimSettlementRatio: 99.5,
-    networkGarages: "7,500+",
-    claimTime: "~3 days avg",
+    claimSettlementRatio: 94.54,
+    stats: [
+      { value: "11.6M", label: "Policies Issued", icon: "file-text" },
+      { value: "4.5L",  label: "Claims Settled",  icon: "shield" },
+    ],
     planTypes: ["Comprehensive", "Third-Party", "Own Damage"],
     features: ["Zero paperwork", "Cashless claims", "Instant policy"],
   },
@@ -38,9 +46,11 @@ export const ALL_PARTNERS: Partner[] = [
     logoUrl: "https://www.google.com/s2/favicons?domain=policybazaar.com&sz=256",
     tagline: "India's largest insurance marketplace",
     highlight: "Most Popular",
-    claimSettlementRatio: 97.8,
-    networkGarages: "10,000+",
-    claimTime: "~5 days avg",
+    claimSettlementRatio: null,
+    stats: [
+      { value: "1,000+", label: "Network Garages",   icon: "building" },
+      { value: "24x7",   label: "Claim Settlement Support", icon: "headphones" },
+    ],
     planTypes: ["Comprehensive", "Third-Party", "Own Damage", "Add-ons"],
     features: ["25+ insurers", "Cashless claims", "24x7 support"],
   },
@@ -52,11 +62,13 @@ export const ALL_PARTNERS: Partner[] = [
     logoUrl: "https://www.google.com/s2/favicons?domain=zurichkotak.com&sz=256",
     tagline: "Global expertise, local trust",
     highlight: null,
-    claimSettlementRatio: 98.5,
-    networkGarages: "4,000+",
-    claimTime: "~4 days avg",
+    claimSettlementRatio: null,
+    stats: [
+      { value: "5,700+",  label: "Network Garages",  icon: "building" },
+      { value: "Up to 50%", label: "No Claim Bonus", icon: "trending-up" },
+    ],
     planTypes: ["Comprehensive", "Third-Party", "Own Damage"],
-    features: ["Global network", "Cashless claims", "Quick settlement"],
+    features: ["24x7 assistance", "Cashless claims", "Quick settlement"],
   },
 ];
 
