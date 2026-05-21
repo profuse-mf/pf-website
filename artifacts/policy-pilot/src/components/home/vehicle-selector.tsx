@@ -132,12 +132,14 @@ export default function VehicleSelector({
                       ${isSelected ? "border-primary bg-primary/5" : "border-border bg-card"}
                     `}
                   >
-                    <BrandLogo
-                      logoUrl={brand.logoUrl}
-                      name={brand.name}
-                      className="w-12 h-12 object-contain"
-                      fallbackClassName="rounded-full text-sm font-bold bg-muted"
-                    />
+                    <div className="w-12 h-12 overflow-hidden flex items-center justify-center">
+                      <BrandLogo
+                        logoUrl={brand.logoUrl}
+                        name={brand.name}
+                        className="w-16 h-16 object-contain scale-[1.35] origin-center"
+                        fallbackClassName="rounded-full text-sm font-bold bg-muted"
+                      />
+                    </div>
                     <span className="text-xs font-medium text-center leading-tight line-clamp-2">{brand.name}</span>
                     {isSelected && <Check className="w-3.5 h-3.5 text-primary" />}
                   </button>
