@@ -38,7 +38,9 @@ function DateDropdowns({ value, onChange, startYear }: { value: string; onChange
 
   const currentYear = new Date().getFullYear();
   const fromYear = startYear ? parseInt(startYear) : currentYear;
-  const years = Array.from({ length: 10 }, (_, i) => String(fromYear + i));
+  const toYear = currentYear + 7;
+  const yearCount = Math.max(1, toYear - fromYear + 1);
+  const years = Array.from({ length: yearCount }, (_, i) => String(fromYear + i));
 
   return (
     <div className="grid grid-cols-3 gap-2">
