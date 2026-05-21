@@ -126,7 +126,7 @@ export const CAR_BRANDS: Brand[] = [
   {
     id: "kia",
     name: "Kia",
-    logoUrl: "https://logo.clearbit.com/kia.com",
+    logoUrl: "/logos/kia.png",
     models: [
       { name: "Sonet", bodyType: "compact-suv", variants: ["HTE", "HTK", "HTK+", "HTX", "HTX+", "GTX", "GTX+", "X-Line HTX+", "X-Line GTX+"] },
       { name: "Seltos", bodyType: "suv", variants: ["HTE", "HTK", "HTK+", "HTX", "HTX+", "GTX+", "X-Line HTX+", "X-Line GTX+"] },
