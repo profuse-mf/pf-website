@@ -517,7 +517,7 @@ export const BIKE_BRANDS: Brand[] = [
   {
     id: "suzuki",
     name: "Suzuki",
-    logoUrl: "/logos/suzuki.jpeg",
+    logoUrl: "https://logo.clearbit.com/suzuki.com",
     models: [
       { name: "Gixxer 150", bodyType: "sports", variants: ["STD", "SF"] },
       { name: "Gixxer SF 150", bodyType: "sports", variants: ["STD", "MotoGP Edition"] },
