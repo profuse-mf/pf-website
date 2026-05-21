@@ -25,7 +25,7 @@ const MONTHS: [string, string][] = [
   ["09","Sep"],["10","Oct"],["11","Nov"],["12","Dec"],
 ];
 
-function DateDropdowns({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+function DateDropdowns({ value, onChange, startYear }: { value: string; onChange: (v: string) => void; startYear?: string }) {
   const parts = value ? value.split("-") : ["", "", ""];
   const [year, setYear] = useState(parts[0] ?? "");
   const [month, setMonth] = useState(parts[1] ?? "");
@@ -37,7 +37,8 @@ function DateDropdowns({ value, onChange }: { value: string; onChange: (v: strin
   };
 
   const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 10 }, (_, i) => String(currentYear + i));
+  const fromYear = startYear ? parseInt(startYear) : currentYear;
+  const years = Array.from({ length: 10 }, (_, i) => String(fromYear + i));
 
   return (
     <div className="grid grid-cols-3 gap-2">
@@ -366,7 +367,7 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Policy Expiry <span className="text-muted-foreground text-xs font-normal">(Optional)</span></FormLabel>
-                          <DateDropdowns value={field.value} onChange={field.onChange} />
+                          <DateDropdowns value={field.value} onChange={field.onChange} startYear={watchYear || undefined} />
                           <FormMessage />
                         </FormItem>
                       )}
