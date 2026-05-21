@@ -382,7 +382,7 @@ export const CAR_BRANDS: Brand[] = [
   {
     id: "byd",
     name: "BYD",
-    logoUrl: "https://logo.clearbit.com/byd.com",
+    logoUrl: "/logos/byd.png",
     models: [
       { name: "Atto 3", bodyType: "electric", variants: ["Standard", "Extended Range"] },
       { name: "Seal", bodyType: "electric", variants: ["Dynamic", "Excellence", "Performance AWD"] },
