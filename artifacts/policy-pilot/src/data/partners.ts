@@ -62,7 +62,7 @@ export const ALL_PARTNERS: Partner[] = [
     logoUrl: "https://www.google.com/s2/favicons?domain=zurichkotak.com&sz=256",
     tagline: "Global expertise, local trust",
     highlight: null,
-    claimSettlementRatio: null,
+    claimSettlementRatio: 98.13,
     stats: [
       { value: "5,700+",  label: "Network Garages",  icon: "building" },
       { value: "Up to 50%", label: "No Claim Bonus", icon: "trending-up" },
