@@ -79,7 +79,7 @@ export const CAR_BRANDS: Brand[] = [
   {
     id: "honda",
     name: "Honda",
-    logoUrl: "https://logo.clearbit.com/honda.com",
+    logoUrl: "/logos/honda.png",
     models: [
       { name: "Amaze", bodyType: "sedan", variants: ["E MT", "S MT", "S CVT", "V MT", "V CVT", "VX MT", "VX CVT"] },
       { name: "City", bodyType: "sedan", variants: ["V MT", "V CVT", "VX MT", "VX CVT", "ZX MT", "ZX CVT"] },
@@ -412,7 +412,7 @@ export const BIKE_BRANDS: Brand[] = [
   {
     id: "honda",
     name: "Honda",
-    logoUrl: "https://logo.clearbit.com/honda.com",
+    logoUrl: "/logos/honda.png",
     models: [
       { name: "Activa 6G", bodyType: "scooter", variants: ["STD", "DLX"] },
       { name: "Activa 125", bodyType: "scooter", variants: ["STD", "H-Smart"] },
