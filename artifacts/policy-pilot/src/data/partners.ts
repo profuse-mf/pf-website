@@ -25,7 +25,7 @@ export const ALL_PARTNERS: Partner[] = [
   {
     id: "acko-car",
     name: "Acko Car Insurance",
-    urlTemplate: "https://profuse.gotrackier.com/click?campaign_id=208&pub_id=260&source={passanyvalue}",
+    urlTemplate: "https://profuse.gotrackier.com/click?campaign_id=216&pub_id=260&source={passanyvalue}",
     vehicleTypes: ["car"],
     logoUrl: "https://www.google.com/s2/favicons?domain=acko.com&sz=256",
     tagline: "Direct insurer with zero paperwork",
