@@ -10,7 +10,8 @@ export interface Partner {
   highlight: string | null;
   claimSettlementRatio: number;
   networkGarages: string;
-  rating: number;
+  claimTime: string;
+  planTypes: string[];
   features: string[];
 }
 
@@ -25,7 +26,8 @@ export const ALL_PARTNERS: Partner[] = [
     highlight: "Lowest Premium",
     claimSettlementRatio: 99.5,
     networkGarages: "7,500+",
-    rating: 4.4,
+    claimTime: "~3 days avg",
+    planTypes: ["Comprehensive", "Third-Party", "Own Damage"],
     features: ["Zero paperwork", "Cashless claims", "Instant policy"],
   },
   {
@@ -38,7 +40,8 @@ export const ALL_PARTNERS: Partner[] = [
     highlight: "Most Popular",
     claimSettlementRatio: 97.8,
     networkGarages: "10,000+",
-    rating: 4.3,
+    claimTime: "~5 days avg",
+    planTypes: ["Comprehensive", "Third-Party", "Own Damage", "Add-ons"],
     features: ["25+ insurers", "Cashless claims", "24x7 support"],
   },
   {
@@ -51,7 +54,8 @@ export const ALL_PARTNERS: Partner[] = [
     highlight: null,
     claimSettlementRatio: 98.5,
     networkGarages: "4,000+",
-    rating: 4.1,
+    claimTime: "~4 days avg",
+    planTypes: ["Comprehensive", "Third-Party", "Own Damage"],
     features: ["Global network", "Cashless claims", "Quick settlement"],
   },
 ];

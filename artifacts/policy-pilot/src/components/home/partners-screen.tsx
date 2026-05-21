@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ArrowLeft, Loader2, ChevronRight, Star, Zap, CheckCircle2, Building2, ShieldCheck } from "lucide-react";
+import { ArrowLeft, Loader2, ChevronRight, Star, Zap, CheckCircle2, Building2, Clock } from "lucide-react";
 import { getPartnersByType, resolvePartnerUrl, type Partner } from "@/data/partners";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -28,15 +28,13 @@ function StarRating({ rating }: { rating: number }) {
 
 function CsrHero({ ratio, size = "lg" }: { ratio: number; size?: "lg" | "sm" }) {
   return (
-    <div className={`flex items-stretch gap-3 ${size === "lg" ? "py-1" : ""}`}>
-      <div className={`bg-green-50 border border-green-200 rounded-xl flex flex-col items-center justify-center ${size === "lg" ? "px-6 py-3" : "px-4 py-2"}`}>
-        <span className={`font-extrabold text-green-700 leading-none ${size === "lg" ? "text-4xl" : "text-2xl"}`}>
-          {ratio}%
-        </span>
-        <span className={`text-green-600 font-medium mt-1 text-center leading-tight ${size === "lg" ? "text-xs" : "text-[10px]"}`}>
-          Claim Settlement<br />Ratio
-        </span>
-      </div>
+    <div className={`bg-green-50 border border-green-200 rounded-xl flex flex-col items-center justify-center shrink-0 ${size === "lg" ? "px-6 py-4" : "px-4 py-3"}`}>
+      <span className={`font-extrabold text-green-700 leading-none ${size === "lg" ? "text-4xl" : "text-2xl"}`}>
+        {ratio}%
+      </span>
+      <span className={`text-green-600 font-medium mt-1 text-center leading-tight ${size === "lg" ? "text-xs" : "text-[10px]"}`}>
+        Claim Settlement<br />Ratio
+      </span>
     </div>
   );
 }
@@ -49,6 +47,27 @@ function StatPill({ label, value, icon: Icon }: { label: string; value: string; 
         <div className="text-xs font-bold text-foreground leading-none">{value}</div>
         <div className="text-[10px] text-muted-foreground leading-none mt-0.5">{label}</div>
       </div>
+    </div>
+  );
+}
+
+function PlanTypeChips({ types }: { types: string[] }) {
+  const colors: Record<string, string> = {
+    "Comprehensive": "bg-blue-50 text-blue-700 border-blue-200",
+    "Third-Party":   "bg-orange-50 text-orange-700 border-orange-200",
+    "Own Damage":    "bg-violet-50 text-violet-700 border-violet-200",
+    "Add-ons":       "bg-teal-50 text-teal-700 border-teal-200",
+  };
+  return (
+    <div className="flex flex-wrap gap-1.5">
+      {types.map((t) => (
+        <span
+          key={t}
+          className={`text-[11px] font-medium px-2 py-0.5 rounded-full border ${colors[t] ?? "bg-muted text-muted-foreground border-border"}`}
+        >
+          {t}
+        </span>
+      ))}
     </div>
   );
 }
@@ -121,21 +140,24 @@ export default function PartnersScreen({ vehicleType, registrationNumber, model,
                   </span>
                 </div>
                 <p className="text-blue-100 text-sm mt-0.5">{featured.tagline}</p>
-                <div className="mt-1.5">
-                  <StarRating rating={featured.rating} />
-                </div>
               </div>
             </div>
 
             {/* Body */}
             <div className="bg-white px-5 py-4 space-y-4">
-              {/* Key stats row */}
-              <div className="flex items-center gap-3">
+              {/* Stats row: CSR hero + side pills */}
+              <div className="flex items-stretch gap-3">
                 <CsrHero ratio={featured.claimSettlementRatio} size="lg" />
-                <div className="flex flex-col gap-2 flex-1">
+                <div className="flex flex-col gap-2 flex-1 justify-center">
                   <StatPill icon={Building2} value={featured.networkGarages} label="Network Garages" />
-                  <StatPill icon={ShieldCheck} value={`${featured.rating}/5`} label="Customer Rating" />
+                  <StatPill icon={Clock} value={featured.claimTime} label="Avg. Claim Time" />
                 </div>
+              </div>
+
+              {/* Plan types */}
+              <div>
+                <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">Plans Available</p>
+                <PlanTypeChips types={featured.planTypes} />
               </div>
 
               {/* Badges */}
@@ -190,7 +212,7 @@ export default function PartnersScreen({ vehicleType, registrationNumber, model,
                   <div className="h-1.5 bg-gradient-to-r from-primary/60 to-primary" />
 
                   <div className="p-4 space-y-3">
-                    {/* Logo + name + rating */}
+                    {/* Logo + name */}
                     <div className="flex items-start gap-3">
                       <div className="w-11 h-11 rounded-xl bg-muted/50 border flex items-center justify-center shrink-0">
                         <BrandLogo logoUrl={partner.logoUrl} name={partner.name} className="w-8 h-8 object-contain" />
@@ -202,12 +224,18 @@ export default function PartnersScreen({ vehicleType, registrationNumber, model,
                     </div>
 
                     {/* Stats */}
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-stretch gap-2">
                       <CsrHero ratio={partner.claimSettlementRatio} size="sm" />
-                      <div className="flex flex-col gap-1.5 flex-1">
+                      <div className="flex flex-col gap-1.5 flex-1 justify-center">
                         <StatPill icon={Building2} value={partner.networkGarages} label="Network Garages" />
-                        <StatPill icon={ShieldCheck} value={`${partner.rating}/5`} label="Customer Rating" />
+                        <StatPill icon={Clock} value={partner.claimTime} label="Avg. Claim Time" />
                       </div>
+                    </div>
+
+                    {/* Plan types */}
+                    <div>
+                      <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">Plans Available</p>
+                      <PlanTypeChips types={partner.planTypes} />
                     </div>
 
                     {/* Features */}
