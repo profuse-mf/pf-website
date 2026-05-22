@@ -148,18 +148,6 @@ components:
           type: string
         partnerUrl:
           type: string
-        utmSource:
-          type: string
-          nullable: true
-        utmMedium:
-          type: string
-          nullable: true
-        utmPartner:
-          type: string
-          nullable: true
-        utmChannel:
-          type: string
-          nullable: true
 
     Lead:
       type: object
@@ -199,18 +187,6 @@ components:
           type: string
         partnerUrl:
           type: string
-        utmSource:
-          type: string
-          nullable: true
-        utmMedium:
-          type: string
-          nullable: true
-        utmPartner:
-          type: string
-          nullable: true
-        utmChannel:
-          type: string
-          nullable: true
         createdAt:
           type: string
 

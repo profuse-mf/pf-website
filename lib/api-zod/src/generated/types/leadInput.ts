@@ -18,8 +18,4 @@ export interface LeadInput {
   partnerId: string;
   partnerName: string;
   partnerUrl: string;
-  utmSource?: string | null;
-  utmMedium?: string | null;
-  utmPartner?: string | null;
-  utmChannel?: string | null;
 }
