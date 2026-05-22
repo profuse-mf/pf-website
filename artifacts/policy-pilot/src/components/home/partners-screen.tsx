@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { ArrowLeft, Loader2, ChevronRight, Star, Zap, CheckCircle2, Building2, Clock, FileText, ShieldCheck, TrendingUp, Headphones } from "lucide-react";
 import { getPartnersByType, resolvePartnerUrl, type Partner, type StatIcon } from "@/data/partners";
+import { getStoredUtm } from "@/lib/application-api";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import BrandLogo from "@/components/ui/brand-logo";
@@ -77,7 +78,8 @@ export default function PartnersScreen({ vehicleType, registrationNumber, model,
 
   const handlePartnerClick = (partner: Partner) => {
     setRedirectingTo(partner.name);
-    window.open(resolvePartnerUrl(partner, registrationNumber), "_blank");
+    const { utm_source } = getStoredUtm();
+    window.open(resolvePartnerUrl(partner, registrationNumber, utm_source), "_blank");
     setTimeout(() => setRedirectingTo(null), 2000);
   };
 

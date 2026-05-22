@@ -76,6 +76,15 @@ export function getPartnersByType(type: VehicleType): Partner[] {
   return ALL_PARTNERS.filter((p) => p.vehicleTypes.includes(type));
 }
 
-export function resolvePartnerUrl(partner: Partner, registrationNumber: string): string {
-  return partner.urlTemplate.replace("{passanyvalue}", encodeURIComponent(registrationNumber));
+function mapUtmSource(raw: string | null): string {
+  if (raw === "85")  return "F_85_PP";
+  if (raw === "141") return "G_141_PP";
+  if (raw === "171") return "W_171_PP";
+  return "pp_Organic";
+}
+
+export function resolvePartnerUrl(partner: Partner, registrationNumber: string, utmSource?: string | null): string {
+  const base = partner.urlTemplate.replace("{passanyvalue}", encodeURIComponent(registrationNumber));
+  const mapped = mapUtmSource(utmSource ?? null);
+  return `${base}&utm_source=${encodeURIComponent(mapped)}`;
 }
