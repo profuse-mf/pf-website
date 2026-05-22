@@ -28,6 +28,10 @@ export interface LeadInput {
   partnerId: string;
   partnerName: string;
   partnerUrl: string;
+  utmSource?: string | null;
+  utmMedium?: string | null;
+  utmPartner?: string | null;
+  utmChannel?: string | null;
 }
 
 export interface Lead {
@@ -42,6 +46,10 @@ export interface Lead {
   partnerId: string;
   partnerName: string;
   partnerUrl: string;
+  utmSource?: string | null;
+  utmMedium?: string | null;
+  utmPartner?: string | null;
+  utmChannel?: string | null;
   createdAt: string;
 }
 

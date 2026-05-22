@@ -30,6 +30,10 @@ export const SubmitLeadBody = zod.object({
   partnerId: zod.string(),
   partnerName: zod.string(),
   partnerUrl: zod.string(),
+  utmSource: zod.string().nullish(),
+  utmMedium: zod.string().nullish(),
+  utmPartner: zod.string().nullish(),
+  utmChannel: zod.string().nullish(),
 });
 
 /**
@@ -48,6 +52,10 @@ export const ListLeadsResponseItem = zod.object({
   partnerId: zod.string(),
   partnerName: zod.string(),
   partnerUrl: zod.string(),
+  utmSource: zod.string().nullish(),
+  utmMedium: zod.string().nullish(),
+  utmPartner: zod.string().nullish(),
+  utmChannel: zod.string().nullish(),
   createdAt: zod.string(),
 });
 export const ListLeadsResponse = zod.array(ListLeadsResponseItem);

@@ -8,6 +8,10 @@ export interface ApplicationPayload {
   mobile_no: string | null;
   expiry_date: string | null;
   email: string | null;
+  utm_source: string | null;
+  utm_medium: string | null;
+  utm_partner: string | null;
+  utm_channel: string | null;
 }
 
 export async function createApplication(payload: ApplicationPayload): Promise<void> {
@@ -20,4 +24,27 @@ export async function createApplication(payload: ApplicationPayload): Promise<vo
   } catch (err) {
     console.error("[application-api] failed to submit:", err);
   }
+}
+
+const UTM_KEY = "pp_utm";
+
+export function captureUtmParams(): void {
+  const params = new URLSearchParams(window.location.search);
+  const utm = {
+    utm_source:  params.get("utm_source")  ?? null,
+    utm_medium:  params.get("utm_medium")  ?? null,
+    utm_partner: params.get("utm_partner") ?? null,
+    utm_channel: params.get("utm_channel") ?? null,
+  };
+  if (Object.values(utm).some(Boolean)) {
+    sessionStorage.setItem(UTM_KEY, JSON.stringify(utm));
+  }
+}
+
+export function getStoredUtm(): { utm_source: string | null; utm_medium: string | null; utm_partner: string | null; utm_channel: string | null } {
+  try {
+    const raw = sessionStorage.getItem(UTM_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  return { utm_source: null, utm_medium: null, utm_partner: null, utm_channel: null };
 }

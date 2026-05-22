@@ -14,6 +14,10 @@ export const leadsTable = pgTable("leads", {
   partnerId: text("partner_id").notNull(),
   partnerName: text("partner_name").notNull(),
   partnerUrl: text("partner_url").notNull(),
+  utmSource: text("utm_source"),
+  utmMedium: text("utm_medium"),
+  utmPartner: text("utm_partner"),
+  utmChannel: text("utm_channel"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

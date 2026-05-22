@@ -1,15 +1,19 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useLocation } from "wouter";
 import HeroForm from "@/components/home/hero-form";
 import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
 import type { FormValues } from "@/lib/form-schema";
-import { createApplication } from "@/lib/application-api";
+import { createApplication, captureUtmParams, getStoredUtm } from "@/lib/application-api";
 
 export type { FormValues };
 
 export default function Home() {
   const [, navigate] = useLocation();
+
+  useEffect(() => {
+    captureUtmParams();
+  }, []);
 
   const utmDefaults = useMemo<FormValues | null>(() => {
     const params = new URLSearchParams(window.location.search);
@@ -30,6 +34,7 @@ export default function Home() {
   }, []);
 
   const handleFormSubmit = (data: FormValues) => {
+    const utm = getStoredUtm();
     createApplication({
       vehicle_type: data.insuranceType === "car" ? "Car" : "Bike",
       reg_no: data.registrationNumber || null,
@@ -40,6 +45,10 @@ export default function Home() {
       mobile_no: data.mobileNumber || null,
       expiry_date: data.policyExpiryDate || null,
       email: null,
+      utm_source:  utm.utm_source,
+      utm_medium:  utm.utm_medium,
+      utm_partner: utm.utm_partner,
+      utm_channel: utm.utm_channel,
     });
     sessionStorage.setItem("offersData", JSON.stringify({
       vehicleType: data.insuranceType,

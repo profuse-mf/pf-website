@@ -29,6 +29,10 @@ router.post("/leads", async (req, res): Promise<void> => {
       partnerId: parsed.data.partnerId,
       partnerName: parsed.data.partnerName,
       partnerUrl: parsed.data.partnerUrl,
+      utmSource: parsed.data.utmSource ?? null,
+      utmMedium: parsed.data.utmMedium ?? null,
+      utmPartner: parsed.data.utmPartner ?? null,
+      utmChannel: parsed.data.utmChannel ?? null,
     })
     .returning();
 
@@ -44,6 +48,10 @@ router.post("/leads", async (req, res): Promise<void> => {
     partnerId: lead.partnerId,
     partnerName: lead.partnerName,
     partnerUrl: lead.partnerUrl,
+    utmSource: lead.utmSource,
+    utmMedium: lead.utmMedium,
+    utmPartner: lead.utmPartner,
+    utmChannel: lead.utmChannel,
     createdAt: lead.createdAt.toISOString(),
   });
 });
