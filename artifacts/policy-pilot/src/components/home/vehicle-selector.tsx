@@ -197,6 +197,28 @@ export default function VehicleSelector({
                   </button>
                 );
               })}
+              {/* Other option */}
+              <button
+                data-testid="button-model-other"
+                onClick={() => {
+                  onChange(`${selectedBrand.name} Other`);
+                  onVariantChange("");
+                  resetAndClose();
+                }}
+                className={`
+                  flex items-center justify-between px-4 py-3 rounded-lg text-left transition-all hover:bg-primary/5 group
+                  ${value === `${selectedBrand.name} Other` ? "bg-primary/10" : ""}
+                `}
+              >
+                <span className={`text-sm font-medium ${value === `${selectedBrand.name} Other` ? "text-primary" : "text-foreground group-hover:text-primary"}`}>
+                  Other
+                </span>
+                {value === `${selectedBrand.name} Other` ? (
+                  <Check className="w-4 h-4 text-primary" />
+                ) : (
+                  <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary" />
+                )}
+              </button>
             </div>
           </ScrollArea>
         )}
@@ -227,6 +249,24 @@ export default function VehicleSelector({
                   </button>
                 );
               })}
+              {/* Other variant option */}
+              <button
+                data-testid="button-variant-other"
+                onClick={() => handleVariantClick("Other")}
+                className={`
+                  flex items-center justify-between px-4 py-3.5 rounded-lg text-left transition-all hover:bg-primary/5 group
+                  ${variant === "Other" && value === `${selectedBrand!.name} ${selectedModel.name}` ? "bg-primary/10" : ""}
+                `}
+              >
+                <span className={`text-sm font-medium ${variant === "Other" && value === `${selectedBrand!.name} ${selectedModel.name}` ? "text-primary" : "text-foreground group-hover:text-primary"}`}>
+                  Other
+                </span>
+                {variant === "Other" && value === `${selectedBrand!.name} ${selectedModel.name}` ? (
+                  <Check className="w-4 h-4 text-primary" />
+                ) : (
+                  <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary" />
+                )}
+              </button>
             </div>
           </ScrollArea>
         )}
