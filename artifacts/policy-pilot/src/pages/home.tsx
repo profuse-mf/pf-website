@@ -34,6 +34,9 @@ export default function Home() {
   }, []);
 
   const handleFormSubmit = (data: FormValues) => {
+    if (typeof (window as any).fbq === "function") {
+      (window as any).fbq("track", "Lead");
+    }
     const utm = getStoredUtm();
     createApplication({
       vehicle_type: data.insuranceType === "car" ? "Car" : "Bike",

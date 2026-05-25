@@ -78,6 +78,9 @@ export default function PartnersScreen({ vehicleType, registrationNumber, model,
 
   const handlePartnerClick = (partner: Partner) => {
     setRedirectingTo(partner.name);
+    if (typeof (window as any).fbq === "function") {
+      (window as any).fbq("track", "Purchase");
+    }
     const { utm_source } = getStoredUtm();
     const url = resolvePartnerUrl(partner, registrationNumber, utm_source);
     console.log("[PolicyPilot] Partner redirect URL:", url);
