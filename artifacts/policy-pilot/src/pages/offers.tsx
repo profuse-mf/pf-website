@@ -20,6 +20,14 @@ export default function OffersPage() {
       try {
         setData(JSON.parse(raw) as OffersData);
         sessionStorage.removeItem("offersData");
+        // Google Ads conversion — Submit lead form
+        if (typeof (window as any).gtag === "function") {
+          (window as any).gtag("event", "conversion", {
+            send_to: "AW-18181123358/TLxECJn1x7EcEJ7at91D",
+            value: 1.0,
+            currency: "INR",
+          });
+        }
       } catch {
         navigate("/");
       }
