@@ -26,6 +26,10 @@ export default function InstantApplyPage() {
       mobile_no: data.mobileNumber || null,
       expiry_date: null,
       email: data.email || null,
+      utm_source: null,
+      utm_medium: null,
+      utm_partner: null,
+      utm_channel: null,
     });
     sessionStorage.setItem("offersData", JSON.stringify({
       vehicleType: data.vehicleType,

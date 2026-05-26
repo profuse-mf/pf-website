@@ -200,7 +200,16 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
                         <FormItem>
                           <FormLabel>Registration Number <span className="text-red-500">*</span></FormLabel>
                           <FormControl>
-                            <Input placeholder="MH12AB1234" {...field} className="uppercase" />
+                            <Input
+                              placeholder="MH12AB1234"
+                              {...field}
+                              className="uppercase"
+                              maxLength={13}
+                              onChange={(e) => {
+                                const cleaned = e.target.value.replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
+                                field.onChange(cleaned);
+                              }}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -213,7 +222,16 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
                         <FormItem>
                           <FormLabel>Pin Code <span className="text-red-500">*</span></FormLabel>
                           <FormControl>
-                            <Input placeholder="400001" maxLength={6} {...field} />
+                            <Input
+                              placeholder="400001"
+                              maxLength={6}
+                              inputMode="numeric"
+                              {...field}
+                              onChange={(e) => {
+                                const digits = e.target.value.replace(/\D/g, "").slice(0, 6);
+                                field.onChange(digits);
+                              }}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -357,7 +375,16 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
                         <FormItem>
                           <FormLabel>Mobile Number <span className="text-red-500">*</span></FormLabel>
                           <FormControl>
-                            <Input placeholder="9876543210" maxLength={10} {...field} />
+                            <Input
+                              placeholder="9876543210"
+                              maxLength={10}
+                              inputMode="numeric"
+                              {...field}
+                              onChange={(e) => {
+                                const digits = e.target.value.replace(/\D/g, "").slice(0, 10);
+                                field.onChange(digits);
+                              }}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -369,7 +396,7 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Policy Expiry <span className="text-muted-foreground text-xs font-normal">(Optional)</span></FormLabel>
-                          <DateDropdowns value={field.value} onChange={field.onChange} startYear={watchYear || undefined} />
+                          <DateDropdowns value={field.value ?? ""} onChange={field.onChange} startYear={watchYear || undefined} />
                           <FormMessage />
                         </FormItem>
                       )}
