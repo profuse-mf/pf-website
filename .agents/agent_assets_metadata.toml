@@ -1,8 +1,13 @@
 uploads = []
-outputs = []
 
 [[generated]]
 id = "phN0TgscJvBcc4YQCJmXc"
 uri = "file://artifacts/policy-pilot/public/hero-insurance.png"
 type = "image"
 title = "generated_image"
+
+[[outputs]]
+id = "q73QdYmDHsjuIZ0sEfTcN"
+uri = "file://artifacts/policy-pilot/public/policypilot-logo.png"
+type = "image"
+title = "PolicyPilot Logo (PNG)"
