@@ -12,8 +12,8 @@ export const formSchema = z.object({
       z
         .string()
         .regex(
-          /^[A-Z]{2}[0-9]{1,2}[A-Z]{1,3}[0-9]{4}$/,
-          "Enter a valid registration number (e.g. MH12AB1234)"
+          /^([A-Z]{2}[0-9]{1,2}[A-Z]{1,3}[0-9]{4}|[0-9]{2}BH[0-9]{4}[A-Z]{2})$/,
+          "Enter a valid registration number (e.g. MH12AB1234 or 22BH1234AB)"
         )
     ),
 
