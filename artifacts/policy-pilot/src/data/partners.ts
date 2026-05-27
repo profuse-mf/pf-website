@@ -86,5 +86,5 @@ function mapUtmSource(raw: string | null): string {
 export function resolvePartnerUrl(partner: Partner, registrationNumber: string, utmSource?: string | null): string {
   const base = partner.urlTemplate.replace("{passanyvalue}", encodeURIComponent(registrationNumber));
   const mapped = mapUtmSource(utmSource ?? null);
-  return `${base}&utm_source=${encodeURIComponent(mapped)}`;
+  return `${base}&p1=${encodeURIComponent(mapped)}`;
 }

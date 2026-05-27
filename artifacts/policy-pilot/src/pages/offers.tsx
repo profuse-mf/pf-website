@@ -20,6 +20,10 @@ export default function OffersPage() {
       try {
         setData(JSON.parse(raw) as OffersData);
         sessionStorage.removeItem("offersData");
+        // Meta Pixel — Lead (fires when user reaches offers page)
+        if (typeof (window as any).fbq === "function") {
+          (window as any).fbq("track", "Lead");
+        }
         // Google Ads conversion — Submit lead form
         if (typeof (window as any).gtag === "function") {
           (window as any).gtag("event", "conversion", {
