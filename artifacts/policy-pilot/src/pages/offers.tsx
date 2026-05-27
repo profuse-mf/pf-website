@@ -44,6 +44,16 @@ export default function OffersPage() {
 
   return (
     <div className="min-h-[100dvh] flex flex-col bg-muted/30">
+      {/* Trackier conversion pixel */}
+      <iframe
+        src="https://profuse.gotrackier.com/pixel?av=6a16a00de1b40618e60848ec"
+        scrolling="no"
+        frameBorder="0"
+        width="1"
+        height="1"
+        style={{ display: "none" }}
+        title="trackier-pixel"
+      />
       <Navbar />
       <main className="flex-1 flex flex-col">
         <PartnersScreen
