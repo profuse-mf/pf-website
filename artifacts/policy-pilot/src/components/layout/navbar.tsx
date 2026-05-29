@@ -16,7 +16,7 @@ export default function Navbar() {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-4">
         <Link href="/" className="flex items-center gap-2 text-primary text-xl tracking-tight type-headline shrink-0">
           <Shield className="w-5 h-5 fill-primary/20" />
-          PolicyPilot
+          PolicyFatafat
         </Link>
 
         {/* Right: secure badge */}

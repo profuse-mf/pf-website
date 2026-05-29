@@ -13,16 +13,16 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-bold mb-3">1. Acceptance of Terms</h2>
             <p className="text-muted-foreground leading-relaxed">
-              By accessing or using PolicyPilot ("the Platform"), you agree to be bound by these
+              By accessing or using PolicyFatafat ("the Platform"), you agree to be bound by these
               Terms of Service. If you do not agree to these terms, please do not use the Platform.
-              PolicyPilot is operated by Profuse Services.
+              PolicyFatafat is operated by Profuse Services.
             </p>
           </section>
 
           <section>
             <h2 className="text-xl font-bold mb-3">2. Nature of Service</h2>
             <p className="text-muted-foreground leading-relaxed">
-              PolicyPilot is an insurance aggregator and comparison platform. We do not sell
+              PolicyFatafat is an insurance aggregator and comparison platform. We do not sell
               insurance directly. We connect you with licensed insurance providers and redirect you
               to their platforms to complete your purchase. All insurance contracts are entered into
               directly between you and the respective insurance partner.
@@ -35,7 +35,7 @@ export default function TermsPage() {
               You are responsible for providing accurate and truthful information on the Platform.
               Providing false, misleading, or incomplete information may result in inaccurate
               insurance recommendations and could void any insurance policy subsequently purchased.
-              PolicyPilot is not responsible for consequences arising from incorrect information
+              PolicyFatafat is not responsible for consequences arising from incorrect information
               provided by users.
             </p>
           </section>
@@ -43,9 +43,9 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-bold mb-3">4. Third-Party Insurance Partners</h2>
             <p className="text-muted-foreground leading-relaxed">
-              PolicyPilot lists insurance partners for informational and comparison purposes only.
+              PolicyFatafat lists insurance partners for informational and comparison purposes only.
               We do not endorse any specific partner over another. Each partner's pricing, coverage
-              terms, and conditions are set by them independently. PolicyPilot is not a party to any
+              terms, and conditions are set by them independently. PolicyFatafat is not a party to any
               insurance contract between you and a partner. Any disputes regarding insurance policies
               must be resolved directly with the relevant insurance provider.
             </p>
@@ -54,7 +54,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-bold mb-3">5. Limitation of Liability</h2>
             <p className="text-muted-foreground leading-relaxed">
-              To the fullest extent permitted by law, PolicyPilot and Profuse Services shall not be
+              To the fullest extent permitted by law, PolicyFatafat and Profuse Services shall not be
               liable for any indirect, incidental, special, consequential, or punitive damages arising
               from your use of the Platform, including but not limited to: reliance on information
               displayed, actions taken by insurance partners, or any insurance claim outcomes.
@@ -64,7 +64,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-bold mb-3">6. Intellectual Property</h2>
             <p className="text-muted-foreground leading-relaxed">
-              All content on PolicyPilot, including text, graphics, logos, and software, is the
+              All content on PolicyFatafat, including text, graphics, logos, and software, is the
               property of Profuse Services and is protected by applicable intellectual property laws.
               You may not reproduce, distribute, or create derivative works without prior written
               permission.
@@ -74,7 +74,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-bold mb-3">7. Modifications to the Service</h2>
             <p className="text-muted-foreground leading-relaxed">
-              PolicyPilot reserves the right to modify, suspend, or discontinue any part of the
+              PolicyFatafat reserves the right to modify, suspend, or discontinue any part of the
               Platform at any time without notice. We may also update these Terms of Service
               periodically. Continued use of the Platform after changes constitutes acceptance of
               the updated terms.
@@ -94,8 +94,8 @@ export default function TermsPage() {
             <h2 className="text-xl font-bold mb-3">9. Contact</h2>
             <p className="text-muted-foreground leading-relaxed">
               For any questions regarding these Terms of Service, please contact us at{" "}
-              <a href="mailto:support@policypilot.in" className="text-primary hover:underline">
-                support@policypilot.in
+              <a href="mailto:support@policyfatafat.in" className="text-primary hover:underline">
+                support@policyfatafat.in
               </a>
               .
             </p>

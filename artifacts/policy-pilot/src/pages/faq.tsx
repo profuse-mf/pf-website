@@ -37,23 +37,23 @@ const FAQ_SECTIONS = [
     ],
   },
   {
-    title: "Using PolicyPilot",
+    title: "Using PolicyFatafat",
     faqs: [
       {
-        q: "Is PolicyPilot free to use?",
-        a: "Yes, completely. PolicyPilot is a comparison platform — we are paid a commission by insurers on policies that are purchased through our platform. This cost is never passed on to you. The premium you see on the insurer's website is exactly what you pay.",
+        q: "Is PolicyFatafat free to use?",
+        a: "Yes, completely. PolicyFatafat is a comparison platform — we are paid a commission by insurers on policies that are purchased through our platform. This cost is never passed on to you. The premium you see on the insurer's website is exactly what you pay.",
       },
       {
-        q: "Does PolicyPilot sell insurance directly?",
-        a: "No. PolicyPilot is an aggregator — we compare plans and redirect you to the insurer's official website or app to complete the purchase. Your contract is directly with the insurer, not with us. This means no middleman and no additional service charges.",
+        q: "Does PolicyFatafat sell insurance directly?",
+        a: "No. PolicyFatafat is an aggregator — we compare plans and redirect you to the insurer's official website or app to complete the purchase. Your contract is directly with the insurer, not with us. This means no middleman and no additional service charges.",
       },
       {
         q: "How accurate are the quotes shown?",
         a: "We surface quotes from our partner insurers based on the vehicle details you provide. Since the final premium depends on additional factors the insurer may ask for (add-ons, exact IDV chosen, NCB proof, etc.), the final price on the insurer's platform may vary slightly from the indicative quote.",
       },
       {
-        q: "Which vehicles can I insure through PolicyPilot?",
-        a: "Currently PolicyPilot supports private cars and two-wheelers (bikes and scooters) registered in India. We cover all major brands — Maruti Suzuki, Hyundai, Tata, Honda, Mahindra, Hero, Bajaj, TVS, Royal Enfield, and many more, including premium and electric vehicles.",
+        q: "Which vehicles can I insure through PolicyFatafat?",
+        a: "Currently PolicyFatafat supports private cars and two-wheelers (bikes and scooters) registered in India. We cover all major brands — Maruti Suzuki, Hyundai, Tata, Honda, Mahindra, Hero, Bajaj, TVS, Royal Enfield, and many more, including premium and electric vehicles.",
       },
       {
         q: "Is my personal information safe?",
@@ -82,7 +82,7 @@ const FAQ_SECTIONS = [
       },
       {
         q: "How do I file a claim after an accident?",
-        a: "Contact your insurer's helpline or use their app immediately after an accident. Do not move the vehicle until an inspection is arranged (for significant damage). Take photos of the damage and the third-party vehicle if applicable. Your insurer will guide you through the cashless or reimbursement claim process. PolicyPilot is a comparison platform and does not handle claims — your insurer is your point of contact.",
+        a: "Contact your insurer's helpline or use their app immediately after an accident. Do not move the vehicle until an inspection is arranged (for significant damage). Take photos of the damage and the third-party vehicle if applicable. Your insurer will guide you through the cashless or reimbursement claim process. PolicyFatafat is a comparison platform and does not handle claims — your insurer is your point of contact.",
       },
     ],
   },
@@ -104,7 +104,7 @@ export default function FaqPage() {
             Frequently asked questions
           </h1>
           <p className="mt-4 text-lg text-muted-foreground type-body">
-            Everything you need to know about motor insurance in India and how PolicyPilot works.
+            Everything you need to know about motor insurance in India and how PolicyFatafat works.
           </p>
         </section>
 

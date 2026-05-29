@@ -83,7 +83,7 @@ export default function PartnersScreen({ vehicleType, registrationNumber, model,
     }
     const { utm_source } = getStoredUtm();
     const url = resolvePartnerUrl(partner, registrationNumber, utm_source);
-    console.log("[PolicyPilot] Partner redirect URL:", url);
+    console.log("[PolicyFatafat] Partner redirect URL:", url);
     window.open(url, "_blank");
     setTimeout(() => setRedirectingTo(null), 2000);
   };

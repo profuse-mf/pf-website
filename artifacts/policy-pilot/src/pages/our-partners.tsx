@@ -13,7 +13,7 @@ export default function OurPartnersPage() {
         <div className="mb-10">
           <h1 className="text-4xl font-extrabold tracking-tight mb-3">Our Insurance Partners</h1>
           <p className="text-muted-foreground text-lg max-w-2xl">
-            PolicyPilot connects you with India's most trusted motor insurance providers. We compare
+            PolicyFatafat connects you with India's most trusted motor insurance providers. We compare
             plans across all partners to find you the best coverage at the lowest price.
           </p>
         </div>

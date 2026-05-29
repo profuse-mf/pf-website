@@ -13,7 +13,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-xl font-bold mb-3">1. Information We Collect</h2>
             <p className="text-muted-foreground leading-relaxed">
-              When you use PolicyPilot, we may collect the following information: vehicle registration
+              When you use PolicyFatafat, we may collect the following information: vehicle registration
               number, mobile number, pin code, policy expiry date, vehicle registration year and
               model, and the insurance type selected (car or bike). This information is used solely to
               help match you with appropriate insurance partners.
@@ -43,7 +43,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-xl font-bold mb-3">4. Cookies and Analytics</h2>
             <p className="text-muted-foreground leading-relaxed">
-              PolicyPilot may use cookies and similar tracking technologies to improve your
+              PolicyFatafat may use cookies and similar tracking technologies to improve your
               experience, analyse traffic, and understand how visitors use our platform. You can
               control cookie settings through your browser preferences.
             </p>
@@ -63,8 +63,8 @@ export default function PrivacyPage() {
             <p className="text-muted-foreground leading-relaxed">
               You have the right to access, correct, or request deletion of your personal data. To
               exercise any of these rights, please contact us at{" "}
-              <a href="mailto:support@policypilot.in" className="text-primary hover:underline">
-                support@policypilot.in
+              <a href="mailto:support@policyfatafat.in" className="text-primary hover:underline">
+                support@policyfatafat.in
               </a>
               .
             </p>
@@ -74,7 +74,7 @@ export default function PrivacyPage() {
             <h2 className="text-xl font-bold mb-3">7. Changes to This Policy</h2>
             <p className="text-muted-foreground leading-relaxed">
               We may update this Privacy Policy from time to time. We will notify you of significant
-              changes by updating the date at the top of this page. Continued use of PolicyPilot
+              changes by updating the date at the top of this page. Continued use of PolicyFatafat
               after changes constitutes acceptance of the updated policy.
             </p>
           </section>
@@ -83,10 +83,10 @@ export default function PrivacyPage() {
             <h2 className="text-xl font-bold mb-3">8. Contact Us</h2>
             <p className="text-muted-foreground leading-relaxed">
               If you have any questions about this Privacy Policy, please contact us at{" "}
-              <a href="mailto:support@policypilot.in" className="text-primary hover:underline">
-                support@policypilot.in
+              <a href="mailto:support@policyfatafat.in" className="text-primary hover:underline">
+                support@policyfatafat.in
               </a>{" "}
-              or write to us at: PolicyPilot, powered by Profuse Services, India.
+              or write to us at: PolicyFatafat, powered by Profuse Services, India.
             </p>
           </section>
         </div>

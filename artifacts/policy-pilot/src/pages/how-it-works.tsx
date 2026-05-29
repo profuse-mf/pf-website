@@ -27,7 +27,7 @@ const STEPS = [
     icon: SlidersHorizontal,
     title: "We compare plans for you",
     description:
-      "PolicyPilot instantly fetches quotes from 6+ top IRDAI-approved insurers — Acko, HDFC ERGO, Bajaj Allianz, Policybazaar, Kotak, ICICI Lombard, and more.",
+      "PolicyFatafat instantly fetches quotes from 6+ top IRDAI-approved insurers — Acko, HDFC ERGO, Bajaj Allianz, Policybazaar, Kotak, ICICI Lombard, and more.",
     detail: "All comparisons are unbiased. We don't favour any insurer.",
   },
   {
@@ -59,7 +59,7 @@ const BENEFITS = [
   {
     icon: ThumbsUp,
     title: "Completely free to use",
-    description: "PolicyPilot is 100% free. Insurers pay us a small commission on policies.",
+    description: "PolicyFatafat is 100% free. Insurers pay us a small commission on policies.",
   },
 ];
 
@@ -76,7 +76,7 @@ export default function HowItWorksPage() {
             Simple. Fast. Transparent.
           </div>
           <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">
-            How PolicyPilot works
+            How PolicyFatafat works
           </h1>
           <p className="mt-4 text-lg text-muted-foreground type-body max-w-2xl">
             Finding the right motor insurance should take minutes, not hours. Here's exactly
@@ -122,10 +122,10 @@ export default function HowItWorksPage() {
           </div>
         </section>
 
-        {/* Why PolicyPilot */}
+        {/* Why PolicyFatafat */}
         <section className="bg-card border-y">
           <div className="container mx-auto max-w-4xl px-4 py-16">
-            <h2 className="text-2xl tracking-tight mb-2">Why choose PolicyPilot?</h2>
+            <h2 className="text-2xl tracking-tight mb-2">Why choose PolicyFatafat?</h2>
             <p className="text-muted-foreground type-body mb-10">
               We're built for the Indian vehicle owner — straightforward, unbiased, and completely free.
             </p>
