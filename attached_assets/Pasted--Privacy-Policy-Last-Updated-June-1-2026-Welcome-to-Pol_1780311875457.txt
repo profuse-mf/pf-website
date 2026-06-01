@@ -1,0 +1,294 @@
+# Privacy Policy
+
+**Last Updated:** June 1, 2026
+
+Welcome to PolicyFatafat ("PolicyFatafat", "we", "our", or "us").
+
+At PolicyFatafat, we value your privacy and are committed to protecting your personal information. This Privacy Policy explains how we collect, use, process, store, disclose, and safeguard your information when you access or use our website, mobile applications, products, services, and related platforms.
+
+By accessing or using PolicyFatafat, you agree to the collection and use of information in accordance with this Privacy Policy.
+
+---
+
+# 1. Who We Are
+
+PolicyFatafat is an online platform that helps users discover, compare, understand, and connect with insurance products, financial products, lending solutions, and related services offered by insurance companies, financial institutions, banks, NBFCs, and other authorized service providers.
+
+PolicyFatafat may act as a technology platform, lead-generation platform, comparison platform, or marketing partner for financial service providers.
+
+---
+
+# 2. Information We Collect
+
+We may collect the following categories of information:
+
+## A. Personal Information
+
+When you use our services, submit forms, request quotes, compare policies, or contact us, we may collect:
+
+* Mobile number
+* Email address
+* City and state
+* PIN code
+* Insurance preferences
+* Vehicle information
+* Health-related information (when relevant for insurance inquiries)
+* Any other information voluntarily submitted by you
+
+---
+
+## B. Technical Information
+
+We may automatically collect:
+
+* IP address
+* Device identifiers
+* Browser type
+* Device model
+* Operating system
+* Language preferences
+* Screen resolution
+* Referring URLs
+* Clickstream data
+* Website interaction data
+* Session information
+
+---
+
+## C. Location Information
+
+We may collect:
+
+* Approximate location based on IP address
+* City-level location information
+* State and country information
+
+We do not collect precise GPS location unless explicitly authorized by you.
+
+---
+
+## D. Communication Information
+
+When you communicate with us, we may collect:
+
+* Support requests
+* Feedback
+* Survey responses
+* Email communications
+* Chat interactions
+* Customer service conversations
+
+---
+
+## E. Marketing and Lead Information
+
+When you submit a quote request, application inquiry, callback request, or lead form, we may collect:
+
+* Product preferences
+* Coverage requirements
+* Budget preferences
+* Policy renewal details
+* Vehicle registration details
+* Insurance history
+* Financial product interests
+
+---
+
+# 3. How We Use Your Information
+
+We may use your information for the following purposes:
+
+* Providing requested services
+* Generating insurance quotes
+* Facilitating policy comparisons
+* Connecting users with insurance providers
+* Connecting users with financial institutions
+* Processing inquiries and requests
+* Customer support and issue resolution
+* Fraud prevention and risk management
+* Website analytics and performance monitoring
+* Improving user experience
+* Personalizing recommendations
+* Marketing communications
+* Product development
+* Compliance with legal obligations
+* Internal reporting and business operations
+
+---
+
+# 4. Lead Sharing and Partner Disclosure
+
+PolicyFatafat may share user information with:
+
+* Insurance companies
+* Insurance brokers
+* Insurance aggregators
+* Banks
+* NBFCs
+* Financial service providers
+* Lending partners
+* Technology service providers
+* CRM and customer support platforms
+
+Such sharing is performed only for purposes related to providing quotations, policy information, product recommendations, customer support, underwriting processes, application processing, and related services.
+
+By submitting your information through PolicyFatafat, you expressly consent to being contacted by our partners through:
+
+* Phone calls
+* SMS
+* WhatsApp
+* Email
+* Push notifications
+
+even if your number is registered under DND or NDNC registries, where legally permissible.
+
+---
+
+# 5. Cookies and Tracking Technologies
+
+We use cookies and similar technologies including:
+
+* Browser cookies
+* Session cookies
+* Persistent cookies
+* Pixel tags
+* Web beacons
+* Analytics scripts
+
+These technologies help us:
+
+* Improve website performance
+* Remember user preferences
+* Measure campaign effectiveness
+* Understand user behavior
+* Deliver relevant advertisements
+
+You may disable cookies through your browser settings. However, some features of the website may not function properly.
+
+---
+
+# 6. Analytics and Advertising
+
+We may use third-party analytics and advertising services such as:
+
+* Google Analytics
+* Google Ads
+* Google Tag Manager
+* Meta Pixel
+* Microsoft Clarity
+* Firebase Analytics
+* Other analytics and marketing platforms
+
+These services may collect information regarding your usage of the website to help us improve our services and marketing effectiveness.
+
+---
+
+# 7. Data Security
+
+We implement reasonable technical, administrative, and organizational safeguards to protect your information.
+
+Security measures may include:
+
+* SSL encryption
+* Secure server infrastructure
+* Access controls
+* Firewalls
+* Monitoring systems
+* Data minimization practices
+
+While we strive to protect your information, no internet transmission or storage system can be guaranteed to be 100% secure.
+
+---
+
+# 8. Data Retention
+
+We retain personal information only for as long as necessary to:
+
+* Provide services
+* Fulfill legal obligations
+* Resolve disputes
+* Enforce agreements
+* Maintain business records
+
+Retention periods may vary depending on the nature of the information and applicable legal requirements.
+
+---
+
+# 9. Your Rights
+
+Depending on applicable laws, you may have rights to:
+
+* Access your information
+* Correct inaccurate information
+* Request deletion of information
+* Withdraw consent
+* Object to certain processing activities
+* Request restriction of processing
+* Request data portability
+
+To exercise these rights, please contact us using the details provided below.
+
+---
+
+# 10. Third-Party Websites
+
+Our website may contain links to third-party websites, insurance providers, financial institutions, or partner platforms.
+
+We do not control and are not responsible for the privacy practices, content, or security of third-party websites. Users should review the privacy policies of such websites independently.
+
+---
+
+# 11. Children's Privacy
+
+Our services are not intended for individuals under the age of 18 years.
+
+We do not knowingly collect personal information from minors. If we become aware that personal information has been collected from a minor without appropriate consent, we will take reasonable steps to delete such information.
+
+---
+
+# 12. International Data Transfers
+
+Your information may be processed, stored, or transferred to servers located in India or other jurisdictions where our service providers operate.
+
+By using our services, you consent to such transfers where permitted by law.
+
+---
+
+# 13. Compliance With Applicable Laws
+
+We aim to comply with applicable privacy and data protection laws, including:
+
+* Information Technology Act, 2000
+* Information Technology Rules applicable in India
+* Digital Personal Data Protection Act (DPDP Act), where applicable
+* Other relevant regulatory requirements
+
+---
+
+# 14. Changes to This Privacy Policy
+
+We may update this Privacy Policy from time to time.
+
+Any modifications will be posted on this page along with the updated effective date. Continued use of our services after such updates constitutes acceptance of the revised Privacy Policy.
+
+---
+
+# 15. Contact Us
+
+If you have any questions, concerns, requests, or complaints regarding this Privacy Policy or our data handling practices, please contact us:
+
+**PolicyFatafat**
+
+Website: https://policyfatafat.com
+
+Email: [support@policyfatafat.com](mailto:support@policyfatafat.com)
+
+Contact Page: https://policyfatafat.com/contact
+
+We will make reasonable efforts to respond to your inquiries within an appropriate timeframe.
+
+---
+
+# Consent
+
+By accessing or using PolicyFatafat, submitting information through our forms, requesting quotes, comparing products, or interacting with our services, you acknowledge that you have read, understood, and agreed to this Privacy Policy.
