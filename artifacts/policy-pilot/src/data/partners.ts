@@ -23,22 +23,6 @@ export interface Partner {
 
 export const ALL_PARTNERS: Partner[] = [
   {
-    id: "acko-car",
-    name: "Acko Car Insurance",
-    urlTemplate: "https://profuse.gotrackier.com/click?campaign_id=216&pub_id=260&source={passanyvalue}",
-    vehicleTypes: ["car"],
-    logoUrl: "https://www.google.com/s2/favicons?domain=acko.com&sz=256",
-    tagline: "Direct insurer with zero paperwork",
-    highlight: "Lowest Premium",
-    claimSettlementRatio: 94.54,
-    stats: [
-      { value: "11.6M", label: "Policies Issued", icon: "file-text" },
-      { value: "4.5L",  label: "Claims Settled",  icon: "shield" },
-    ],
-    planTypes: ["Comprehensive", "Third-Party", "Own Damage"],
-    features: ["Zero paperwork", "Cashless claims", "Instant policy"],
-  },
-  {
     id: "policybazaar",
     name: "Policybazaar",
     urlTemplate: "https://profuse.gotrackier.com/click?campaign_id=194&pub_id=260&source={passanyvalue}",

@@ -73,7 +73,7 @@ export default function PartnersScreen({ vehicleType, registrationNumber, model,
   const [redirectingTo, setRedirectingTo] = useState<string | null>(null);
 
   const partners = getPartnersByType(vehicleType);
-  const featured = partners.find((p) => p.id === "acko-car") ?? partners[0];
+  const featured = partners.find((p) => p.id === "policybazaar") ?? partners[0];
   const rest = partners.filter((p) => p.id !== featured?.id);
 
   const handlePartnerClick = (partner: Partner) => {
