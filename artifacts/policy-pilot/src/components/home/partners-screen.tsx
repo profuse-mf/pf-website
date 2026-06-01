@@ -208,13 +208,13 @@ export default function PartnersScreen({ vehicleType, registrationNumber, model,
         {rest.length > 0 && (
           <>
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-1 mt-2">Other options</p>
-            <div className="grid sm:grid-cols-2 gap-4">
+            <div className="flex flex-col items-center gap-4">
               {rest.map((partner) => (
                 <div
                   key={partner.id}
                   data-testid={`card-partner-${partner.id}`}
                   onClick={() => handlePartnerClick(partner)}
-                  className="group relative rounded-2xl overflow-hidden cursor-pointer border border-border hover:border-primary/50 hover:shadow-md transition-all duration-300 bg-white"
+                  className="group relative rounded-2xl overflow-hidden cursor-pointer border border-border hover:border-primary/50 hover:shadow-md transition-all duration-300 bg-white w-full max-w-lg"
                 >
                   {partner.highlight && (
                     <div className="absolute top-0 right-0 bg-amber-400 text-amber-900 text-xs font-bold px-3 py-1 rounded-bl-xl z-10 flex items-center gap-1">
