@@ -1,3 +1,5 @@
+import { encryptField } from "./encrypt";
+
 export interface ApplicationPayload {
   vehicle_type: string | null;
   reg_no: string | null;
@@ -14,12 +16,25 @@ export interface ApplicationPayload {
   utm_channel: string | null;
 }
 
+async function encryptPayload(
+  payload: ApplicationPayload
+): Promise<Record<string, string | null>> {
+  const entries = await Promise.all(
+    Object.entries(payload).map(async ([key, value]) => {
+      if (value === null) return [key, null] as [string, null];
+      return [key, await encryptField(String(value))] as [string, string];
+    })
+  );
+  return Object.fromEntries(entries);
+}
+
 export async function createApplication(payload: ApplicationPayload): Promise<void> {
   try {
+    const encrypted = await encryptPayload(payload);
     await fetch("/api/application/create", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(encrypted),
     });
   } catch (err) {
     console.error("[application-api] failed to submit:", err);
