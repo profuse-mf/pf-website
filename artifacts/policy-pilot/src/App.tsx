@@ -10,6 +10,8 @@ import PrivacyPage from "@/pages/privacy";
 import TermsPage from "@/pages/terms";
 import HowItWorksPage from "@/pages/how-it-works";
 import FaqPage from "@/pages/faq";
+import CrmLoginPage from "@/pages/crm/login";
+import CrmDashboard from "@/pages/crm/dashboard";
 
 function Router() {
   return (
@@ -22,6 +24,8 @@ function Router() {
       <Route path="/faq" component={FaqPage} />
       <Route path="/privacy" component={PrivacyPage} />
       <Route path="/terms" component={TermsPage} />
+      <Route path="/crm" component={CrmLoginPage} />
+      <Route path="/crm/dashboard" component={CrmDashboard} />
       <Route component={NotFound} />
     </Switch>
   );
