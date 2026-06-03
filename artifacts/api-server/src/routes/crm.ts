@@ -193,6 +193,11 @@ router.get("/crm/users", requireCrmAuth, requireCrmDb, async (req, res): Promise
 
   const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
 
+  // Build WHERE for the count query (only p-level conditions + EXISTS)
+  const existsClause = conditions.length > 0
+    ? `WHERE ${conditions.join(" AND ")} AND EXISTS (SELECT 1 FROM pp_application_master WHERE user_id = p.id)`
+    : `WHERE EXISTS (SELECT 1 FROM pp_application_master WHERE user_id = p.id)`;
+
   try {
     const [[dataRows], [countRows]] = await Promise.all([
       crmPool!.query(
@@ -200,17 +205,15 @@ router.get("/crm/users", requireCrmAuth, requireCrmDb, async (req, res): Promise
                 a.model, a.brand, a.expiry_date, p.created_at,
                 p.utm_source, p.utm_medium, p.utm_channel, p.utm_partner
          FROM pp_user p
-         JOIN pp_application_master a ON p.id = a.user_id
+         INNER JOIN pp_application_master a
+           ON a.id = (SELECT id FROM pp_application_master WHERE user_id = p.id ORDER BY id DESC LIMIT 1)
          ${whereClause}
          ORDER BY p.id ASC
          LIMIT ? OFFSET ?`,
         [...params, limit, offset]
       ),
       crmPool!.query(
-        `SELECT COUNT(*) AS total
-         FROM pp_user p
-         JOIN pp_application_master a ON p.id = a.user_id
-         ${whereClause}`,
+        `SELECT COUNT(*) AS total FROM pp_user p ${existsClause}`,
         params
       ),
     ]);
