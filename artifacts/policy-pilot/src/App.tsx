@@ -14,6 +14,7 @@ import CrmLoginPage from "@/pages/crm/login";
 import CrmDashboard from "@/pages/crm/dashboard";
 import UserBoard from "@/pages/crm/userboard";
 import AppBoard from "@/pages/crm/appboard";
+import PartnerBoard from "@/pages/crm/partnerboard";
 
 function Router() {
   return (
@@ -30,6 +31,7 @@ function Router() {
       <Route path="/crm/dashboard" component={CrmDashboard} />
       <Route path="/crm/userboard" component={UserBoard} />
       <Route path="/crm/appboard" component={AppBoard} />
+      <Route path="/crm/partnerboard" component={PartnerBoard} />
       <Route component={NotFound} />
     </Switch>
   );

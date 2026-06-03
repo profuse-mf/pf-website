@@ -4,6 +4,7 @@ const TABS = [
   { label: "Insights",           href: "/crm/dashboard" },
   { label: "User Board",         href: "/crm/userboard" },
   { label: "Application Board",  href: "/crm/appboard" },
+  { label: "Partner Board",      href: "/crm/partnerboard" },
 ];
 
 export function CrmNav() {
