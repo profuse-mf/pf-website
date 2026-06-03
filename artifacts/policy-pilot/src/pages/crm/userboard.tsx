@@ -91,6 +91,16 @@ function maskMobile(mobile: string): string {
   return "XXXXXX" + mobile.slice(-4);
 }
 
+function maskEmail(email: string): string {
+  if (!email) return email;
+  const at = email.indexOf("@");
+  if (at < 0) return email;
+  const local = email.slice(0, at);
+  const domain = email.slice(at); // includes @
+  const visible = local.slice(0, 5);
+  return visible + "XXXX" + domain;
+}
+
 export default function UserBoard() {
   const [, navigate] = useLocation();
   const session = getCrmSession();
@@ -279,6 +289,7 @@ export default function UserBoard() {
                         {COLUMNS.map((c) => {
                           let val = String(row[c.key] ?? "");
                           if (c.key === "mobile") val = maskMobile(val);
+                          if (c.key === "email") val = maskEmail(val);
                           if (c.key === "expiry_date" && val) val = fmtDate(val);
                           return (
                             <td key={c.key} className="py-2 px-3 text-slate-700">

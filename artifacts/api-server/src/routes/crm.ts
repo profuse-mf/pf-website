@@ -202,7 +202,7 @@ router.get("/crm/users", requireCrmAuth, requireCrmDb, async (req, res): Promise
          FROM pp_user p
          JOIN pp_application_master a ON p.id = a.user_id
          ${whereClause}
-         ORDER BY p.id DESC
+         ORDER BY p.id ASC
          LIMIT ? OFFSET ?`,
         [...params, limit, offset]
       ),
