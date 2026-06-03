@@ -9,6 +9,10 @@ import {
   fetchUsersBySource,
   exportUsersByDate,
   exportUsersBySource,
+  fetchByPincode,
+  exportByPincode,
+  fetchByVehicle,
+  exportByVehicle,
   fetchSourceByDate,
   fetchDateBySource,
   getPresetDates,
@@ -18,6 +22,8 @@ import {
   type CrmStats,
   type DayRow,
   type SourceRow,
+  type PincodeRow,
+  type VehicleRow,
   type DrillSourceRow,
   type DrillDateRow,
   type PaginatedResult,
@@ -253,6 +259,16 @@ export default function CrmDashboard() {
   const [sourceLoading, setSourceLoading] = useState(false);
   const [sourceDlLoading, setSourceDlLoading] = useState(false);
 
+  const [pincodePage, setPincodePage] = useState(1);
+  const [pincodeData, setPincodeData] = useState<PaginatedResult<PincodeRow> | null>(null);
+  const [pincodeLoading, setPincodeLoading] = useState(false);
+  const [pincodeDlLoading, setPincodeDlLoading] = useState(false);
+
+  const [vehiclePage, setVehiclePage] = useState(1);
+  const [vehicleData, setVehicleData] = useState<PaginatedResult<VehicleRow> | null>(null);
+  const [vehicleLoading, setVehicleLoading] = useState(false);
+  const [vehicleDlLoading, setVehicleDlLoading] = useState(false);
+
   const [drill, setDrill] = useState<DrillMode | null>(null);
 
   useEffect(() => {
@@ -271,6 +287,14 @@ export default function CrmDashboard() {
     setSourceLoading(true);
     setSourcePage(1);
     fetchUsersBySource(1, from, to).then(setSourceData).catch(() => {}).finally(() => setSourceLoading(false));
+
+    setPincodeLoading(true);
+    setPincodePage(1);
+    fetchByPincode(1, from, to).then(setPincodeData).catch(() => {}).finally(() => setPincodeLoading(false));
+
+    setVehicleLoading(true);
+    setVehiclePage(1);
+    fetchByVehicle(1, from, to).then(setVehicleData).catch(() => {}).finally(() => setVehicleLoading(false));
   }, []);
 
   useEffect(() => {
@@ -331,6 +355,50 @@ export default function CrmDashboard() {
       );
     } finally {
       setSourceDlLoading(false);
+    }
+  }
+
+  const loadPincodePage = useCallback((page: number) => {
+    setPincodeLoading(true);
+    fetchByPincode(page, fromDate, toDate)
+      .then((d) => { setPincodeData(d); setPincodePage(page); })
+      .catch(() => {})
+      .finally(() => setPincodeLoading(false));
+  }, [fromDate, toDate]);
+
+  async function handlePincodeDownload() {
+    setPincodeDlLoading(true);
+    try {
+      const rows = await exportByPincode(fromDate, toDate);
+      downloadXlsx(
+        `apps-by-pincode_${fromDate}_${toDate}`,
+        ["Pincode", "Applications"],
+        rows.map((r) => [r.pincode, r.count])
+      );
+    } finally {
+      setPincodeDlLoading(false);
+    }
+  }
+
+  const loadVehiclePage = useCallback((page: number) => {
+    setVehicleLoading(true);
+    fetchByVehicle(page, fromDate, toDate)
+      .then((d) => { setVehicleData(d); setVehiclePage(page); })
+      .catch(() => {})
+      .finally(() => setVehicleLoading(false));
+  }, [fromDate, toDate]);
+
+  async function handleVehicleDownload() {
+    setVehicleDlLoading(true);
+    try {
+      const rows = await exportByVehicle(fromDate, toDate);
+      downloadXlsx(
+        `apps-by-vehicle_${fromDate}_${toDate}`,
+        ["Vehicle Type", "Applications"],
+        rows.map((r) => [r.vehicle_type, r.count])
+      );
+    } finally {
+      setVehicleDlLoading(false);
     }
   }
 
@@ -488,6 +556,80 @@ export default function CrmDashboard() {
                   </table>
                 </div>
                 <Pagination page={sourcePage} totalPages={sourceData.totalPages} onChange={loadSourcePage} />
+              </>
+            ) : (
+              <p className="text-sm text-slate-400 py-6 text-center">No data for this period</p>
+            )}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Pincode-wise table */}
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+            <div className="flex items-start justify-between mb-1">
+              <h3 className="text-base font-bold text-slate-800">Applications — Pincode Wise</h3>
+              <DownloadBtn onClick={handlePincodeDownload} loading={pincodeDlLoading} />
+            </div>
+            <p className="text-xs text-slate-400 mb-4">Applications by pincode in the selected period</p>
+            {pincodeLoading ? (
+              <p className="text-sm text-slate-400 py-6 text-center">Loading…</p>
+            ) : pincodeData && pincodeData.rows.length > 0 ? (
+              <>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b-2 border-slate-200 bg-slate-50">
+                        <th className="text-left py-2.5 px-3 text-slate-700 font-bold text-xs uppercase tracking-wide">Pincode</th>
+                        <th className="text-right py-2.5 px-3 text-slate-700 font-bold text-xs uppercase tracking-wide">Applications</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {pincodeData.rows.map((row, i) => (
+                        <tr key={i} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                          <td className="py-2.5 px-3 text-slate-700">{row.pincode || <span className="text-slate-300">—</span>}</td>
+                          <td className="py-2.5 px-3 text-right font-semibold text-slate-800">{row.count.toLocaleString()}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <Pagination page={pincodePage} totalPages={pincodeData.totalPages} onChange={loadPincodePage} />
+              </>
+            ) : (
+              <p className="text-sm text-slate-400 py-6 text-center">No data for this period</p>
+            )}
+          </div>
+
+          {/* Vehicle type-wise table */}
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+            <div className="flex items-start justify-between mb-1">
+              <h3 className="text-base font-bold text-slate-800">Applications — Vehicle Type Wise</h3>
+              <DownloadBtn onClick={handleVehicleDownload} loading={vehicleDlLoading} />
+            </div>
+            <p className="text-xs text-slate-400 mb-4">Applications by vehicle type in the selected period</p>
+            {vehicleLoading ? (
+              <p className="text-sm text-slate-400 py-6 text-center">Loading…</p>
+            ) : vehicleData && vehicleData.rows.length > 0 ? (
+              <>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b-2 border-slate-200 bg-slate-50">
+                        <th className="text-left py-2.5 px-3 text-slate-700 font-bold text-xs uppercase tracking-wide">Vehicle Type</th>
+                        <th className="text-right py-2.5 px-3 text-slate-700 font-bold text-xs uppercase tracking-wide">Applications</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {vehicleData.rows.map((row, i) => (
+                        <tr key={i} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                          <td className="py-2.5 px-3 text-slate-700">{row.vehicle_type || <span className="text-slate-300">—</span>}</td>
+                          <td className="py-2.5 px-3 text-right font-semibold text-slate-800">{row.count.toLocaleString()}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <Pagination page={vehiclePage} totalPages={vehicleData.totalPages} onChange={loadVehiclePage} />
               </>
             ) : (
               <p className="text-sm text-slate-400 py-6 text-center">No data for this period</p>

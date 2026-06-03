@@ -150,6 +150,44 @@ export async function exportUsers(from: string, to: string, source: string): Pro
   return data.rows;
 }
 
+// ── Pincode / Vehicle breakdown helpers ───────────────────────────────────────
+
+export interface PincodeRow {
+  pincode: string;
+  count: number;
+}
+
+export interface VehicleRow {
+  vehicle_type: string;
+  count: number;
+}
+
+export async function fetchByPincode(page: number, from: string, to: string): Promise<PaginatedResult<PincodeRow>> {
+  const res = await crmFetch(`/crm/apps-by-pincode?page=${page}&from=${from}&to=${to}`);
+  if (!res.ok) throw new Error("Failed to fetch by pincode");
+  return res.json() as Promise<PaginatedResult<PincodeRow>>;
+}
+
+export async function exportByPincode(from: string, to: string): Promise<PincodeRow[]> {
+  const res = await crmFetch(`/crm/apps-by-pincode?export=1&from=${from}&to=${to}`);
+  if (!res.ok) throw new Error("Failed to export by pincode");
+  const data = await res.json() as PaginatedResult<PincodeRow>;
+  return data.rows;
+}
+
+export async function fetchByVehicle(page: number, from: string, to: string): Promise<PaginatedResult<VehicleRow>> {
+  const res = await crmFetch(`/crm/apps-by-vehicle?page=${page}&from=${from}&to=${to}`);
+  if (!res.ok) throw new Error("Failed to fetch by vehicle");
+  return res.json() as Promise<PaginatedResult<VehicleRow>>;
+}
+
+export async function exportByVehicle(from: string, to: string): Promise<VehicleRow[]> {
+  const res = await crmFetch(`/crm/apps-by-vehicle?export=1&from=${from}&to=${to}`);
+  if (!res.ok) throw new Error("Failed to export by vehicle");
+  const data = await res.json() as PaginatedResult<VehicleRow>;
+  return data.rows;
+}
+
 // ── Application Board helpers ─────────────────────────────────────────────────
 
 export interface AppBoardRow {

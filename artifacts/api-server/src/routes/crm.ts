@@ -323,6 +323,86 @@ router.get("/crm/appboard", requireCrmAuth, requireCrmDb, async (req, res): Prom
   }
 });
 
+// Applications by pincode
+router.get("/crm/apps-by-pincode", requireCrmAuth, requireCrmDb, async (req, res): Promise<void> => {
+  const isExport = req.query["export"] === "1";
+  const page = Math.max(1, parseInt(String(req.query["page"] ?? "1"), 10));
+  const limit = isExport ? 100_000 : 15;
+  const offset = isExport ? 0 : (page - 1) * limit;
+  const { from, to } = getDateParams(req);
+
+  const dateFilter = from && to ? "WHERE DATE(created_at) BETWEEN ? AND ?" : "";
+  const dateParams: string[] = from && to ? [from, to] : [];
+
+  try {
+    const [[dataRows], [countRows]] = await Promise.all([
+      crmPool!.query(
+        `SELECT COUNT(*) AS count, pincode
+         FROM pp_application_master
+         ${dateFilter}
+         GROUP BY pincode
+         ORDER BY count DESC
+         LIMIT ? OFFSET ?`,
+        [...dateParams, limit, offset]
+      ),
+      crmPool!.query(
+        `SELECT COUNT(DISTINCT pincode) AS total FROM pp_application_master ${dateFilter}`,
+        dateParams
+      ),
+    ]);
+
+    const total = Number((countRows as mysql.RowDataPacket[])[0]?.total ?? 0);
+    const rows = (dataRows as mysql.RowDataPacket[]).map((r) => ({
+      pincode: String(r["pincode"] ?? ""),
+      count: Number(r["count"]),
+    }));
+    res.json({ rows, total, page, totalPages: Math.ceil(total / limit) });
+  } catch (err) {
+    req.log.error({ err }, "CRM apps-by-pincode query failed");
+    res.status(500).json({ error: "Query failed" });
+  }
+});
+
+// Applications by vehicle type
+router.get("/crm/apps-by-vehicle", requireCrmAuth, requireCrmDb, async (req, res): Promise<void> => {
+  const isExport = req.query["export"] === "1";
+  const page = Math.max(1, parseInt(String(req.query["page"] ?? "1"), 10));
+  const limit = isExport ? 100_000 : 15;
+  const offset = isExport ? 0 : (page - 1) * limit;
+  const { from, to } = getDateParams(req);
+
+  const dateFilter = from && to ? "WHERE DATE(created_at) BETWEEN ? AND ?" : "";
+  const dateParams: string[] = from && to ? [from, to] : [];
+
+  try {
+    const [[dataRows], [countRows]] = await Promise.all([
+      crmPool!.query(
+        `SELECT COUNT(*) AS count, vehicle_type
+         FROM pp_application_master
+         ${dateFilter}
+         GROUP BY vehicle_type
+         ORDER BY count DESC
+         LIMIT ? OFFSET ?`,
+        [...dateParams, limit, offset]
+      ),
+      crmPool!.query(
+        `SELECT COUNT(DISTINCT vehicle_type) AS total FROM pp_application_master ${dateFilter}`,
+        dateParams
+      ),
+    ]);
+
+    const total = Number((countRows as mysql.RowDataPacket[])[0]?.total ?? 0);
+    const rows = (dataRows as mysql.RowDataPacket[]).map((r) => ({
+      vehicle_type: String(r["vehicle_type"] ?? ""),
+      count: Number(r["count"]),
+    }));
+    res.json({ rows, total, page, totalPages: Math.ceil(total / limit) });
+  } catch (err) {
+    req.log.error({ err }, "CRM apps-by-vehicle query failed");
+    res.status(500).json({ error: "Query failed" });
+  }
+});
+
 // Drill-down: sources for a specific date
 router.get("/crm/drill/source-by-date", requireCrmAuth, requireCrmDb, async (req, res): Promise<void> => {
   const date = typeof req.query["date"] === "string" ? req.query["date"] : null;
