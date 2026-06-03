@@ -260,9 +260,7 @@ export default function AppBoard() {
               </span>
               <span className="text-xs text-slate-400 ml-2">{fmtDateRange(fromDate, toDate)}</span>
             </div>
-            {session.type === "masteradmin" && (
-              <DownloadBtn onClick={handleDownload} loading={dlLoading} />
-            )}
+            <DownloadBtn onClick={handleDownload} loading={dlLoading} />
           </div>
 
           {loading ? (
