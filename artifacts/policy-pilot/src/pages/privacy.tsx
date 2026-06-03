@@ -36,6 +36,12 @@ export default function PrivacyPage() {
               PolicyFatafat may act as a technology platform, lead-generation platform, comparison
               platform, or marketing partner for financial service providers.
             </p>
+            <p className="text-muted-foreground leading-relaxed mt-2">
+              PolicyFatafat is not an insurance company and does not issue, underwrite, or service
+              insurance policies. We act as a comparison, lead-generation, and technology platform
+              that connects users with licensed insurance providers and intermediaries that we
+              reasonably believe are authorized to offer the relevant services.
+            </p>
           </section>
 
           <section>
