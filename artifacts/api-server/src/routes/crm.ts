@@ -31,7 +31,7 @@ router.get("/crm/stats", requireCrmAuth, requireCrmDb, async (req, res): Promise
   try {
     const [[usersRows], [leadsRows]] = await Promise.all([
       crmPool!.query("SELECT MAX(id) AS total FROM pp_user"),
-      crmPool!.query("SELECT MAX(id) AS total FROM pp_applications"),
+      crmPool!.query("SELECT MAX(id) AS total FROM pp_application_master"),
     ]);
 
     const totalUsers = Number((usersRows as mysql.RowDataPacket[])[0]?.total ?? 0);
