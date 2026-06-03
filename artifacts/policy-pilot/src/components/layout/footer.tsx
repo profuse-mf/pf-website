@@ -50,6 +50,7 @@ export default function Footer() {
               Terms
             </Link>
           </nav>
+          <p className="text-gray-500 text-xs">PolicyFatafat is operated by Profuse Services. We connect users with Insurance products.</p>
           <p className="text-gray-600 text-xs">Made with love in India 🇮🇳</p>
           <p className="text-gray-600 text-xs">
             Powered by{" "}
