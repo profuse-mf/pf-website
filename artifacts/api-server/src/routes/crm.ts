@@ -8,6 +8,39 @@ const CRM_TOKEN = "pf-crm-secret-2026";
 const crmUrl = process.env["CRM_MYSQL_URL"];
 const crmPool = crmUrl ? mysql.createPool(crmUrl) : null;
 
+// Create pp_partners table and seed initial partners on startup
+if (crmPool) {
+  (async () => {
+    try {
+      await crmPool.query(`
+        CREATE TABLE IF NOT EXISTS pp_partners (
+          id          INT PRIMARY KEY AUTO_INCREMENT,
+          name        VARCHAR(50) NOT NULL,
+          redirect_url TEXT NOT NULL,
+          status      TINYINT(1) NOT NULL DEFAULT 1,
+          created     DATETIME NOT NULL,
+          updated     DATETIME NOT NULL
+        )
+      `);
+      const [rows] = await crmPool.query("SELECT COUNT(*) AS cnt FROM pp_partners");
+      const cnt = Number((rows as mysql.RowDataPacket[])[0]?.cnt ?? 0);
+      if (cnt === 0) {
+        const now = new Date().toISOString().replace("T", " ").slice(0, 19);
+        await crmPool.query(
+          `INSERT INTO pp_partners (name, redirect_url, status, created, updated) VALUES
+           ('Acko General Insurance',          'https://www.acko.com',                                                                              1, ?, ?),
+           ('Zurich Kotak General Insurance',  'https://profuse.gotrackier.com/click?campaign_id=193&pub_id=260&source={passanyvalue}',             1, ?, ?),
+           ('Policybazaar',                    'https://profuse.gotrackier.com/click?campaign_id=194&pub_id=260&source={passanyvalue}',             1, ?, ?)`,
+          [now, now, now, now, now, now]
+        );
+      }
+    } catch (e) {
+      // non-fatal — log but don't crash
+      console.error("pp_partners init failed:", e);
+    }
+  })();
+}
+
 function requireCrmAuth(req: Request, res: Response, next: NextFunction): void {
   const token = req.headers["x-crm-token"];
   if (token !== CRM_TOKEN) {
@@ -459,6 +492,63 @@ router.get("/crm/drill/date-by-source", requireCrmAuth, requireCrmDb, async (req
   } catch (err) {
     req.log.error({ err }, "CRM drill date-by-source failed");
     res.status(500).json({ error: "Query failed" });
+  }
+});
+
+// Partner Board — list all partners
+router.get("/crm/partners", requireCrmAuth, requireCrmDb, async (req, res): Promise<void> => {
+  try {
+    const [rows] = await crmPool!.query(
+      "SELECT id, name, redirect_url, status, created, updated FROM pp_partners ORDER BY id ASC"
+    );
+    const fmtDt = (v: unknown) =>
+      v instanceof Date ? v.toISOString().replace("T", " ").slice(0, 19) : String(v ?? "");
+    const data = (rows as mysql.RowDataPacket[]).map((r) => ({
+      id:           r["id"],
+      name:         r["name"],
+      redirect_url: r["redirect_url"],
+      status:       Number(r["status"]),
+      created:      fmtDt(r["created"]),
+      updated:      fmtDt(r["updated"]),
+    }));
+    res.json({ rows: data });
+  } catch (err) {
+    req.log.error({ err }, "CRM partners list failed");
+    res.status(500).json({ error: "Query failed" });
+  }
+});
+
+// Partner Board — add new partner
+router.post("/crm/partners", requireCrmAuth, requireCrmDb, async (req, res): Promise<void> => {
+  const { name, redirect_url, status } = req.body as {
+    name?: string;
+    redirect_url?: string;
+    status?: number;
+  };
+
+  if (!name?.trim() || !redirect_url?.trim() || status === undefined) {
+    res.status(400).json({ error: "name, redirect_url and status are required" });
+    return;
+  }
+
+  const now = new Date().toISOString().replace("T", " ").slice(0, 19);
+  try {
+    const [result] = await crmPool!.query(
+      "INSERT INTO pp_partners (name, redirect_url, status, created, updated) VALUES (?, ?, ?, ?, ?)",
+      [name.trim(), redirect_url.trim(), status ? 1 : 0, now, now]
+    );
+    const insertId = (result as mysql.ResultSetHeader).insertId;
+    res.status(201).json({
+      id:           insertId,
+      name:         name.trim(),
+      redirect_url: redirect_url.trim(),
+      status:       status ? 1 : 0,
+      created:      now,
+      updated:      now,
+    });
+  } catch (err) {
+    req.log.error({ err }, "CRM partner insert failed");
+    res.status(500).json({ error: "Insert failed" });
   }
 });
 

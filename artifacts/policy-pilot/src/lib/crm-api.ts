@@ -221,6 +221,41 @@ export async function exportAppBoard(from: string, to: string, source: string): 
   return data.rows;
 }
 
+// ── Partner Board helpers ─────────────────────────────────────────────────────
+
+export interface PartnerRow {
+  id: number;
+  name: string;
+  redirect_url: string;
+  status: number;
+  created: string;
+  updated: string;
+}
+
+export async function fetchPartners(): Promise<PartnerRow[]> {
+  const res = await crmFetch("/crm/partners");
+  if (!res.ok) throw new Error("Failed to fetch partners");
+  const data = await res.json() as { rows: PartnerRow[] };
+  return data.rows;
+}
+
+export async function createPartner(payload: {
+  name: string;
+  redirect_url: string;
+  status: number;
+}): Promise<PartnerRow> {
+  const res = await fetch("/api/crm/partners", {
+    method: "POST",
+    headers: { "x-crm-token": CRM_TOKEN, "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const err = await res.json() as { error?: string };
+    throw new Error(err.error ?? "Failed to create partner");
+  }
+  return res.json() as Promise<PartnerRow>;
+}
+
 // ── Drill-down helpers ───────────────────────────────────────────────────────
 
 export interface DrillSourceRow {
