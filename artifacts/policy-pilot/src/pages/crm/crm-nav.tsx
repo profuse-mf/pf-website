@@ -1,8 +1,9 @@
 import { useLocation } from "wouter";
 
 const TABS = [
-  { label: "Insights", href: "/crm/dashboard" },
-  { label: "User Board", href: "/crm/userboard" },
+  { label: "Insights",           href: "/crm/dashboard" },
+  { label: "User Board",         href: "/crm/userboard" },
+  { label: "Application Board",  href: "/crm/appboard" },
 ];
 
 export function CrmNav() {

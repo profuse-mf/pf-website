@@ -150,6 +150,39 @@ export async function exportUsers(from: string, to: string, source: string): Pro
   return data.rows;
 }
 
+// ── Application Board helpers ─────────────────────────────────────────────────
+
+export interface AppBoardRow {
+  userid: number;
+  mobile: string;
+  email: string;
+  created_at: string;
+  utm_source: string;
+  total_applications: number;
+  last_application: string;
+  ulr: number;
+}
+
+export async function fetchAppBoard(
+  page: number,
+  from: string,
+  to: string,
+  source: string
+): Promise<PaginatedResult<AppBoardRow>> {
+  const sp = source ? `&source=${encodeURIComponent(source)}` : "";
+  const res = await crmFetch(`/crm/appboard?page=${page}&from=${from}&to=${to}${sp}`);
+  if (!res.ok) throw new Error("Failed to fetch app board");
+  return res.json() as Promise<PaginatedResult<AppBoardRow>>;
+}
+
+export async function exportAppBoard(from: string, to: string, source: string): Promise<AppBoardRow[]> {
+  const sp = source ? `&source=${encodeURIComponent(source)}` : "";
+  const res = await crmFetch(`/crm/appboard?export=1&from=${from}&to=${to}${sp}`);
+  if (!res.ok) throw new Error("Failed to export app board");
+  const data = await res.json() as PaginatedResult<AppBoardRow>;
+  return data.rows;
+}
+
 // ── Drill-down helpers ───────────────────────────────────────────────────────
 
 export interface DrillSourceRow {

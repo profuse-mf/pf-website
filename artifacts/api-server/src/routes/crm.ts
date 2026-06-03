@@ -245,6 +245,84 @@ router.get("/crm/users", requireCrmAuth, requireCrmDb, async (req, res): Promise
   }
 });
 
+// Application Board — one row per user, aggregated application stats
+router.get("/crm/appboard", requireCrmAuth, requireCrmDb, async (req, res): Promise<void> => {
+  const { from, to } = getDateParams(req);
+  const source = typeof req.query["source"] === "string" ? req.query["source"].trim() : "";
+  const exportAll = req.query["export"] === "1";
+  const page   = Math.max(1, parseInt(String(req.query["page"] ?? "1"), 10));
+  const limit  = exportAll ? 100_000 : 20;
+  const offset = exportAll ? 0 : (page - 1) * limit;
+
+  const conditions: string[] = [];
+  const params: (string | number)[] = [];
+
+  if (from && to) {
+    conditions.push("DATE(a.created_at) BETWEEN ? AND ?");
+    params.push(from, to);
+  }
+  if (source) {
+    if (source === "(direct)") {
+      conditions.push("p.utm_source IS NULL");
+    } else {
+      conditions.push("p.utm_source = ?");
+      params.push(source);
+    }
+  }
+
+  const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
+
+  try {
+    const [[dataRows], [countRows]] = await Promise.all([
+      crmPool!.query(
+        `SELECT p.id AS userid, p.mobile, p.email, p.created_at,
+                p.utm_source,
+                COUNT(a.id)       AS total_applications,
+                MAX(a.created_at) AS last_application
+         FROM pp_user p
+         JOIN pp_application_master a ON p.id = a.user_id
+         ${whereClause}
+         GROUP BY p.id, p.mobile, p.email, p.created_at, p.utm_source
+         ORDER BY p.id ASC
+         LIMIT ? OFFSET ?`,
+        [...params, limit, offset]
+      ),
+      crmPool!.query(
+        `SELECT COUNT(DISTINCT p.id) AS total
+         FROM pp_user p
+         JOIN pp_application_master a ON p.id = a.user_id
+         ${whereClause}`,
+        params
+      ),
+    ]);
+
+    const total = Number((countRows as mysql.RowDataPacket[])[0]?.total ?? 0);
+    const fmtDt = (v: unknown) =>
+      v instanceof Date
+        ? v.toISOString().replace("T", " ").slice(0, 19)
+        : String(v ?? "");
+
+    const rows = (dataRows as mysql.RowDataPacket[]).map((r) => {
+      const apps = Number(r["total_applications"] ?? 0);
+      return {
+        userid:             r["userid"],
+        mobile:             r["mobile"] ?? "",
+        email:              r["email"]  ?? "",
+        created_at:         fmtDt(r["created_at"]),
+        utm_source:         r["utm_source"] ?? "",
+        total_applications: apps,
+        last_application:   fmtDt(r["last_application"]),
+        ulr:                apps,
+      };
+    });
+
+    res.json({ rows, total, page, totalPages: Math.ceil(total / limit) });
+  } catch (err) {
+    req.log.error({ err }, "CRM appboard query failed");
+    res.status(500).json({ error: "Query failed" });
+  }
+});
+
 // Drill-down: sources for a specific date
 router.get("/crm/drill/source-by-date", requireCrmAuth, requireCrmDb, async (req, res): Promise<void> => {
   const date = typeof req.query["date"] === "string" ? req.query["date"] : null;
