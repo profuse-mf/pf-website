@@ -134,6 +134,9 @@ components:
           type: string
         mobileNumber:
           type: string
+        email:
+          type: string
+          nullable: true
         pinCode:
           type: string
         policyExpiryDate:
@@ -173,6 +176,9 @@ components:
           type: string
         mobileNumber:
           type: string
+        email:
+          type: string
+          nullable: true
         pinCode:
           type: string
         policyExpiryDate:

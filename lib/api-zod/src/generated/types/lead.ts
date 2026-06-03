@@ -11,6 +11,7 @@ export interface Lead {
   insuranceType: string;
   registrationNumber: string;
   mobileNumber: string;
+  email?: string | null;
   pinCode: string;
   policyExpiryDate: string;
   registrationYear: string;

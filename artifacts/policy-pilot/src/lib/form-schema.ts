@@ -22,6 +22,8 @@ export const formSchema = z.object({
     .string()
     .regex(/^[6-9][0-9]{9}$/, "Enter a valid 10-digit Indian mobile number"),
 
+  email: z.string().email("Enter a valid email address"),
+
   // Valid Indian pincode: 6 digits, first digit 1–9
   pinCode: z
     .string()

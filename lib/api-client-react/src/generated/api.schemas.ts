@@ -21,6 +21,7 @@ export interface LeadInput {
   insuranceType: LeadInputInsuranceType;
   registrationNumber: string;
   mobileNumber: string;
+  email?: string | null;
   pinCode: string;
   policyExpiryDate: string;
   registrationYear: string;
@@ -35,6 +36,7 @@ export interface Lead {
   insuranceType: string;
   registrationNumber: string;
   mobileNumber: string;
+  email?: string | null;
   pinCode: string;
   policyExpiryDate: string;
   registrationYear: string;

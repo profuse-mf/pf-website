@@ -7,6 +7,7 @@ export const leadsTable = pgTable("leads", {
   insuranceType: text("insurance_type").notNull(),
   registrationNumber: text("registration_number").notNull(),
   mobileNumber: text("mobile_number").notNull(),
+  email: text("email"),
   pinCode: text("pin_code").notNull(),
   policyExpiryDate: text("policy_expiry_date").notNull(),
   registrationYear: text("registration_year").notNull(),
