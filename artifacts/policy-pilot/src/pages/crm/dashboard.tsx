@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useLocation } from "wouter";
 import {
   getCrmSession,
@@ -6,6 +6,8 @@ import {
   fetchCrmStats,
   fetchUsersByDate,
   fetchUsersBySource,
+  fetchSourceByDate,
+  fetchDateBySource,
   getPresetDates,
   todayStr,
   DATE_PRESETS,
@@ -13,24 +15,28 @@ import {
   type CrmStats,
   type DayRow,
   type SourceRow,
+  type DrillSourceRow,
+  type DrillDateRow,
   type PaginatedResult,
 } from "@/lib/crm-api";
 import { Button } from "@/components/ui/button";
 
-function StatCard({
-  label,
-  value,
-  sub,
-}: {
-  label: string;
-  value: string | number;
-  sub?: string;
-}) {
+// ── Helpers ──────────────────────────────────────────────────────────────────
+
+function fmtDate(iso: string) {
+  return new Date(iso + "T00:00:00").toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+// ── Sub-components ────────────────────────────────────────────────────────────
+
+function StatCard({ label, value, sub }: { label: string; value: string | number; sub?: string }) {
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-      <p className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-1">
-        {label}
-      </p>
+      <p className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-1">{label}</p>
       <p className="text-3xl font-bold text-slate-800">
         {typeof value === "number" ? value.toLocaleString() : value}
       </p>
@@ -39,29 +45,136 @@ function StatCard({
   );
 }
 
-function Pagination({
-  page,
-  totalPages,
-  onChange,
-}: {
-  page: number;
-  totalPages: number;
-  onChange: (p: number) => void;
-}) {
+function Pagination({ page, totalPages, onChange }: { page: number; totalPages: number; onChange: (p: number) => void }) {
   return (
     <div className="flex items-center gap-2 justify-end mt-4">
-      <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => onChange(page - 1)}>
-        ← Prev
-      </Button>
-      <span className="text-sm text-slate-500">
-        Page {page} of {totalPages || 1}
-      </span>
-      <Button variant="outline" size="sm" disabled={page >= totalPages} onClick={() => onChange(page + 1)}>
-        Next →
-      </Button>
+      <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => onChange(page - 1)}>← Prev</Button>
+      <span className="text-sm text-slate-500">Page {page} of {totalPages || 1}</span>
+      <Button variant="outline" size="sm" disabled={page >= totalPages} onClick={() => onChange(page + 1)}>Next →</Button>
     </div>
   );
 }
+
+// ── Drill-down modal ──────────────────────────────────────────────────────────
+
+type DrillMode =
+  | { type: "source-by-date"; date: string }
+  | { type: "date-by-source"; source: string };
+
+function DrillModal({
+  mode,
+  from,
+  to,
+  onClose,
+}: {
+  mode: DrillMode;
+  from: string;
+  to: string;
+  onClose: () => void;
+}) {
+  const [rows, setRows] = useState<DrillSourceRow[] | DrillDateRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const overlayRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setLoading(true);
+    setError("");
+    const p =
+      mode.type === "source-by-date"
+        ? fetchSourceByDate(mode.date)
+        : fetchDateBySource(mode.source, from, to);
+    p.then((r) => setRows(r as DrillSourceRow[] & DrillDateRow[]))
+      .catch(() => setError("Could not load data"))
+      .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) { if (e.key === "Escape") onClose(); }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  const title =
+    mode.type === "source-by-date"
+      ? `Source breakdown — ${fmtDate(mode.date)}`
+      : `Date breakdown — ${mode.source}`;
+
+  const subtitle =
+    mode.type === "source-by-date"
+      ? "UTM source split for this date"
+      : `${fmtDate(from)} → ${fmtDate(to)}`;
+
+  return (
+    <div
+      ref={overlayRef}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
+      onClick={(e) => { if (e.target === overlayRef.current) onClose(); }}
+    >
+      <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md mx-4 overflow-hidden">
+        <div className="flex items-start justify-between px-6 pt-5 pb-4 border-b border-slate-100">
+          <div>
+            <h3 className="text-base font-bold text-slate-800">{title}</h3>
+            <p className="text-xs text-slate-400 mt-0.5">{subtitle}</p>
+          </div>
+          <button
+            onClick={onClose}
+            className="ml-4 text-slate-400 hover:text-slate-600 transition-colors text-lg leading-none"
+            aria-label="Close"
+          >
+            ✕
+          </button>
+        </div>
+
+        <div className="px-6 py-4 max-h-[60vh] overflow-y-auto">
+          {loading ? (
+            <p className="text-sm text-slate-400 py-8 text-center">Loading…</p>
+          ) : error ? (
+            <p className="text-sm text-red-500 py-8 text-center">{error}</p>
+          ) : rows.length === 0 ? (
+            <p className="text-sm text-slate-400 py-8 text-center">No data</p>
+          ) : mode.type === "source-by-date" ? (
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b-2 border-slate-200 bg-slate-50">
+                  <th className="text-left py-2 px-3 text-slate-700 font-bold text-xs uppercase tracking-wide">UTM Source</th>
+                  <th className="text-right py-2 px-3 text-slate-700 font-bold text-xs uppercase tracking-wide">Users</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(rows as DrillSourceRow[]).map((r, i) => (
+                  <tr key={i} className="border-b border-slate-100">
+                    <td className="py-2.5 px-3 text-slate-700">{r.source}</td>
+                    <td className="py-2.5 px-3 text-right font-semibold text-slate-800">{r.count.toLocaleString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b-2 border-slate-200 bg-slate-50">
+                  <th className="text-left py-2 px-3 text-slate-700 font-bold text-xs uppercase tracking-wide">Date</th>
+                  <th className="text-right py-2 px-3 text-slate-700 font-bold text-xs uppercase tracking-wide">Users</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(rows as DrillDateRow[]).map((r, i) => (
+                  <tr key={i} className="border-b border-slate-100">
+                    <td className="py-2.5 px-3 text-slate-700">{fmtDate(r.date)}</td>
+                    <td className="py-2.5 px-3 text-right font-semibold text-slate-800">{r.count.toLocaleString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Main page ─────────────────────────────────────────────────────────────────
 
 export default function CrmDashboard() {
   const [, navigate] = useLocation();
@@ -83,6 +196,8 @@ export default function CrmDashboard() {
   const [sourceData, setSourceData] = useState<PaginatedResult<SourceRow> | null>(null);
   const [sourceLoading, setSourceLoading] = useState(false);
 
+  const [drill, setDrill] = useState<DrillMode | null>(null);
+
   useEffect(() => {
     if (!session) navigate("/crm");
   }, []);
@@ -90,23 +205,15 @@ export default function CrmDashboard() {
   const loadAll = useCallback((from: string, to: string) => {
     setStatsError("");
     setStats(null);
-    fetchCrmStats(from, to)
-      .then(setStats)
-      .catch(() => setStatsError("Could not load stats"));
+    fetchCrmStats(from, to).then(setStats).catch(() => setStatsError("Could not load stats"));
 
     setDateLoading(true);
     setDatePage(1);
-    fetchUsersByDate(1, from, to)
-      .then(setDateData)
-      .catch(() => {})
-      .finally(() => setDateLoading(false));
+    fetchUsersByDate(1, from, to).then(setDateData).catch(() => {}).finally(() => setDateLoading(false));
 
     setSourceLoading(true);
     setSourcePage(1);
-    fetchUsersBySource(1, from, to)
-      .then(setSourceData)
-      .catch(() => {})
-      .finally(() => setSourceLoading(false));
+    fetchUsersBySource(1, from, to).then(setSourceData).catch(() => {}).finally(() => setSourceLoading(false));
   }, []);
 
   useEffect(() => {
@@ -122,19 +229,9 @@ export default function CrmDashboard() {
     loadAll(from, to);
   }
 
-  function handleFromChange(val: string) {
-    setFromDate(val);
-    setPreset("Custom");
-  }
-
-  function handleToChange(val: string) {
-    setToDate(val);
-    setPreset("Custom");
-  }
-
-  function handleApply() {
-    loadAll(fromDate, toDate);
-  }
+  function handleFromChange(val: string) { setFromDate(val); setPreset("Custom"); }
+  function handleToChange(val: string)   { setToDate(val);   setPreset("Custom"); }
+  function handleApply()                 { loadAll(fromDate, toDate); }
 
   const loadDatePage = useCallback((page: number) => {
     setDateLoading(true);
@@ -152,22 +249,19 @@ export default function CrmDashboard() {
       .finally(() => setSourceLoading(false));
   }, [fromDate, toDate]);
 
-  function handleLogout() {
-    crmLogout();
-    navigate("/crm");
-  }
+  function handleLogout() { crmLogout(); navigate("/crm"); }
 
   if (!session) return null;
 
   return (
     <div className="min-h-screen bg-slate-50">
+      {drill && (
+        <DrillModal mode={drill} from={fromDate} to={toDate} onClose={() => setDrill(null)} />
+      )}
+
       <header className="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <img
-            src="/policypilot-logo.png"
-            alt="PolicyFatafat"
-            className="h-8 w-auto object-contain"
-          />
+          <img src="/policypilot-logo.png" alt="PolicyFatafat" className="h-8 w-auto object-contain" />
           <span className="text-slate-300 text-lg font-light">|</span>
           <span className="font-semibold text-slate-700 text-sm">Insights</span>
           <span className="text-xs bg-slate-100 text-slate-500 rounded-full px-2 py-0.5">
@@ -176,9 +270,7 @@ export default function CrmDashboard() {
         </div>
         <div className="flex items-center gap-3">
           <span className="text-sm text-slate-500">{session.username}</span>
-          <Button variant="outline" size="sm" onClick={handleLogout}>
-            Logout
-          </Button>
+          <Button variant="outline" size="sm" onClick={handleLogout}>Logout</Button>
         </div>
       </header>
 
@@ -197,40 +289,21 @@ export default function CrmDashboard() {
                 onChange={(e) => handlePresetChange(e.target.value as DatePreset)}
                 className="h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#1b5fb8]/30 min-w-[160px]"
               >
-                {DATE_PRESETS.map((p) => (
-                  <option key={p} value={p}>{p}</option>
-                ))}
+                {DATE_PRESETS.map((p) => <option key={p} value={p}>{p}</option>)}
               </select>
             </div>
-
             <div className="flex flex-col gap-1">
               <label className="text-xs text-slate-400 font-medium">From</label>
-              <input
-                type="date"
-                value={fromDate}
-                onChange={(e) => handleFromChange(e.target.value)}
-                className="h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#1b5fb8]/30"
-              />
+              <input type="date" value={fromDate} onChange={(e) => handleFromChange(e.target.value)}
+                className="h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#1b5fb8]/30" />
             </div>
-
             <div className="flex flex-col gap-1">
               <label className="text-xs text-slate-400 font-medium">To</label>
-              <input
-                type="date"
-                value={toDate}
-                onChange={(e) => handleToChange(e.target.value)}
-                className="h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#1b5fb8]/30"
-              />
+              <input type="date" value={toDate} onChange={(e) => handleToChange(e.target.value)}
+                className="h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#1b5fb8]/30" />
             </div>
-
             {preset === "Custom" && (
-              <Button
-                size="sm"
-                onClick={handleApply}
-                className="bg-[#1b5fb8] hover:bg-[#1a55a8] text-white h-9"
-              >
-                Apply
-              </Button>
+              <Button size="sm" onClick={handleApply} className="bg-[#1b5fb8] hover:bg-[#1a55a8] text-white h-9">Apply</Button>
             )}
           </div>
         </div>
@@ -240,28 +313,18 @@ export default function CrmDashboard() {
         )}
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <StatCard
-            label="Users"
-            value={stats ? stats.totalUsers : "—"}
-            sub={`${fromDate === toDate ? fromDate : `${fromDate} → ${toDate}`}`}
-          />
-          <StatCard
-            label="Leads"
-            value={stats ? stats.totalLeads : "—"}
-            sub={`${fromDate === toDate ? fromDate : `${fromDate} → ${toDate}`}`}
-          />
-          <StatCard
-            label="ULR"
-            value={stats ? stats.ulr : "—"}
-            sub="User to Lead Ratio"
-          />
+          <StatCard label="Users" value={stats ? stats.totalUsers : "—"}
+            sub={fromDate === toDate ? fromDate : `${fromDate} → ${toDate}`} />
+          <StatCard label="Leads" value={stats ? stats.totalLeads : "—"}
+            sub={fromDate === toDate ? fromDate : `${fromDate} → ${toDate}`} />
+          <StatCard label="ULR" value={stats ? stats.ulr : "—"} sub="User to Lead Ratio" />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Day-wise table */}
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-            <h3 className="text-base font-bold text-slate-800 mb-4">
-              User Acquisition — Day Wise
-            </h3>
+            <h3 className="text-base font-bold text-slate-800 mb-1">User Acquisition — Day Wise</h3>
+            <p className="text-xs text-slate-400 mb-4">Click a row to see source breakdown</p>
             {dateLoading ? (
               <p className="text-sm text-slate-400 py-6 text-center">Loading…</p>
             ) : dateData && dateData.rows.length > 0 ? (
@@ -276,15 +339,15 @@ export default function CrmDashboard() {
                     </thead>
                     <tbody>
                       {dateData.rows.map((row, i) => (
-                        <tr key={i} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
-                          <td className="py-2.5 px-3 text-slate-700">
-                            {new Date(row.date + "T00:00:00").toLocaleDateString("en-IN", {
-                              day: "2-digit",
-                              month: "short",
-                              year: "numeric",
-                            })}
+                        <tr
+                          key={i}
+                          onClick={() => setDrill({ type: "source-by-date", date: row.date })}
+                          className="border-b border-slate-100 hover:bg-blue-50 cursor-pointer transition-colors group"
+                        >
+                          <td className="py-2.5 px-3 text-slate-700 group-hover:text-[#1b5fb8] transition-colors">
+                            {fmtDate(row.date)}
                           </td>
-                          <td className="py-2.5 px-3 text-right font-semibold text-slate-800">
+                          <td className="py-2.5 px-3 text-right font-semibold text-slate-800 group-hover:text-[#1b5fb8] transition-colors">
                             {row.count.toLocaleString()}
                           </td>
                         </tr>
@@ -299,10 +362,10 @@ export default function CrmDashboard() {
             )}
           </div>
 
+          {/* Source-wise table */}
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-            <h3 className="text-base font-bold text-slate-800 mb-4">
-              User Acquisition — Source Wise
-            </h3>
+            <h3 className="text-base font-bold text-slate-800 mb-1">User Acquisition — Source Wise</h3>
+            <p className="text-xs text-slate-400 mb-4">Click a row to see date breakdown</p>
             {sourceLoading ? (
               <p className="text-sm text-slate-400 py-6 text-center">Loading…</p>
             ) : sourceData && sourceData.rows.length > 0 ? (
@@ -317,9 +380,15 @@ export default function CrmDashboard() {
                     </thead>
                     <tbody>
                       {sourceData.rows.map((row, i) => (
-                        <tr key={i} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
-                          <td className="py-2.5 px-3 text-slate-700">{row.source}</td>
-                          <td className="py-2.5 px-3 text-right font-semibold text-slate-800">
+                        <tr
+                          key={i}
+                          onClick={() => setDrill({ type: "date-by-source", source: row.source })}
+                          className="border-b border-slate-100 hover:bg-blue-50 cursor-pointer transition-colors group"
+                        >
+                          <td className="py-2.5 px-3 text-slate-700 group-hover:text-[#1b5fb8] transition-colors">
+                            {row.source}
+                          </td>
+                          <td className="py-2.5 px-3 text-right font-semibold text-slate-800 group-hover:text-[#1b5fb8] transition-colors">
                             {row.count.toLocaleString()}
                           </td>
                         </tr>

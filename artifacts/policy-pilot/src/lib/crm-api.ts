@@ -89,6 +89,32 @@ export async function fetchUsersBySource(
   return res.json() as Promise<PaginatedResult<SourceRow>>;
 }
 
+// ── Drill-down helpers ───────────────────────────────────────────────────────
+
+export interface DrillSourceRow {
+  source: string;
+  count: number;
+}
+
+export interface DrillDateRow {
+  date: string;
+  count: number;
+}
+
+export async function fetchSourceByDate(date: string): Promise<DrillSourceRow[]> {
+  const res = await crmFetch(`/crm/drill/source-by-date?date=${date}`);
+  if (!res.ok) throw new Error("Failed to fetch drill source-by-date");
+  const data = await res.json() as { rows: DrillSourceRow[] };
+  return data.rows;
+}
+
+export async function fetchDateBySource(source: string, from: string, to: string): Promise<DrillDateRow[]> {
+  const res = await crmFetch(`/crm/drill/date-by-source?source=${encodeURIComponent(source)}&from=${from}&to=${to}`);
+  if (!res.ok) throw new Error("Failed to fetch drill date-by-source");
+  const data = await res.json() as { rows: DrillDateRow[] };
+  return data.rows;
+}
+
 // ── Date preset helpers ──────────────────────────────────────────────────────
 
 export const DATE_PRESETS = [

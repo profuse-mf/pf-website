@@ -144,5 +144,61 @@ router.get("/crm/users-by-source", requireCrmAuth, requireCrmDb, async (req, res
   }
 });
 
+// Drill-down: sources for a specific date
+router.get("/crm/drill/source-by-date", requireCrmAuth, requireCrmDb, async (req, res): Promise<void> => {
+  const date = typeof req.query["date"] === "string" ? req.query["date"] : null;
+  if (!date) { res.status(400).json({ error: "date is required" }); return; }
+
+  try {
+    const [rows] = await crmPool!.query(
+      `SELECT COUNT(*) AS count, utm_source
+       FROM pp_user
+       WHERE DATE(created_at) = ?
+       GROUP BY utm_source
+       ORDER BY count DESC`,
+      [date]
+    );
+    const data = (rows as mysql.RowDataPacket[]).map((r) => ({
+      source: r["utm_source"] ?? "(direct)",
+      count: Number(r["count"]),
+    }));
+    res.json({ date, rows: data });
+  } catch (err) {
+    req.log.error({ err }, "CRM drill source-by-date failed");
+    res.status(500).json({ error: "Query failed" });
+  }
+});
+
+// Drill-down: dates for a specific source within a date range
+router.get("/crm/drill/date-by-source", requireCrmAuth, requireCrmDb, async (req, res): Promise<void> => {
+  const source = typeof req.query["source"] === "string" ? req.query["source"] : null;
+  const from   = typeof req.query["from"]   === "string" ? req.query["from"]   : null;
+  const to     = typeof req.query["to"]     === "string" ? req.query["to"]     : null;
+  if (!source || !from || !to) { res.status(400).json({ error: "source, from and to are required" }); return; }
+
+  const sourceFilter = source === "(direct)" ? "utm_source IS NULL" : "utm_source = ?";
+  const params: string[] = source === "(direct)" ? [from, to] : [source, from, to];
+
+  try {
+    const [rows] = await crmPool!.query(
+      `SELECT COUNT(*) AS count, DATE(created_at) AS date
+       FROM pp_user
+       WHERE ${sourceFilter}
+         AND DATE(created_at) BETWEEN ? AND ?
+       GROUP BY DATE(created_at)
+       ORDER BY DATE(created_at) DESC`,
+      params
+    );
+    const data = (rows as mysql.RowDataPacket[]).map((r) => ({
+      date: r["date"] instanceof Date ? r["date"].toISOString().split("T")[0] : String(r["date"]),
+      count: Number(r["count"]),
+    }));
+    res.json({ source, from, to, rows: data });
+  } catch (err) {
+    req.log.error({ err }, "CRM drill date-by-source failed");
+    res.status(500).json({ error: "Query failed" });
+  }
+});
+
 export { CRM_TOKEN };
 export default router;
