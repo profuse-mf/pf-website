@@ -55,7 +55,7 @@ router.get("/crm/stats", requireCrmAuth, requireCrmDb, async (req, res): Promise
 
     const totalUsers = Number((usersRows as mysql.RowDataPacket[])[0]?.total ?? 0);
     const totalLeads = Number((leadsRows as mysql.RowDataPacket[])[0]?.total ?? 0);
-    const ulr = totalLeads > 0 ? parseFloat((totalUsers / totalLeads).toFixed(2)) : 0;
+    const ulr = totalUsers > 0 ? parseFloat((totalLeads / totalUsers).toFixed(2)) : 0;
 
     res.json({ totalUsers, totalLeads, ulr });
   } catch (err) {
