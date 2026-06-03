@@ -1,6 +1,13 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
-import { getCrmSession, crmLogout, fetchPartners, createPartner, type PartnerRow } from "@/lib/crm-api";
+import {
+  getCrmSession,
+  crmLogout,
+  fetchPartners,
+  createPartner,
+  updatePartner,
+  type PartnerRow,
+} from "@/lib/crm-api";
 import { Button } from "@/components/ui/button";
 import { CrmNav } from "./crm-nav";
 
@@ -11,35 +18,177 @@ function fmtDate(dt: string) {
   });
 }
 
-// ── Add Partner Modal ──────────────────────────────────────────────────────────
+// ── Pencil icon ────────────────────────────────────────────────────────────────
+function PencilIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 20 20" fill="currentColor">
+      <path d="M2.695 14.763l-1.262 3.154a.5.5 0 0 0 .65.65l3.155-1.262a4 4 0 0 0 1.343-.885L17.5 5.5a2.121 2.121 0 0 0-3-3L3.58 13.42a4 4 0 0 0-.885 1.343z" />
+    </svg>
+  );
+}
+function CheckIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 20 20" fill="currentColor">
+      <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143z" clipRule="evenodd" />
+    </svg>
+  );
+}
+function XIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 20 20" fill="currentColor">
+      <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22z" />
+    </svg>
+  );
+}
 
+// ── Inline editable cell ───────────────────────────────────────────────────────
+interface EditCellProps {
+  value: string;
+  type?: "text" | "url";
+  maxLength?: number;
+  saving: boolean;
+  onSave: (val: string) => Promise<void>;
+}
+
+function EditCell({ value, type = "text", maxLength, saving, onSave }: EditCellProps) {
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft]     = useState(value);
+  const [busy, setBusy]       = useState(false);
+  const inputRef              = useRef<HTMLInputElement>(null);
+
+  function startEdit() {
+    setDraft(value);
+    setEditing(true);
+    setTimeout(() => inputRef.current?.select(), 0);
+  }
+
+  function cancel() { setEditing(false); setDraft(value); }
+
+  async function save() {
+    if (!draft.trim() || draft.trim() === value) { cancel(); return; }
+    setBusy(true);
+    try {
+      await onSave(draft.trim());
+      setEditing(false);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function onKey(e: React.KeyboardEvent) {
+    if (e.key === "Enter")  save();
+    if (e.key === "Escape") cancel();
+  }
+
+  if (editing) {
+    return (
+      <div className="flex items-center gap-1 min-w-0">
+        <input
+          ref={inputRef}
+          type={type}
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
+          onKeyDown={onKey}
+          maxLength={maxLength}
+          disabled={busy}
+          className="flex-1 min-w-0 h-7 rounded border border-[#1b5fb8]/40 px-2 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#1b5fb8]/30 font-mono"
+          autoFocus
+        />
+        <button
+          onClick={save}
+          disabled={busy}
+          className="shrink-0 w-6 h-6 flex items-center justify-center rounded hover:bg-emerald-50 text-emerald-600 disabled:opacity-40"
+          title="Save"
+        >
+          <CheckIcon className="w-3.5 h-3.5" />
+        </button>
+        <button
+          onClick={cancel}
+          disabled={busy}
+          className="shrink-0 w-6 h-6 flex items-center justify-center rounded hover:bg-red-50 text-red-500 disabled:opacity-40"
+          title="Cancel"
+        >
+          <XIcon className="w-3.5 h-3.5" />
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-1.5 group/cell min-w-0">
+      <span className="truncate">{value}</span>
+      <button
+        onClick={startEdit}
+        disabled={saving}
+        className="shrink-0 opacity-0 group-hover/cell:opacity-100 transition-opacity w-5 h-5 flex items-center justify-center rounded hover:bg-slate-100 text-slate-400 hover:text-[#1b5fb8] disabled:opacity-30"
+        title="Edit"
+      >
+        <PencilIcon className="w-3 h-3" />
+      </button>
+    </div>
+  );
+}
+
+// ── Status toggle ─────────────────────────────────────────────────────────────
+interface StatusToggleProps {
+  status: number;
+  saving: boolean;
+  onToggle: () => Promise<void>;
+}
+
+function StatusToggle({ status, saving, onToggle }: StatusToggleProps) {
+  const [busy, setBusy] = useState(false);
+
+  async function handle() {
+    setBusy(true);
+    try { await onToggle(); }
+    finally { setBusy(false); }
+  }
+
+  const active = status === 1;
+  return (
+    <button
+      onClick={handle}
+      disabled={saving || busy}
+      title={active ? "Click to deactivate" : "Click to activate"}
+      className={`inline-flex items-center gap-1.5 text-xs font-medium rounded-full px-2.5 py-0.5 transition-all select-none
+        ${active
+          ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
+          : "bg-slate-100 text-slate-500 hover:bg-slate-200"}
+        ${(saving || busy) ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+    >
+      <span className={`w-1.5 h-1.5 rounded-full transition-colors ${active ? "bg-emerald-500" : "bg-slate-400"}`} />
+      {busy ? "Saving…" : active ? "Active" : "Inactive"}
+    </button>
+  );
+}
+
+// ── Add Partner Modal ──────────────────────────────────────────────────────────
 interface AddModalProps {
   onClose: () => void;
   onSaved: (p: PartnerRow) => void;
 }
 
 function AddModal({ onClose, onSaved }: AddModalProps) {
-  const [name, setName]             = useState("");
-  const [url, setUrl]               = useState("");
-  const [status, setStatus]         = useState<"1" | "0">("1");
-  const [saving, setSaving]         = useState(false);
-  const [error, setError]           = useState("");
-  const overlayRef                  = useRef<HTMLDivElement>(null);
+  const [name, setName]     = useState("");
+  const [url, setUrl]       = useState("");
+  const [status, setStatus] = useState<"1" | "0">("1");
+  const [saving, setSaving] = useState(false);
+  const [error, setError]   = useState("");
+  const overlayRef          = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    function onKey(e: KeyboardEvent) { if (e.key === "Escape") onClose(); }
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
+    const fn = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", fn);
+    return () => document.removeEventListener("keydown", fn);
   }, [onClose]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!name.trim() || !url.trim()) { setError("All fields are required"); return; }
-    setSaving(true);
-    setError("");
+    setSaving(true); setError("");
     try {
-      const partner = await createPartner({ name: name.trim(), redirect_url: url.trim(), status: Number(status) });
-      onSaved(partner);
+      onSaved(await createPartner({ name: name.trim(), redirect_url: url.trim(), status: Number(status) }));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to save");
     } finally {
@@ -56,50 +205,25 @@ function AddModal({ onClose, onSaved }: AddModalProps) {
       <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md mx-4 overflow-hidden">
         <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-slate-100">
           <h3 className="text-base font-bold text-slate-800">Add Partner</h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 transition-colors text-lg leading-none" aria-label="Close">✕</button>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none">✕</button>
         </div>
-
         <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
           <div className="flex flex-col gap-1">
             <label className="text-xs font-medium text-slate-500">Partner Name <span className="text-red-400">*</span></label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Acko General Insurance"
-              maxLength={50}
-              required
-              className="h-9 rounded-lg border border-slate-200 px-3 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#1b5fb8]/30 w-full"
-            />
+            <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Acko General Insurance" maxLength={50} required className="h-9 rounded-lg border border-slate-200 px-3 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#1b5fb8]/30 w-full" />
           </div>
-
           <div className="flex flex-col gap-1">
             <label className="text-xs font-medium text-slate-500">Status <span className="text-red-400">*</span></label>
-            <select
-              value={status}
-              onChange={(e) => setStatus(e.target.value as "1" | "0")}
-              required
-              className="h-9 rounded-lg border border-slate-200 px-3 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#1b5fb8]/30 w-full bg-white"
-            >
+            <select value={status} onChange={(e) => setStatus(e.target.value as "1" | "0")} required className="h-9 rounded-lg border border-slate-200 px-3 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#1b5fb8]/30 w-full bg-white">
               <option value="1">Active</option>
               <option value="0">Inactive</option>
             </select>
           </div>
-
           <div className="flex flex-col gap-1">
             <label className="text-xs font-medium text-slate-500">Redirect URL <span className="text-red-400">*</span></label>
-            <input
-              type="url"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              placeholder="https://..."
-              required
-              className="h-9 rounded-lg border border-slate-200 px-3 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#1b5fb8]/30 w-full"
-            />
+            <input type="url" value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://..." required className="h-9 rounded-lg border border-slate-200 px-3 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#1b5fb8]/30 w-full" />
           </div>
-
           {error && <p className="text-xs text-red-500">{error}</p>}
-
           <div className="flex justify-end gap-2 pt-1">
             <Button type="button" variant="outline" size="sm" onClick={onClose} disabled={saving}>Cancel</Button>
             <Button type="submit" size="sm" className="bg-[#1b5fb8] hover:bg-[#1a55a8] text-white" disabled={saving}>
@@ -113,13 +237,13 @@ function AddModal({ onClose, onSaved }: AddModalProps) {
 }
 
 // ── Main Page ──────────────────────────────────────────────────────────────────
-
 export default function PartnerBoard() {
   const [, navigate] = useLocation();
   const session = getCrmSession();
 
   const [partners, setPartners] = useState<PartnerRow[]>([]);
   const [loading, setLoading]   = useState(false);
+  const [saving, setSaving]     = useState<number | null>(null); // id of row being saved
   const [showAdd, setShowAdd]   = useState(false);
 
   useEffect(() => {
@@ -129,17 +253,26 @@ export default function PartnerBoard() {
 
   function load() {
     setLoading(true);
-    fetchPartners()
-      .then(setPartners)
-      .catch(() => {})
-      .finally(() => setLoading(false));
+    fetchPartners().then(setPartners).catch(() => {}).finally(() => setLoading(false));
   }
 
-  function handleSaved(p: PartnerRow) {
-    setPartners((prev) => [...prev, p]);
-    setShowAdd(false);
+  function applyUpdate(updated: PartnerRow) {
+    setPartners((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
   }
 
+  async function handleFieldSave(id: number, field: "name" | "redirect_url", val: string) {
+    setSaving(id);
+    try { applyUpdate(await updatePartner(id, { [field]: val })); }
+    finally { setSaving(null); }
+  }
+
+  async function handleStatusToggle(p: PartnerRow) {
+    setSaving(p.id);
+    try { applyUpdate(await updatePartner(p.id, { status: p.status === 1 ? 0 : 1 })); }
+    finally { setSaving(null); }
+  }
+
+  function handleSaved(p: PartnerRow) { setPartners((prev) => [...prev, p]); setShowAdd(false); }
   function handleLogout() { crmLogout(); navigate("/crm"); }
 
   if (!session) return null;
@@ -171,11 +304,7 @@ export default function PartnerBoard() {
             <h2 className="text-xl font-bold text-slate-800 mb-0.5">Partner Board</h2>
             <p className="text-sm text-slate-400">Active insurance partners and their redirect links</p>
           </div>
-          <Button
-            size="sm"
-            onClick={() => setShowAdd(true)}
-            className="bg-[#1b5fb8] hover:bg-[#1a55a8] text-white flex items-center gap-1.5"
-          >
+          <Button size="sm" onClick={() => setShowAdd(true)} className="bg-[#1b5fb8] hover:bg-[#1a55a8] text-white flex items-center gap-1.5">
             <svg className="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
               <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
             </svg>
@@ -199,42 +328,54 @@ export default function PartnerBoard() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b-2 border-slate-200 bg-slate-50">
-                    <th className="text-left py-2.5 px-3 text-slate-700 font-bold text-xs uppercase tracking-wide">#</th>
+                    <th className="text-left py-2.5 px-3 text-slate-700 font-bold text-xs uppercase tracking-wide w-6">#</th>
                     <th className="text-left py-2.5 px-3 text-slate-700 font-bold text-xs uppercase tracking-wide">Partner Name</th>
-                    <th className="text-left py-2.5 px-3 text-slate-700 font-bold text-xs uppercase tracking-wide">Status</th>
-                    <th className="text-left py-2.5 px-3 text-slate-700 font-bold text-xs uppercase tracking-wide">Created</th>
+                    <th className="text-left py-2.5 px-3 text-slate-700 font-bold text-xs uppercase tracking-wide w-28">Status</th>
+                    <th className="text-left py-2.5 px-3 text-slate-700 font-bold text-xs uppercase tracking-wide w-28">Created</th>
                     <th className="text-left py-2.5 px-3 text-slate-700 font-bold text-xs uppercase tracking-wide">Redirect URL</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {partners.map((p, i) => (
-                    <tr key={p.id} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
-                      <td className="py-3 px-3 text-slate-400 text-xs">{i + 1}</td>
-                      <td className="py-3 px-3 font-semibold text-slate-800">{p.name}</td>
-                      <td className="py-3 px-3">
-                        <span className={`inline-flex items-center gap-1.5 text-xs font-medium rounded-full px-2.5 py-0.5 ${
-                          p.status === 1
-                            ? "bg-emerald-50 text-emerald-700"
-                            : "bg-slate-100 text-slate-500"
-                        }`}>
-                          <span className={`w-1.5 h-1.5 rounded-full ${p.status === 1 ? "bg-emerald-500" : "bg-slate-400"}`} />
-                          {p.status === 1 ? "Active" : "Inactive"}
-                        </span>
-                      </td>
-                      <td className="py-3 px-3 text-slate-600">{fmtDate(p.created)}</td>
-                      <td className="py-3 px-3 max-w-xs">
-                        <a
-                          href={p.redirect_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          title={p.redirect_url}
-                          className="text-[#1b5fb8] hover:underline truncate block max-w-xs font-mono text-xs"
-                        >
-                          {p.redirect_url}
-                        </a>
-                      </td>
-                    </tr>
-                  ))}
+                  {partners.map((p, i) => {
+                    const rowSaving = saving === p.id;
+                    return (
+                      <tr key={p.id} className={`border-b border-slate-100 hover:bg-slate-50 transition-colors ${rowSaving ? "opacity-70" : ""}`}>
+                        <td className="py-3 px-3 text-slate-400 text-xs">{i + 1}</td>
+
+                        {/* Name — editable */}
+                        <td className="py-3 px-3 font-semibold text-slate-800 max-w-xs">
+                          <EditCell
+                            value={p.name}
+                            type="text"
+                            maxLength={50}
+                            saving={rowSaving}
+                            onSave={(val) => handleFieldSave(p.id, "name", val)}
+                          />
+                        </td>
+
+                        {/* Status — toggle */}
+                        <td className="py-3 px-3">
+                          <StatusToggle
+                            status={p.status}
+                            saving={rowSaving}
+                            onToggle={() => handleStatusToggle(p)}
+                          />
+                        </td>
+
+                        <td className="py-3 px-3 text-slate-600 whitespace-nowrap">{fmtDate(p.created)}</td>
+
+                        {/* Redirect URL — editable */}
+                        <td className="py-3 px-3 max-w-xs font-mono text-xs text-[#1b5fb8]">
+                          <EditCell
+                            value={p.redirect_url}
+                            type="url"
+                            saving={rowSaving}
+                            onSave={(val) => handleFieldSave(p.id, "redirect_url", val)}
+                          />
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

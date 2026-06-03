@@ -552,5 +552,77 @@ router.post("/crm/partners", requireCrmAuth, requireCrmDb, async (req, res): Pro
   }
 });
 
+// Partner Board — update a single field (name | redirect_url | status)
+router.patch("/crm/partners/:id", requireCrmAuth, requireCrmDb, async (req, res): Promise<void> => {
+  const id = Number(req.params["id"]);
+  if (!Number.isFinite(id) || id <= 0) {
+    res.status(400).json({ error: "Invalid id" });
+    return;
+  }
+
+  const { name, redirect_url, status } = req.body as {
+    name?: string;
+    redirect_url?: string;
+    status?: number;
+  };
+
+  const setClauses: string[]  = [];
+  const values: (string | number)[] = [];
+
+  if (name !== undefined) {
+    if (!name.trim()) { res.status(400).json({ error: "name cannot be empty" }); return; }
+    setClauses.push("name = ?");
+    values.push(name.trim());
+  }
+  if (redirect_url !== undefined) {
+    if (!redirect_url.trim()) { res.status(400).json({ error: "redirect_url cannot be empty" }); return; }
+    setClauses.push("redirect_url = ?");
+    values.push(redirect_url.trim());
+  }
+  if (status !== undefined) {
+    setClauses.push("status = ?");
+    values.push(status ? 1 : 0);
+  }
+
+  if (setClauses.length === 0) {
+    res.status(400).json({ error: "At least one field (name, redirect_url, status) must be provided" });
+    return;
+  }
+
+  const now = new Date().toISOString().replace("T", " ").slice(0, 19);
+  setClauses.push("updated = ?");
+  values.push(now);
+  values.push(id);
+
+  try {
+    const [result] = await crmPool!.query(
+      `UPDATE pp_partners SET ${setClauses.join(", ")} WHERE id = ?`,
+      values
+    );
+    if ((result as mysql.ResultSetHeader).affectedRows === 0) {
+      res.status(404).json({ error: "Partner not found" });
+      return;
+    }
+    const [rows] = await crmPool!.query(
+      "SELECT id, name, redirect_url, status, created, updated FROM pp_partners WHERE id = ?",
+      [id]
+    );
+    const r = (rows as mysql.RowDataPacket[])[0];
+    const fmtDt = (v: unknown) =>
+      v instanceof Date ? v.toISOString().replace("T", " ").slice(0, 19) : String(v ?? "");
+    res.json({
+      id:           r["id"],
+      name:         r["name"],
+      redirect_url: r["redirect_url"],
+      status:       Number(r["status"]),
+      created:      fmtDt(r["created"]),
+      updated:      fmtDt(r["updated"]),
+    });
+  } catch (err) {
+    req.log.error({ err }, "CRM partner update failed");
+    res.status(500).json({ error: "Update failed" });
+  }
+});
+
 export { CRM_TOKEN };
 export default router;

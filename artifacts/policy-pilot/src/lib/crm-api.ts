@@ -239,6 +239,22 @@ export async function fetchPartners(): Promise<PartnerRow[]> {
   return data.rows;
 }
 
+export async function updatePartner(
+  id: number,
+  payload: { name?: string; redirect_url?: string; status?: number }
+): Promise<PartnerRow> {
+  const res = await fetch(`/api/crm/partners/${id}`, {
+    method: "PATCH",
+    headers: { "x-crm-token": CRM_TOKEN, "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const err = await res.json() as { error?: string };
+    throw new Error(err.error ?? "Failed to update partner");
+  }
+  return res.json() as Promise<PartnerRow>;
+}
+
 export async function createPartner(payload: {
   name: string;
   redirect_url: string;
