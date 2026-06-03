@@ -1,9 +1,12 @@
 import { Router, type IRouter, type Request, type Response, type NextFunction } from "express";
-import { pool } from "@workspace/db";
+import { createPool } from "@workspace/db";
 
 const router: IRouter = Router();
 
 const CRM_TOKEN = "pf-crm-secret-2026";
+
+const crmUrl = process.env["CRM_DATABASE_URL"];
+const crmPool = crmUrl ? createPool(crmUrl) : null;
 
 function requireCrmAuth(req: Request, res: Response, next: NextFunction): void {
   const token = req.headers["x-crm-token"];
@@ -14,11 +17,19 @@ function requireCrmAuth(req: Request, res: Response, next: NextFunction): void {
   next();
 }
 
-router.get("/crm/stats", requireCrmAuth, async (req, res): Promise<void> => {
+function requireCrmDb(req: Request, res: Response, next: NextFunction): void {
+  if (!crmPool) {
+    res.status(503).json({ error: "CRM_DATABASE_URL is not configured" });
+    return;
+  }
+  next();
+}
+
+router.get("/crm/stats", requireCrmAuth, requireCrmDb, async (req, res): Promise<void> => {
   try {
     const [usersResult, leadsResult] = await Promise.all([
-      pool.query("SELECT MAX(id) AS total FROM pp_user"),
-      pool.query("SELECT MAX(id) AS total FROM pp_applications"),
+      crmPool!.query("SELECT MAX(id) AS total FROM pp_user"),
+      crmPool!.query("SELECT MAX(id) AS total FROM pp_applications"),
     ]);
 
     const totalUsers = Number(usersResult.rows[0]?.total ?? 0);
@@ -32,14 +43,14 @@ router.get("/crm/stats", requireCrmAuth, async (req, res): Promise<void> => {
   }
 });
 
-router.get("/crm/users-by-date", requireCrmAuth, async (req, res): Promise<void> => {
+router.get("/crm/users-by-date", requireCrmAuth, requireCrmDb, async (req, res): Promise<void> => {
   const page = Math.max(1, parseInt(String(req.query["page"] ?? "1"), 10));
   const limit = 15;
   const offset = (page - 1) * limit;
 
   try {
     const [dataResult, countResult] = await Promise.all([
-      pool.query(
+      crmPool!.query(
         `SELECT COUNT(*) AS count, DATE(created_at) AS date
          FROM pp_user
          GROUP BY DATE(created_at)
@@ -47,9 +58,7 @@ router.get("/crm/users-by-date", requireCrmAuth, async (req, res): Promise<void>
          LIMIT $1 OFFSET $2`,
         [limit, offset]
       ),
-      pool.query(
-        "SELECT COUNT(DISTINCT DATE(created_at)) AS total FROM pp_user"
-      ),
+      crmPool!.query("SELECT COUNT(DISTINCT DATE(created_at)) AS total FROM pp_user"),
     ]);
 
     const total = Number(countResult.rows[0]?.total ?? 0);
@@ -65,14 +74,14 @@ router.get("/crm/users-by-date", requireCrmAuth, async (req, res): Promise<void>
   }
 });
 
-router.get("/crm/users-by-source", requireCrmAuth, async (req, res): Promise<void> => {
+router.get("/crm/users-by-source", requireCrmAuth, requireCrmDb, async (req, res): Promise<void> => {
   const page = Math.max(1, parseInt(String(req.query["page"] ?? "1"), 10));
   const limit = 15;
   const offset = (page - 1) * limit;
 
   try {
     const [dataResult, countResult] = await Promise.all([
-      pool.query(
+      crmPool!.query(
         `SELECT COUNT(*) AS count, utm_source
          FROM pp_user
          GROUP BY utm_source
@@ -80,9 +89,7 @@ router.get("/crm/users-by-source", requireCrmAuth, async (req, res): Promise<voi
          LIMIT $1 OFFSET $2`,
         [limit, offset]
       ),
-      pool.query(
-        "SELECT COUNT(DISTINCT utm_source) AS total FROM pp_user"
-      ),
+      crmPool!.query("SELECT COUNT(DISTINCT utm_source) AS total FROM pp_user"),
     ]);
 
     const total = Number(countResult.rows[0]?.total ?? 0);
