@@ -103,6 +103,53 @@ export async function exportUsersBySource(from: string, to: string): Promise<Sou
   return data.rows;
 }
 
+// ── User board helpers ────────────────────────────────────────────────────────
+
+export async function fetchUtmSources(from: string, to: string): Promise<string[]> {
+  const res = await crmFetch(`/crm/utm-sources?from=${from}&to=${to}`);
+  if (!res.ok) throw new Error("Failed to fetch UTM sources");
+  const data = await res.json() as { sources: string[] };
+  return data.sources;
+}
+
+export interface UserRow {
+  id: number;
+  mobile: string;
+  email: string;
+  pincode: string;
+  vehicle_type: string;
+  reg_no: string;
+  reg_year: string;
+  model: string;
+  brand: string;
+  expiry_date: string;
+  created_at: string;
+  utm_source: string;
+  utm_medium: string;
+  utm_channel: string;
+  utm_partner: string;
+}
+
+export async function fetchUsers(
+  page: number,
+  from: string,
+  to: string,
+  source: string
+): Promise<PaginatedResult<UserRow>> {
+  const sourceParam = source ? `&source=${encodeURIComponent(source)}` : "";
+  const res = await crmFetch(`/crm/users?page=${page}&from=${from}&to=${to}${sourceParam}`);
+  if (!res.ok) throw new Error("Failed to fetch users");
+  return res.json() as Promise<PaginatedResult<UserRow>>;
+}
+
+export async function exportUsers(from: string, to: string, source: string): Promise<UserRow[]> {
+  const sourceParam = source ? `&source=${encodeURIComponent(source)}` : "";
+  const res = await crmFetch(`/crm/users?export=1&from=${from}&to=${to}${sourceParam}`);
+  if (!res.ok) throw new Error("Failed to export users");
+  const data = await res.json() as PaginatedResult<UserRow>;
+  return data.rows;
+}
+
 // ── Drill-down helpers ───────────────────────────────────────────────────────
 
 export interface DrillSourceRow {

@@ -146,6 +146,105 @@ router.get("/crm/users-by-source", requireCrmAuth, requireCrmDb, async (req, res
   }
 });
 
+// UTM source list for date range (for filter dropdown)
+router.get("/crm/utm-sources", requireCrmAuth, requireCrmDb, async (req, res): Promise<void> => {
+  const { from, to } = getDateParams(req);
+  const dateFilter = from && to ? "WHERE DATE(created_at) BETWEEN ? AND ?" : "";
+  const dateParams: string[] = from && to ? [from, to] : [];
+  try {
+    const [rows] = await crmPool!.query(
+      `SELECT DISTINCT utm_source FROM pp_user ${dateFilter} ORDER BY utm_source`,
+      dateParams
+    );
+    const sources = (rows as mysql.RowDataPacket[]).map((r) =>
+      r["utm_source"] == null ? "(direct)" : String(r["utm_source"])
+    );
+    res.json({ sources });
+  } catch (err) {
+    req.log.error({ err }, "CRM utm-sources query failed");
+    res.status(500).json({ error: "Query failed" });
+  }
+});
+
+// User board — paginated user+application data
+router.get("/crm/users", requireCrmAuth, requireCrmDb, async (req, res): Promise<void> => {
+  const isExport = req.query["export"] === "1";
+  const page = Math.max(1, parseInt(String(req.query["page"] ?? "1"), 10));
+  const limit = isExport ? 100000 : 20;
+  const offset = isExport ? 0 : (page - 1) * limit;
+  const { from, to } = getDateParams(req);
+  const source = typeof req.query["source"] === "string" ? req.query["source"] : null;
+
+  const conditions: string[] = [];
+  const params: (string | number)[] = [];
+
+  if (from && to) {
+    conditions.push("DATE(p.created_at) BETWEEN ? AND ?");
+    params.push(from, to);
+  }
+  if (source) {
+    if (source === "(direct)") {
+      conditions.push("p.utm_source IS NULL");
+    } else {
+      conditions.push("p.utm_source = ?");
+      params.push(source);
+    }
+  }
+
+  const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
+
+  try {
+    const [[dataRows], [countRows]] = await Promise.all([
+      crmPool!.query(
+        `SELECT p.id, p.mobile, p.email, a.pincode, a.vehicle_type, a.reg_no, a.reg_year,
+                a.model, a.brand, a.expiry_date, p.created_at,
+                p.utm_source, p.utm_medium, p.utm_channel, p.utm_partner
+         FROM pp_user p
+         JOIN pp_application_master a ON p.id = a.user_id
+         ${whereClause}
+         ORDER BY p.id DESC
+         LIMIT ? OFFSET ?`,
+        [...params, limit, offset]
+      ),
+      crmPool!.query(
+        `SELECT COUNT(*) AS total
+         FROM pp_user p
+         JOIN pp_application_master a ON p.id = a.user_id
+         ${whereClause}`,
+        params
+      ),
+    ]);
+
+    const total = Number((countRows as mysql.RowDataPacket[])[0]?.total ?? 0);
+    const rows = (dataRows as mysql.RowDataPacket[]).map((r) => ({
+      id: r["id"],
+      mobile: r["mobile"] ?? "",
+      email: r["email"] ?? "",
+      pincode: r["pincode"] ?? "",
+      vehicle_type: r["vehicle_type"] ?? "",
+      reg_no: r["reg_no"] ?? "",
+      reg_year: r["reg_year"] ?? "",
+      model: r["model"] ?? "",
+      brand: r["brand"] ?? "",
+      expiry_date: r["expiry_date"] instanceof Date
+        ? r["expiry_date"].toISOString().split("T")[0]
+        : (r["expiry_date"] ? String(r["expiry_date"]) : ""),
+      created_at: r["created_at"] instanceof Date
+        ? r["created_at"].toISOString().replace("T", " ").slice(0, 19)
+        : String(r["created_at"] ?? ""),
+      utm_source: r["utm_source"] ?? "",
+      utm_medium: r["utm_medium"] ?? "",
+      utm_channel: r["utm_channel"] ?? "",
+      utm_partner: r["utm_partner"] ?? "",
+    }));
+
+    res.json({ rows, total, page, totalPages: Math.ceil(total / limit) });
+  } catch (err) {
+    req.log.error({ err }, "CRM users query failed");
+    res.status(500).json({ error: "Query failed" });
+  }
+});
+
 // Drill-down: sources for a specific date
 router.get("/crm/drill/source-by-date", requireCrmAuth, requireCrmDb, async (req, res): Promise<void> => {
   const date = typeof req.query["date"] === "string" ? req.query["date"] : null;

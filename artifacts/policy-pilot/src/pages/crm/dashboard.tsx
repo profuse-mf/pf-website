@@ -23,6 +23,7 @@ import {
   type PaginatedResult,
 } from "@/lib/crm-api";
 import { Button } from "@/components/ui/button";
+import { CrmNav } from "./crm-nav";
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -347,7 +348,7 @@ export default function CrmDashboard() {
         <div className="flex items-center gap-3">
           <img src="/policypilot-logo.png" alt="PolicyFatafat" className="h-8 w-auto object-contain" />
           <span className="text-slate-300 text-lg font-light">|</span>
-          <span className="font-semibold text-slate-700 text-sm">Insights</span>
+          <span className="font-semibold text-slate-700 text-sm">CRM</span>
           <span className="text-xs bg-slate-100 text-slate-500 rounded-full px-2 py-0.5">
             {session.type === "masteradmin" ? "Master Admin" : "Admin"}
           </span>
@@ -357,6 +358,8 @@ export default function CrmDashboard() {
           <Button variant="outline" size="sm" onClick={handleLogout}>Logout</Button>
         </div>
       </header>
+
+      <CrmNav />
 
       <main className="max-w-6xl mx-auto px-6 py-8 space-y-8">
         <div className="flex flex-col sm:flex-row sm:items-end gap-4">
