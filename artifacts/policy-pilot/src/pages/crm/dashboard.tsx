@@ -1,11 +1,14 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useLocation } from "wouter";
+import * as XLSX from "xlsx";
 import {
   getCrmSession,
   crmLogout,
   fetchCrmStats,
   fetchUsersByDate,
   fetchUsersBySource,
+  exportUsersByDate,
+  exportUsersBySource,
   fetchSourceByDate,
   fetchDateBySource,
   getPresetDates,
@@ -21,7 +24,7 @@ import {
 } from "@/lib/crm-api";
 import { Button } from "@/components/ui/button";
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
+// ── Helpers ───────────────────────────────────────────────────────────────────
 
 function fmtDate(iso: string) {
   return new Date(iso + "T00:00:00").toLocaleDateString("en-IN", {
@@ -29,6 +32,40 @@ function fmtDate(iso: string) {
     month: "short",
     year: "numeric",
   });
+}
+
+function fmtDateRange(from: string, to: string) {
+  return from === to ? fmtDate(from) : `${fmtDate(from)} → ${fmtDate(to)}`;
+}
+
+function downloadXlsx(filename: string, headers: string[], rows: (string | number)[][]) {
+  const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
+  const colWidths = headers.map((h, i) => ({
+    wch: Math.max(h.length, ...rows.map((r) => String(r[i] ?? "").length)) + 2,
+  }));
+  ws["!cols"] = colWidths;
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Data");
+  XLSX.writeFile(wb, `${filename}.xlsx`);
+}
+
+// ── Download button ───────────────────────────────────────────────────────────
+
+function DownloadBtn({ onClick, loading }: { onClick: () => void; loading: boolean }) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={loading}
+      title="Download as Excel"
+      className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-[#1b5fb8] border border-slate-200 hover:border-[#1b5fb8]/40 rounded-lg px-3 py-1.5 transition-colors disabled:opacity-50 bg-white"
+    >
+      <svg className="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
+        <path d="M10.75 2.75a.75.75 0 0 0-1.5 0v8.614L6.295 8.235a.75.75 0 1 0-1.09 1.03l4.25 4.5a.75.75 0 0 0 1.09 0l4.25-4.5a.75.75 0 0 0-1.09-1.03l-2.955 3.129V2.75Z" />
+        <path d="M3.5 12.75a.75.75 0 0 0-1.5 0v2.5A2.75 2.75 0 0 0 4.75 18h10.5A2.75 2.75 0 0 0 18 15.25v-2.5a.75.75 0 0 0-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5Z" />
+      </svg>
+      {loading ? "Exporting…" : "Download XL"}
+    </button>
+  );
 }
 
 // ── Sub-components ────────────────────────────────────────────────────────────
@@ -61,29 +98,19 @@ type DrillMode =
   | { type: "source-by-date"; date: string }
   | { type: "date-by-source"; source: string };
 
-function DrillModal({
-  mode,
-  from,
-  to,
-  onClose,
-}: {
-  mode: DrillMode;
-  from: string;
-  to: string;
-  onClose: () => void;
-}) {
+function DrillModal({ mode, from, to, onClose }: { mode: DrillMode; from: string; to: string; onClose: () => void }) {
   const [rows, setRows] = useState<DrillSourceRow[] | DrillDateRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [dlLoading, setDlLoading] = useState(false);
   const overlayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setLoading(true);
     setError("");
-    const p =
-      mode.type === "source-by-date"
-        ? fetchSourceByDate(mode.date)
-        : fetchDateBySource(mode.source, from, to);
+    const p = mode.type === "source-by-date"
+      ? fetchSourceByDate(mode.date)
+      : fetchDateBySource(mode.source, from, to);
     p.then((r) => setRows(r as DrillSourceRow[] & DrillDateRow[]))
       .catch(() => setError("Could not load data"))
       .finally(() => setLoading(false));
@@ -95,15 +122,37 @@ function DrillModal({
     return () => document.removeEventListener("keydown", onKey);
   }, [onClose]);
 
-  const title =
-    mode.type === "source-by-date"
-      ? `Source breakdown — ${fmtDate(mode.date)}`
-      : `Date breakdown — ${mode.source}`;
+  const title = mode.type === "source-by-date"
+    ? `Source breakdown — ${fmtDate(mode.date)}`
+    : `Date breakdown — ${mode.source}`;
 
-  const subtitle =
-    mode.type === "source-by-date"
-      ? "UTM source split for this date"
-      : `${fmtDate(from)} → ${fmtDate(to)}`;
+  const subtitle = mode.type === "source-by-date"
+    ? "UTM source split for this date"
+    : fmtDateRange(from, to);
+
+  function handleDownload() {
+    if (!rows.length) return;
+    setDlLoading(true);
+    try {
+      if (mode.type === "source-by-date") {
+        const r = rows as DrillSourceRow[];
+        downloadXlsx(
+          `source-breakdown-${mode.date}`,
+          ["UTM Source", "Users"],
+          r.map((x) => [x.source, x.count])
+        );
+      } else {
+        const r = rows as DrillDateRow[];
+        downloadXlsx(
+          `date-breakdown-${mode.source}`,
+          ["Date", "Users"],
+          r.map((x) => [fmtDate(x.date), x.count])
+        );
+      }
+    } finally {
+      setDlLoading(false);
+    }
+  }
 
   return (
     <div
@@ -117,13 +166,18 @@ function DrillModal({
             <h3 className="text-base font-bold text-slate-800">{title}</h3>
             <p className="text-xs text-slate-400 mt-0.5">{subtitle}</p>
           </div>
-          <button
-            onClick={onClose}
-            className="ml-4 text-slate-400 hover:text-slate-600 transition-colors text-lg leading-none"
-            aria-label="Close"
-          >
-            ✕
-          </button>
+          <div className="flex items-center gap-2 ml-4 flex-shrink-0">
+            {!loading && !error && rows.length > 0 && (
+              <DownloadBtn onClick={handleDownload} loading={dlLoading} />
+            )}
+            <button
+              onClick={onClose}
+              className="text-slate-400 hover:text-slate-600 transition-colors text-lg leading-none"
+              aria-label="Close"
+            >
+              ✕
+            </button>
+          </div>
         </div>
 
         <div className="px-6 py-4 max-h-[60vh] overflow-y-auto">
@@ -191,10 +245,12 @@ export default function CrmDashboard() {
   const [datePage, setDatePage] = useState(1);
   const [dateData, setDateData] = useState<PaginatedResult<DayRow> | null>(null);
   const [dateLoading, setDateLoading] = useState(false);
+  const [dateDlLoading, setDateDlLoading] = useState(false);
 
   const [sourcePage, setSourcePage] = useState(1);
   const [sourceData, setSourceData] = useState<PaginatedResult<SourceRow> | null>(null);
   const [sourceLoading, setSourceLoading] = useState(false);
+  const [sourceDlLoading, setSourceDlLoading] = useState(false);
 
   const [drill, setDrill] = useState<DrillMode | null>(null);
 
@@ -248,6 +304,34 @@ export default function CrmDashboard() {
       .catch(() => {})
       .finally(() => setSourceLoading(false));
   }, [fromDate, toDate]);
+
+  async function handleDateDownload() {
+    setDateDlLoading(true);
+    try {
+      const rows = await exportUsersByDate(fromDate, toDate);
+      downloadXlsx(
+        `users-by-date_${fromDate}_${toDate}`,
+        ["Date", "Users"],
+        rows.map((r) => [fmtDate(r.date), r.count])
+      );
+    } finally {
+      setDateDlLoading(false);
+    }
+  }
+
+  async function handleSourceDownload() {
+    setSourceDlLoading(true);
+    try {
+      const rows = await exportUsersBySource(fromDate, toDate);
+      downloadXlsx(
+        `users-by-source_${fromDate}_${toDate}`,
+        ["UTM Source", "Users"],
+        rows.map((r) => [r.source, r.count])
+      );
+    } finally {
+      setSourceDlLoading(false);
+    }
+  }
 
   function handleLogout() { crmLogout(); navigate("/crm"); }
 
@@ -313,17 +397,18 @@ export default function CrmDashboard() {
         )}
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <StatCard label="Users" value={stats ? stats.totalUsers : "—"}
-            sub={fromDate === toDate ? fromDate : `${fromDate} → ${toDate}`} />
-          <StatCard label="Leads" value={stats ? stats.totalLeads : "—"}
-            sub={fromDate === toDate ? fromDate : `${fromDate} → ${toDate}`} />
+          <StatCard label="Users" value={stats ? stats.totalUsers : "—"} sub={fmtDateRange(fromDate, toDate)} />
+          <StatCard label="Leads" value={stats ? stats.totalLeads : "—"} sub={fmtDateRange(fromDate, toDate)} />
           <StatCard label="ULR" value={stats ? stats.ulr : "—"} sub="User to Lead Ratio" />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Day-wise table */}
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-            <h3 className="text-base font-bold text-slate-800 mb-1">User Acquisition — Day Wise</h3>
+            <div className="flex items-start justify-between mb-1">
+              <h3 className="text-base font-bold text-slate-800">User Acquisition — Day Wise</h3>
+              <DownloadBtn onClick={handleDateDownload} loading={dateDlLoading} />
+            </div>
             <p className="text-xs text-slate-400 mb-4">Click a row to see source breakdown</p>
             {dateLoading ? (
               <p className="text-sm text-slate-400 py-6 text-center">Loading…</p>
@@ -364,7 +449,10 @@ export default function CrmDashboard() {
 
           {/* Source-wise table */}
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-            <h3 className="text-base font-bold text-slate-800 mb-1">User Acquisition — Source Wise</h3>
+            <div className="flex items-start justify-between mb-1">
+              <h3 className="text-base font-bold text-slate-800">User Acquisition — Source Wise</h3>
+              <DownloadBtn onClick={handleSourceDownload} loading={sourceDlLoading} />
+            </div>
             <p className="text-xs text-slate-400 mb-4">Click a row to see date breakdown</p>
             {sourceLoading ? (
               <p className="text-sm text-slate-400 py-6 text-center">Loading…</p>

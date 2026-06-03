@@ -89,6 +89,20 @@ export async function fetchUsersBySource(
   return res.json() as Promise<PaginatedResult<SourceRow>>;
 }
 
+export async function exportUsersByDate(from: string, to: string): Promise<DayRow[]> {
+  const res = await crmFetch(`/crm/users-by-date?export=1&from=${from}&to=${to}`);
+  if (!res.ok) throw new Error("Failed to export users by date");
+  const data = await res.json() as PaginatedResult<DayRow>;
+  return data.rows;
+}
+
+export async function exportUsersBySource(from: string, to: string): Promise<SourceRow[]> {
+  const res = await crmFetch(`/crm/users-by-source?export=1&from=${from}&to=${to}`);
+  if (!res.ok) throw new Error("Failed to export users by source");
+  const data = await res.json() as PaginatedResult<SourceRow>;
+  return data.rows;
+}
+
 // ── Drill-down helpers ───────────────────────────────────────────────────────
 
 export interface DrillSourceRow {

@@ -65,9 +65,10 @@ router.get("/crm/stats", requireCrmAuth, requireCrmDb, async (req, res): Promise
 });
 
 router.get("/crm/users-by-date", requireCrmAuth, requireCrmDb, async (req, res): Promise<void> => {
+  const isExport = req.query["export"] === "1";
   const page = Math.max(1, parseInt(String(req.query["page"] ?? "1"), 10));
-  const limit = 15;
-  const offset = (page - 1) * limit;
+  const limit = isExport ? 100000 : 15;
+  const offset = isExport ? 0 : (page - 1) * limit;
   const { from, to } = getDateParams(req);
 
   const dateFilter = from && to ? "WHERE DATE(created_at) BETWEEN ? AND ?" : "";
@@ -106,9 +107,10 @@ router.get("/crm/users-by-date", requireCrmAuth, requireCrmDb, async (req, res):
 });
 
 router.get("/crm/users-by-source", requireCrmAuth, requireCrmDb, async (req, res): Promise<void> => {
+  const isExport = req.query["export"] === "1";
   const page = Math.max(1, parseInt(String(req.query["page"] ?? "1"), 10));
-  const limit = 15;
-  const offset = (page - 1) * limit;
+  const limit = isExport ? 100000 : 15;
+  const offset = isExport ? 0 : (page - 1) * limit;
   const { from, to } = getDateParams(req);
 
   const dateFilter = from && to ? "WHERE DATE(created_at) BETWEEN ? AND ?" : "";
