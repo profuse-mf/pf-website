@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ArrowLeft, Loader2, ChevronRight, Star, Zap, CheckCircle2, Building2, Clock, FileText, ShieldCheck, TrendingUp, Headphones } from "lucide-react";
-import { getPartnersByType, resolvePartnerUrl, type Partner, type StatIcon } from "@/data/partners";
+import { fetchPublicPartners, resolvePartnerUrl, type Partner, type StatIcon } from "@/data/partners";
 import { getStoredUtm } from "@/lib/application-api";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -71,8 +71,15 @@ function PlanTypeChips({ types }: { types: string[] }) {
 
 export default function PartnersScreen({ vehicleType, registrationNumber, model, onBack }: PartnersScreenProps) {
   const [redirectingTo, setRedirectingTo] = useState<string | null>(null);
+  const [partners, setPartners]           = useState<Partner[]>([]);
+  const [loading, setLoading]             = useState(true);
 
-  const partners = getPartnersByType(vehicleType);
+  useEffect(() => {
+    fetchPublicPartners(vehicleType)
+      .then(setPartners)
+      .finally(() => setLoading(false));
+  }, [vehicleType]);
+
   const featured = partners.find((p) => p.id === "policybazaar") ?? partners[0];
   const rest = partners.filter((p) => p.id !== featured?.id);
 
@@ -127,7 +134,16 @@ export default function PartnersScreen({ vehicleType, registrationNumber, model,
         <sup className="text-[9px] mr-0.5">✱</sup>Results and recommendations are based on your vehicle details. Final premium may vary after insurer verification.
       </p>
 
-      <div className="flex flex-col gap-4">
+      {/* Loading skeleton */}
+      {loading && (
+        <div className="flex flex-col gap-4">
+          <div className="rounded-2xl border-2 border-primary/30 bg-gradient-to-r from-primary/10 to-blue-100 h-52 animate-pulse" />
+          <div className="rounded-2xl border border-border bg-muted/40 h-40 animate-pulse" />
+          <div className="rounded-2xl border border-border bg-muted/40 h-40 animate-pulse" />
+        </div>
+      )}
+
+      <div className={`flex flex-col gap-4 ${loading ? "hidden" : ""}`}>
         {/* ── Featured card ── */}
         {featured && (
           <div
