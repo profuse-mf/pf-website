@@ -78,7 +78,6 @@ const COLUMNS: { key: keyof UserRow; label: string }[] = [
   { key: "reg_no",       label: "Reg No" },
   { key: "reg_year",     label: "Reg Year" },
   { key: "model",        label: "Model" },
-  { key: "brand",        label: "Brand" },
   { key: "expiry_date",  label: "Expiry" },
   { key: "created_at",   label: "Created" },
   { key: "utm_source",   label: "Source" },
@@ -86,6 +85,11 @@ const COLUMNS: { key: keyof UserRow; label: string }[] = [
   { key: "utm_channel",  label: "Channel" },
   { key: "utm_partner",  label: "Partner" },
 ];
+
+function maskMobile(mobile: string): string {
+  if (!mobile || mobile.length <= 4) return mobile;
+  return "XXXXXX" + mobile.slice(-4);
+}
 
 export default function UserBoard() {
   const [, navigate] = useLocation();
@@ -246,7 +250,9 @@ export default function UserBoard() {
               </span>
               <span className="text-xs text-slate-400 ml-2">{fmtDateRange(fromDate, toDate)}</span>
             </div>
-            <DownloadBtn onClick={handleDownload} loading={dlLoading} />
+            {session.type === "masteradmin" && (
+              <DownloadBtn onClick={handleDownload} loading={dlLoading} />
+            )}
           </div>
 
           {loading ? (
@@ -272,6 +278,7 @@ export default function UserBoard() {
                       <tr key={i} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
                         {COLUMNS.map((c) => {
                           let val = String(row[c.key] ?? "");
+                          if (c.key === "mobile") val = maskMobile(val);
                           if (c.key === "expiry_date" && val) val = fmtDate(val);
                           return (
                             <td key={c.key} className="py-2 px-3 text-slate-700">
