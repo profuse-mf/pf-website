@@ -257,80 +257,82 @@ export default function CrmDashboard() {
           />
         </div>
 
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-          <h3 className="text-base font-semibold text-slate-800 mb-4">
-            User Acquisition — Day Wise
-          </h3>
-          {dateLoading ? (
-            <p className="text-sm text-slate-400 py-6 text-center">Loading…</p>
-          ) : dateData && dateData.rows.length > 0 ? (
-            <>
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b border-slate-100">
-                      <th className="text-left py-2 px-3 text-slate-400 font-medium">Date</th>
-                      <th className="text-right py-2 px-3 text-slate-400 font-medium">Users</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {dateData.rows.map((row, i) => (
-                      <tr key={i} className="border-b border-slate-50 hover:bg-slate-50 transition-colors">
-                        <td className="py-2.5 px-3 text-slate-700">
-                          {new Date(row.date + "T00:00:00").toLocaleDateString("en-IN", {
-                            day: "2-digit",
-                            month: "short",
-                            year: "numeric",
-                          })}
-                        </td>
-                        <td className="py-2.5 px-3 text-right font-medium text-slate-800">
-                          {row.count.toLocaleString()}
-                        </td>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+            <h3 className="text-base font-bold text-slate-800 mb-4">
+              User Acquisition — Day Wise
+            </h3>
+            {dateLoading ? (
+              <p className="text-sm text-slate-400 py-6 text-center">Loading…</p>
+            ) : dateData && dateData.rows.length > 0 ? (
+              <>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b-2 border-slate-200 bg-slate-50">
+                        <th className="text-left py-2.5 px-3 text-slate-700 font-bold text-xs uppercase tracking-wide">Date</th>
+                        <th className="text-right py-2.5 px-3 text-slate-700 font-bold text-xs uppercase tracking-wide">Users</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <Pagination page={datePage} totalPages={dateData.totalPages} onChange={loadDatePage} />
-            </>
-          ) : (
-            <p className="text-sm text-slate-400 py-6 text-center">No data for this period</p>
-          )}
-        </div>
+                    </thead>
+                    <tbody>
+                      {dateData.rows.map((row, i) => (
+                        <tr key={i} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                          <td className="py-2.5 px-3 text-slate-700">
+                            {new Date(row.date + "T00:00:00").toLocaleDateString("en-IN", {
+                              day: "2-digit",
+                              month: "short",
+                              year: "numeric",
+                            })}
+                          </td>
+                          <td className="py-2.5 px-3 text-right font-semibold text-slate-800">
+                            {row.count.toLocaleString()}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <Pagination page={datePage} totalPages={dateData.totalPages} onChange={loadDatePage} />
+              </>
+            ) : (
+              <p className="text-sm text-slate-400 py-6 text-center">No data for this period</p>
+            )}
+          </div>
 
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-          <h3 className="text-base font-semibold text-slate-800 mb-4">
-            User Acquisition — Source Wise
-          </h3>
-          {sourceLoading ? (
-            <p className="text-sm text-slate-400 py-6 text-center">Loading…</p>
-          ) : sourceData && sourceData.rows.length > 0 ? (
-            <>
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b border-slate-100">
-                      <th className="text-left py-2 px-3 text-slate-400 font-medium">UTM Source</th>
-                      <th className="text-right py-2 px-3 text-slate-400 font-medium">Users</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {sourceData.rows.map((row, i) => (
-                      <tr key={i} className="border-b border-slate-50 hover:bg-slate-50 transition-colors">
-                        <td className="py-2.5 px-3 text-slate-700">{row.source}</td>
-                        <td className="py-2.5 px-3 text-right font-medium text-slate-800">
-                          {row.count.toLocaleString()}
-                        </td>
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+            <h3 className="text-base font-bold text-slate-800 mb-4">
+              User Acquisition — Source Wise
+            </h3>
+            {sourceLoading ? (
+              <p className="text-sm text-slate-400 py-6 text-center">Loading…</p>
+            ) : sourceData && sourceData.rows.length > 0 ? (
+              <>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b-2 border-slate-200 bg-slate-50">
+                        <th className="text-left py-2.5 px-3 text-slate-700 font-bold text-xs uppercase tracking-wide">UTM Source</th>
+                        <th className="text-right py-2.5 px-3 text-slate-700 font-bold text-xs uppercase tracking-wide">Users</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <Pagination page={sourcePage} totalPages={sourceData.totalPages} onChange={loadSourcePage} />
-            </>
-          ) : (
-            <p className="text-sm text-slate-400 py-6 text-center">No data for this period</p>
-          )}
+                    </thead>
+                    <tbody>
+                      {sourceData.rows.map((row, i) => (
+                        <tr key={i} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                          <td className="py-2.5 px-3 text-slate-700">{row.source}</td>
+                          <td className="py-2.5 px-3 text-right font-semibold text-slate-800">
+                            {row.count.toLocaleString()}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <Pagination page={sourcePage} totalPages={sourceData.totalPages} onChange={loadSourcePage} />
+              </>
+            ) : (
+              <p className="text-sm text-slate-400 py-6 text-center">No data for this period</p>
+            )}
+          </div>
         </div>
       </main>
     </div>
