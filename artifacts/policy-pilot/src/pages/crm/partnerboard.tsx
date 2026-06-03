@@ -18,7 +18,7 @@ function fmtDate(dt: string) {
   });
 }
 
-// ── Pencil icon ────────────────────────────────────────────────────────────────
+// ── Icons ─────────────────────────────────────────────────────────────────────
 function PencilIcon({ className = "" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 20 20" fill="currentColor">
@@ -40,6 +40,17 @@ function XIcon({ className = "" }: { className?: string }) {
     </svg>
   );
 }
+function StarIcon({ filled, className = "" }: { filled: boolean; className?: string }) {
+  return filled ? (
+    <svg className={className} viewBox="0 0 20 20" fill="currentColor">
+      <path fillRule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clipRule="evenodd" />
+    </svg>
+  ) : (
+    <svg className={className} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 0 0 .95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 0 0-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 0 0-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 0 0-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 0 0 .951-.69l1.07-3.292z" />
+    </svg>
+  );
+}
 
 // ── Inline editable cell ───────────────────────────────────────────────────────
 interface EditCellProps {
@@ -48,31 +59,23 @@ interface EditCellProps {
   maxLength?: number;
   saving: boolean;
   onSave: (val: string) => Promise<void>;
+  mono?: boolean;
 }
 
-function EditCell({ value, type = "text", maxLength, saving, onSave }: EditCellProps) {
+function EditCell({ value, type = "text", maxLength, saving, onSave, mono }: EditCellProps) {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft]     = useState(value);
   const [busy, setBusy]       = useState(false);
   const inputRef              = useRef<HTMLInputElement>(null);
 
-  function startEdit() {
-    setDraft(value);
-    setEditing(true);
-    setTimeout(() => inputRef.current?.select(), 0);
-  }
-
+  function startEdit() { setDraft(value); setEditing(true); setTimeout(() => inputRef.current?.select(), 0); }
   function cancel() { setEditing(false); setDraft(value); }
 
   async function save() {
     if (!draft.trim() || draft.trim() === value) { cancel(); return; }
     setBusy(true);
-    try {
-      await onSave(draft.trim());
-      setEditing(false);
-    } finally {
-      setBusy(false);
-    }
+    try { await onSave(draft.trim()); setEditing(false); }
+    finally { setBusy(false); }
   }
 
   function onKey(e: React.KeyboardEvent) {
@@ -91,23 +94,13 @@ function EditCell({ value, type = "text", maxLength, saving, onSave }: EditCellP
           onKeyDown={onKey}
           maxLength={maxLength}
           disabled={busy}
-          className="flex-1 min-w-0 h-7 rounded border border-[#1b5fb8]/40 px-2 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#1b5fb8]/30 font-mono"
+          className={`flex-1 min-w-0 h-7 rounded border border-[#1b5fb8]/40 px-2 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#1b5fb8]/30 ${mono ? "font-mono" : ""}`}
           autoFocus
         />
-        <button
-          onClick={save}
-          disabled={busy}
-          className="shrink-0 w-6 h-6 flex items-center justify-center rounded hover:bg-emerald-50 text-emerald-600 disabled:opacity-40"
-          title="Save"
-        >
+        <button onClick={save} disabled={busy} className="shrink-0 w-6 h-6 flex items-center justify-center rounded hover:bg-emerald-50 text-emerald-600 disabled:opacity-40" title="Save">
           <CheckIcon className="w-3.5 h-3.5" />
         </button>
-        <button
-          onClick={cancel}
-          disabled={busy}
-          className="shrink-0 w-6 h-6 flex items-center justify-center rounded hover:bg-red-50 text-red-500 disabled:opacity-40"
-          title="Cancel"
-        >
+        <button onClick={cancel} disabled={busy} className="shrink-0 w-6 h-6 flex items-center justify-center rounded hover:bg-red-50 text-red-500 disabled:opacity-40" title="Cancel">
           <XIcon className="w-3.5 h-3.5" />
         </button>
       </div>
@@ -116,7 +109,7 @@ function EditCell({ value, type = "text", maxLength, saving, onSave }: EditCellP
 
   return (
     <div className="flex items-center gap-1.5 group/cell min-w-0">
-      <span className="truncate">{value}</span>
+      <span className={`truncate ${mono ? "font-mono text-[#1b5fb8]" : ""}`}>{value}</span>
       <button
         onClick={startEdit}
         disabled={saving}
@@ -129,36 +122,57 @@ function EditCell({ value, type = "text", maxLength, saving, onSave }: EditCellP
   );
 }
 
-// ── Status toggle ─────────────────────────────────────────────────────────────
-interface StatusToggleProps {
-  status: number;
+// ── Generic toggle badge ───────────────────────────────────────────────────────
+interface ToggleBadgeProps {
+  active: boolean;
   saving: boolean;
   onToggle: () => Promise<void>;
+  activeClass: string;
+  inactiveClass: string;
+  activeDot: string;
+  inactiveDot: string;
+  activeLabel: string;
+  inactiveLabel: string;
+  title?: string;
 }
 
-function StatusToggle({ status, saving, onToggle }: StatusToggleProps) {
+function ToggleBadge({ active, saving, onToggle, activeClass, inactiveClass, activeDot, inactiveDot, activeLabel, inactiveLabel, title }: ToggleBadgeProps) {
   const [busy, setBusy] = useState(false);
-
   async function handle() {
     setBusy(true);
-    try { await onToggle(); }
-    finally { setBusy(false); }
+    try { await onToggle(); } finally { setBusy(false); }
   }
-
-  const active = status === 1;
   return (
     <button
       onClick={handle}
       disabled={saving || busy}
-      title={active ? "Click to deactivate" : "Click to activate"}
-      className={`inline-flex items-center gap-1.5 text-xs font-medium rounded-full px-2.5 py-0.5 transition-all select-none
-        ${active
-          ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
-          : "bg-slate-100 text-slate-500 hover:bg-slate-200"}
+      title={title}
+      className={`inline-flex items-center gap-1.5 text-xs font-medium rounded-full px-2.5 py-0.5 transition-all select-none cursor-pointer
+        ${active ? activeClass : inactiveClass}
+        ${(saving || busy) ? "opacity-50 cursor-not-allowed" : ""}`}
+    >
+      <span className={`w-1.5 h-1.5 rounded-full transition-colors ${active ? activeDot : inactiveDot}`} />
+      {busy ? "…" : active ? activeLabel : inactiveLabel}
+    </button>
+  );
+}
+
+// ── Primary star toggle ────────────────────────────────────────────────────────
+function PrimaryToggle({ isPrimary, saving, onToggle }: { isPrimary: number; saving: boolean; onToggle: () => Promise<void> }) {
+  const [busy, setBusy] = useState(false);
+  const on = isPrimary === 1;
+  async function handle() { setBusy(true); try { await onToggle(); } finally { setBusy(false); } }
+  return (
+    <button
+      onClick={handle}
+      disabled={saving || busy}
+      title={on ? "Remove primary" : "Set as primary (shown on top)"}
+      className={`flex items-center gap-1 text-xs rounded-full px-2 py-0.5 font-medium transition-all
+        ${on ? "bg-amber-50 text-amber-600 hover:bg-amber-100" : "bg-slate-50 text-slate-400 hover:bg-slate-100"}
         ${(saving || busy) ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
     >
-      <span className={`w-1.5 h-1.5 rounded-full transition-colors ${active ? "bg-emerald-500" : "bg-slate-400"}`} />
-      {busy ? "Saving…" : active ? "Active" : "Inactive"}
+      <StarIcon filled={on} className="w-3.5 h-3.5" />
+      {busy ? "…" : on ? "Primary" : "Set Primary"}
     </button>
   );
 }
@@ -191,9 +205,7 @@ function AddModal({ onClose, onSaved }: AddModalProps) {
       onSaved(await createPartner({ name: name.trim(), redirect_url: url.trim(), status: Number(status) }));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to save");
-    } finally {
-      setSaving(false);
-    }
+    } finally { setSaving(false); }
   }
 
   return (
@@ -243,7 +255,7 @@ export default function PartnerBoard() {
 
   const [partners, setPartners] = useState<PartnerRow[]>([]);
   const [loading, setLoading]   = useState(false);
-  const [saving, setSaving]     = useState<number | null>(null); // id of row being saved
+  const [saving, setSaving]     = useState<number | null>(null);
   const [showAdd, setShowAdd]   = useState(false);
 
   useEffect(() => {
@@ -257,7 +269,11 @@ export default function PartnerBoard() {
   }
 
   function applyUpdate(updated: PartnerRow) {
-    setPartners((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
+    setPartners((prev) => {
+      const next = prev.map((p) => (p.id === updated.id ? updated : p));
+      // keep primary rows sorted to top
+      return [...next].sort((a, b) => b.is_primary - a.is_primary || a.id - b.id);
+    });
   }
 
   async function handleFieldSave(id: number, field: "name" | "redirect_url", val: string) {
@@ -272,7 +288,16 @@ export default function PartnerBoard() {
     finally { setSaving(null); }
   }
 
-  function handleSaved(p: PartnerRow) { setPartners((prev) => [...prev, p]); setShowAdd(false); }
+  async function handlePrimaryToggle(p: PartnerRow) {
+    setSaving(p.id);
+    try { applyUpdate(await updatePartner(p.id, { is_primary: p.is_primary === 1 ? 0 : 1 })); }
+    finally { setSaving(null); }
+  }
+
+  function handleSaved(p: PartnerRow) {
+    setPartners((prev) => [...prev, p].sort((a, b) => b.is_primary - a.is_primary || a.id - b.id));
+    setShowAdd(false);
+  }
   function handleLogout() { crmLogout(); navigate("/crm"); }
 
   if (!session) return null;
@@ -302,7 +327,7 @@ export default function PartnerBoard() {
         <div className="flex items-end justify-between">
           <div>
             <h2 className="text-xl font-bold text-slate-800 mb-0.5">Partner Board</h2>
-            <p className="text-sm text-slate-400">Active insurance partners and their redirect links</p>
+            <p className="text-sm text-slate-400">Manage partners — primary partner appears first on the offers page</p>
           </div>
           <Button size="sm" onClick={() => setShowAdd(true)} className="bg-[#1b5fb8] hover:bg-[#1a55a8] text-white flex items-center gap-1.5">
             <svg className="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
@@ -331,7 +356,9 @@ export default function PartnerBoard() {
                     <th className="text-left py-2.5 px-3 text-slate-700 font-bold text-xs uppercase tracking-wide w-6">#</th>
                     <th className="text-left py-2.5 px-3 text-slate-700 font-bold text-xs uppercase tracking-wide">Partner Name</th>
                     <th className="text-left py-2.5 px-3 text-slate-700 font-bold text-xs uppercase tracking-wide w-28">Status</th>
+                    <th className="text-left py-2.5 px-3 text-slate-700 font-bold text-xs uppercase tracking-wide w-28">Primary</th>
                     <th className="text-left py-2.5 px-3 text-slate-700 font-bold text-xs uppercase tracking-wide w-28">Created</th>
+                    <th className="text-left py-2.5 px-3 text-slate-700 font-bold text-xs uppercase tracking-wide w-36">Updated</th>
                     <th className="text-left py-2.5 px-3 text-slate-700 font-bold text-xs uppercase tracking-wide">Redirect URL</th>
                   </tr>
                 </thead>
@@ -339,11 +366,20 @@ export default function PartnerBoard() {
                   {partners.map((p, i) => {
                     const rowSaving = saving === p.id;
                     return (
-                      <tr key={p.id} className={`border-b border-slate-100 hover:bg-slate-50 transition-colors ${rowSaving ? "opacity-70" : ""}`}>
-                        <td className="py-3 px-3 text-slate-400 text-xs">{i + 1}</td>
+                      <tr
+                        key={p.id}
+                        className={`border-b border-slate-100 hover:bg-slate-50 transition-colors
+                          ${p.is_primary === 1 ? "bg-amber-50/40 hover:bg-amber-50/60" : ""}
+                          ${rowSaving ? "opacity-70" : ""}`}
+                      >
+                        <td className="py-3 px-3 text-slate-400 text-xs">
+                          {p.is_primary === 1 ? (
+                            <StarIcon filled className="w-3.5 h-3.5 text-amber-400" />
+                          ) : i + 1}
+                        </td>
 
                         {/* Name — editable */}
-                        <td className="py-3 px-3 font-semibold text-slate-800 max-w-xs">
+                        <td className="py-3 px-3 font-semibold text-slate-800 max-w-[200px]">
                           <EditCell
                             value={p.name}
                             type="text"
@@ -353,24 +389,45 @@ export default function PartnerBoard() {
                           />
                         </td>
 
-                        {/* Status — toggle */}
+                        {/* Status toggle */}
                         <td className="py-3 px-3">
-                          <StatusToggle
-                            status={p.status}
+                          <ToggleBadge
+                            active={p.status === 1}
                             saving={rowSaving}
                             onToggle={() => handleStatusToggle(p)}
+                            activeClass="bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
+                            inactiveClass="bg-slate-100 text-slate-500 hover:bg-slate-200"
+                            activeDot="bg-emerald-500"
+                            inactiveDot="bg-slate-400"
+                            activeLabel="Active"
+                            inactiveLabel="Inactive"
+                            title={p.status === 1 ? "Click to deactivate" : "Click to activate"}
                           />
                         </td>
 
-                        <td className="py-3 px-3 text-slate-600 whitespace-nowrap">{fmtDate(p.created)}</td>
+                        {/* Is Primary toggle */}
+                        <td className="py-3 px-3">
+                          <PrimaryToggle
+                            isPrimary={p.is_primary}
+                            saving={rowSaving}
+                            onToggle={() => handlePrimaryToggle(p)}
+                          />
+                        </td>
+
+                        {/* Created */}
+                        <td className="py-3 px-3 text-slate-600 whitespace-nowrap text-xs">{fmtDate(p.created)}</td>
+
+                        {/* Updated */}
+                        <td className="py-3 px-3 text-slate-400 whitespace-nowrap text-xs">{fmtDate(p.updated)}</td>
 
                         {/* Redirect URL — editable */}
-                        <td className="py-3 px-3 max-w-xs font-mono text-xs text-[#1b5fb8]">
+                        <td className="py-3 px-3 max-w-xs text-xs">
                           <EditCell
                             value={p.redirect_url}
                             type="url"
                             saving={rowSaving}
                             onSave={(val) => handleFieldSave(p.id, "redirect_url", val)}
+                            mono
                           />
                         </td>
                       </tr>

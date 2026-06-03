@@ -80,8 +80,9 @@ export default function PartnersScreen({ vehicleType, registrationNumber, model,
       .finally(() => setLoading(false));
   }, [vehicleType]);
 
-  const featured = partners.find((p) => p.id === "policybazaar") ?? partners[0];
-  const rest = partners.filter((p) => p.id !== featured?.id);
+  // API sorts primary partners first; first item is always the featured card
+  const featured = partners[0] ?? null;
+  const rest = partners.slice(1);
 
   const handlePartnerClick = (partner: Partner) => {
     setRedirectingTo(partner.name);

@@ -76,7 +76,7 @@ router.get("/partners", async (req, res): Promise<void> => {
   if (crmPool) {
     try {
       const [rows] = await crmPool.query(
-        "SELECT id, name, redirect_url FROM pp_partners WHERE status = 1 ORDER BY id ASC"
+        "SELECT id, name, redirect_url, is_primary FROM pp_partners WHERE status = 1 ORDER BY is_primary DESC, id ASC"
       );
 
       const partners = (rows as mysql.RowDataPacket[])

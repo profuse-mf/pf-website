@@ -18,6 +18,7 @@ if (crmPool) {
           name        VARCHAR(50) NOT NULL,
           redirect_url TEXT NOT NULL,
           status      TINYINT(1) NOT NULL DEFAULT 1,
+          is_primary  TINYINT(1) NOT NULL DEFAULT 0,
           created     DATETIME NOT NULL,
           updated     DATETIME NOT NULL
         )
@@ -499,7 +500,7 @@ router.get("/crm/drill/date-by-source", requireCrmAuth, requireCrmDb, async (req
 router.get("/crm/partners", requireCrmAuth, requireCrmDb, async (req, res): Promise<void> => {
   try {
     const [rows] = await crmPool!.query(
-      "SELECT id, name, redirect_url, status, created, updated FROM pp_partners ORDER BY id ASC"
+      "SELECT id, name, redirect_url, status, is_primary, created, updated FROM pp_partners ORDER BY is_primary DESC, id ASC"
     );
     const fmtDt = (v: unknown) =>
       v instanceof Date ? v.toISOString().replace("T", " ").slice(0, 19) : String(v ?? "");
@@ -508,6 +509,7 @@ router.get("/crm/partners", requireCrmAuth, requireCrmDb, async (req, res): Prom
       name:         r["name"],
       redirect_url: r["redirect_url"],
       status:       Number(r["status"]),
+      is_primary:   Number(r["is_primary"]),
       created:      fmtDt(r["created"]),
       updated:      fmtDt(r["updated"]),
     }));
@@ -520,10 +522,11 @@ router.get("/crm/partners", requireCrmAuth, requireCrmDb, async (req, res): Prom
 
 // Partner Board — add new partner
 router.post("/crm/partners", requireCrmAuth, requireCrmDb, async (req, res): Promise<void> => {
-  const { name, redirect_url, status } = req.body as {
+  const { name, redirect_url, status, is_primary } = req.body as {
     name?: string;
     redirect_url?: string;
     status?: number;
+    is_primary?: number;
   };
 
   if (!name?.trim() || !redirect_url?.trim() || status === undefined) {
@@ -532,10 +535,11 @@ router.post("/crm/partners", requireCrmAuth, requireCrmDb, async (req, res): Pro
   }
 
   const now = new Date().toISOString().replace("T", " ").slice(0, 19);
+  const isPrimary = is_primary ? 1 : 0;
   try {
     const [result] = await crmPool!.query(
-      "INSERT INTO pp_partners (name, redirect_url, status, created, updated) VALUES (?, ?, ?, ?, ?)",
-      [name.trim(), redirect_url.trim(), status ? 1 : 0, now, now]
+      "INSERT INTO pp_partners (name, redirect_url, status, is_primary, created, updated) VALUES (?, ?, ?, ?, ?, ?)",
+      [name.trim(), redirect_url.trim(), status ? 1 : 0, isPrimary, now, now]
     );
     const insertId = (result as mysql.ResultSetHeader).insertId;
     res.status(201).json({
@@ -543,6 +547,7 @@ router.post("/crm/partners", requireCrmAuth, requireCrmDb, async (req, res): Pro
       name:         name.trim(),
       redirect_url: redirect_url.trim(),
       status:       status ? 1 : 0,
+      is_primary:   isPrimary,
       created:      now,
       updated:      now,
     });
@@ -552,7 +557,7 @@ router.post("/crm/partners", requireCrmAuth, requireCrmDb, async (req, res): Pro
   }
 });
 
-// Partner Board — update a single field (name | redirect_url | status)
+// Partner Board — update one or more fields (name | redirect_url | status | is_primary)
 router.patch("/crm/partners/:id", requireCrmAuth, requireCrmDb, async (req, res): Promise<void> => {
   const id = Number(req.params["id"]);
   if (!Number.isFinite(id) || id <= 0) {
@@ -560,10 +565,11 @@ router.patch("/crm/partners/:id", requireCrmAuth, requireCrmDb, async (req, res)
     return;
   }
 
-  const { name, redirect_url, status } = req.body as {
+  const { name, redirect_url, status, is_primary } = req.body as {
     name?: string;
     redirect_url?: string;
     status?: number;
+    is_primary?: number;
   };
 
   const setClauses: string[]  = [];
@@ -583,9 +589,13 @@ router.patch("/crm/partners/:id", requireCrmAuth, requireCrmDb, async (req, res)
     setClauses.push("status = ?");
     values.push(status ? 1 : 0);
   }
+  if (is_primary !== undefined) {
+    setClauses.push("is_primary = ?");
+    values.push(is_primary ? 1 : 0);
+  }
 
   if (setClauses.length === 0) {
-    res.status(400).json({ error: "At least one field (name, redirect_url, status) must be provided" });
+    res.status(400).json({ error: "At least one field must be provided" });
     return;
   }
 
@@ -604,7 +614,7 @@ router.patch("/crm/partners/:id", requireCrmAuth, requireCrmDb, async (req, res)
       return;
     }
     const [rows] = await crmPool!.query(
-      "SELECT id, name, redirect_url, status, created, updated FROM pp_partners WHERE id = ?",
+      "SELECT id, name, redirect_url, status, is_primary, created, updated FROM pp_partners WHERE id = ?",
       [id]
     );
     const r = (rows as mysql.RowDataPacket[])[0];
@@ -615,6 +625,7 @@ router.patch("/crm/partners/:id", requireCrmAuth, requireCrmDb, async (req, res)
       name:         r["name"],
       redirect_url: r["redirect_url"],
       status:       Number(r["status"]),
+      is_primary:   Number(r["is_primary"]),
       created:      fmtDt(r["created"]),
       updated:      fmtDt(r["updated"]),
     });

@@ -228,6 +228,7 @@ export interface PartnerRow {
   name: string;
   redirect_url: string;
   status: number;
+  is_primary: number;
   created: string;
   updated: string;
 }
@@ -241,7 +242,7 @@ export async function fetchPartners(): Promise<PartnerRow[]> {
 
 export async function updatePartner(
   id: number,
-  payload: { name?: string; redirect_url?: string; status?: number }
+  payload: { name?: string; redirect_url?: string; status?: number; is_primary?: number }
 ): Promise<PartnerRow> {
   const res = await fetch(`/api/crm/partners/${id}`, {
     method: "PATCH",
