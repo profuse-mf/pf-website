@@ -289,9 +289,21 @@ export default function PartnerBoard() {
   }
 
   async function handlePrimaryToggle(p: PartnerRow) {
+    const newVal = p.is_primary === 1 ? 0 : 1;
     setSaving(p.id);
-    try { applyUpdate(await updatePartner(p.id, { is_primary: p.is_primary === 1 ? 0 : 1 })); }
-    finally { setSaving(null); }
+    try {
+      const updated = await updatePartner(p.id, { is_primary: newVal });
+      setPartners((prev) => {
+        const next = prev.map((r) =>
+          r.id === updated.id
+            ? updated
+            : newVal === 1
+              ? { ...r, is_primary: 0 }  // clear all others when one is set primary
+              : r
+        );
+        return [...next].sort((a, b) => b.is_primary - a.is_primary || a.id - b.id);
+      });
+    } finally { setSaving(null); }
   }
 
   function handleSaved(p: PartnerRow) {

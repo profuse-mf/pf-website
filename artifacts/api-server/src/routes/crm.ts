@@ -605,6 +605,14 @@ router.patch("/crm/partners/:id", requireCrmAuth, requireCrmDb, async (req, res)
   values.push(id);
 
   try {
+    // Enforce exclusive primary: if setting is_primary = 1, clear all others first
+    if (is_primary === 1) {
+      await crmPool!.query(
+        "UPDATE pp_partners SET is_primary = 0, updated = ? WHERE id != ?",
+        [now, id]
+      );
+    }
+
     const [result] = await crmPool!.query(
       `UPDATE pp_partners SET ${setClauses.join(", ")} WHERE id = ?`,
       values
