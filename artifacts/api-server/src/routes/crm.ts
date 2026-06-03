@@ -1,12 +1,14 @@
 import { Router, type IRouter, type Request, type Response, type NextFunction } from "express";
-import { createPool } from "@workspace/db";
+import mysql from "mysql2/promise";
 
 const router: IRouter = Router();
 
 const CRM_TOKEN = "pf-crm-secret-2026";
 
-const crmUrl = process.env["CRM_DATABASE_URL"];
-const crmPool = crmUrl ? createPool(crmUrl) : null;
+const crmUrl = process.env["CRM_MYSQL_URL"];
+const crmPool = crmUrl
+  ? mysql.createPool(crmUrl)
+  : null;
 
 function requireCrmAuth(req: Request, res: Response, next: NextFunction): void {
   const token = req.headers["x-crm-token"];
@@ -19,7 +21,7 @@ function requireCrmAuth(req: Request, res: Response, next: NextFunction): void {
 
 function requireCrmDb(req: Request, res: Response, next: NextFunction): void {
   if (!crmPool) {
-    res.status(503).json({ error: "CRM_DATABASE_URL is not configured" });
+    res.status(503).json({ error: "CRM_MYSQL_URL is not configured" });
     return;
   }
   next();
@@ -27,13 +29,13 @@ function requireCrmDb(req: Request, res: Response, next: NextFunction): void {
 
 router.get("/crm/stats", requireCrmAuth, requireCrmDb, async (req, res): Promise<void> => {
   try {
-    const [usersResult, leadsResult] = await Promise.all([
+    const [[usersRows], [leadsRows]] = await Promise.all([
       crmPool!.query("SELECT MAX(id) AS total FROM pp_user"),
       crmPool!.query("SELECT MAX(id) AS total FROM pp_applications"),
     ]);
 
-    const totalUsers = Number(usersResult.rows[0]?.total ?? 0);
-    const totalLeads = Number(leadsResult.rows[0]?.total ?? 0);
+    const totalUsers = Number((usersRows as mysql.RowDataPacket[])[0]?.total ?? 0);
+    const totalLeads = Number((leadsRows as mysql.RowDataPacket[])[0]?.total ?? 0);
     const ulr = totalLeads > 0 ? parseFloat((totalUsers / totalLeads).toFixed(2)) : 0;
 
     res.json({ totalUsers, totalLeads, ulr });
@@ -49,22 +51,24 @@ router.get("/crm/users-by-date", requireCrmAuth, requireCrmDb, async (req, res):
   const offset = (page - 1) * limit;
 
   try {
-    const [dataResult, countResult] = await Promise.all([
+    const [[dataRows], [countRows]] = await Promise.all([
       crmPool!.query(
         `SELECT COUNT(*) AS count, DATE(created_at) AS date
          FROM pp_user
          GROUP BY DATE(created_at)
          ORDER BY DATE(created_at) DESC
-         LIMIT $1 OFFSET $2`,
+         LIMIT ? OFFSET ?`,
         [limit, offset]
       ),
       crmPool!.query("SELECT COUNT(DISTINCT DATE(created_at)) AS total FROM pp_user"),
     ]);
 
-    const total = Number(countResult.rows[0]?.total ?? 0);
-    const rows = dataResult.rows.map((r: { date: string; count: string }) => ({
-      date: r.date,
-      count: Number(r.count),
+    const total = Number((countRows as mysql.RowDataPacket[])[0]?.total ?? 0);
+    const rows = (dataRows as mysql.RowDataPacket[]).map((r) => ({
+      date: r["date"] instanceof Date
+        ? r["date"].toISOString().split("T")[0]
+        : String(r["date"]),
+      count: Number(r["count"]),
     }));
 
     res.json({ rows, total, page, totalPages: Math.ceil(total / limit) });
@@ -80,22 +84,22 @@ router.get("/crm/users-by-source", requireCrmAuth, requireCrmDb, async (req, res
   const offset = (page - 1) * limit;
 
   try {
-    const [dataResult, countResult] = await Promise.all([
+    const [[dataRows], [countRows]] = await Promise.all([
       crmPool!.query(
         `SELECT COUNT(*) AS count, utm_source
          FROM pp_user
          GROUP BY utm_source
-         ORDER BY utm_source DESC NULLS LAST
-         LIMIT $1 OFFSET $2`,
+         ORDER BY utm_source DESC
+         LIMIT ? OFFSET ?`,
         [limit, offset]
       ),
       crmPool!.query("SELECT COUNT(DISTINCT utm_source) AS total FROM pp_user"),
     ]);
 
-    const total = Number(countResult.rows[0]?.total ?? 0);
-    const rows = dataResult.rows.map((r: { utm_source: string | null; count: string }) => ({
-      source: r.utm_source ?? "(direct)",
-      count: Number(r.count),
+    const total = Number((countRows as mysql.RowDataPacket[])[0]?.total ?? 0);
+    const rows = (dataRows as mysql.RowDataPacket[]).map((r) => ({
+      source: r["utm_source"] ?? "(direct)",
+      count: Number(r["count"]),
     }));
 
     res.json({ rows, total, page, totalPages: Math.ceil(total / limit) });

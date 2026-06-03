@@ -56,7 +56,7 @@ router.get("/leads", async (req, res): Promise<void> => {
 
   res.json(
     ListLeadsResponse.parse(
-      leads.map((l) => ({
+      leads.map((l: typeof leadsTable.$inferSelect) => ({
         ...l,
         createdAt: l.createdAt.toISOString(),
       }))
