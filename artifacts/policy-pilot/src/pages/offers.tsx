@@ -35,6 +35,7 @@ export default function OffersPage() {
           function gtag(...args: unknown[]) { (window as any).dataLayer.push(args); }
           gtag("js", new Date());
           gtag("config", "GT-P82HMF9M");
+          gtag("event", "conversion", { send_to: "AW-18181123358/birsCPOPmrgcEJ7at91D" });
         };
       } catch {
         navigate("/");
