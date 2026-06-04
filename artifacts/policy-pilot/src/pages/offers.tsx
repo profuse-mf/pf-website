@@ -24,19 +24,10 @@ export default function OffersPage() {
         if (typeof (window as any).fbq === "function") {
           (window as any).fbq("track", "Lead");
         }
-        // Google tag (GT-P82HMF9M) — fires only on successful lead submission
-        // Dynamically inject so it never loads unless the user filled the form
-        const gtagScript = document.createElement("script");
-        gtagScript.async = true;
-        gtagScript.src = "https://www.googletagmanager.com/gtag/js?id=GT-P82HMF9M";
-        document.head.appendChild(gtagScript);
-        gtagScript.onload = () => {
-          (window as any).dataLayer = (window as any).dataLayer || [];
-          function gtag(...args: unknown[]) { (window as any).dataLayer.push(args); }
-          gtag("js", new Date());
-          gtag("config", "GT-P82HMF9M");
-          gtag("event", "conversion", { send_to: "AW-18181123358/birsCPOPmrgcEJ7at91D" });
-        };
+        // Google Ads conversion — fires only on successful lead submission
+        if (typeof (window as any).gtag === "function") {
+          (window as any).gtag("event", "conversion", { send_to: "AW-18181123358/birsCPOPmrgcEJ7at91D" });
+        }
       } catch {
         navigate("/");
       }
