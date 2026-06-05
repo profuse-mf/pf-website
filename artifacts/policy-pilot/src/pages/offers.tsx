@@ -24,10 +24,6 @@ export default function OffersPage() {
         if (typeof (window as any).fbq === "function") {
           (window as any).fbq("track", "Lead");
         }
-        // Google Ads conversion — fires only on successful lead submission
-        if (typeof (window as any).gtag === "function") {
-          (window as any).gtag("event", "conversion", { send_to: "AW-18181123358/birsCPOPmrgcEJ7at91D" });
-        }
       } catch {
         navigate("/");
       }
