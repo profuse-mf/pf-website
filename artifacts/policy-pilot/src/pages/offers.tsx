@@ -24,6 +24,14 @@ export default function OffersPage() {
         if (typeof (window as any).fbq === "function") {
           (window as any).fbq("track", "Lead");
         }
+        // Google Ads conversion — Submit lead form
+        if (typeof (window as any).gtag === "function") {
+          (window as any).gtag("event", "conversion", {
+            send_to: "AW-18181123358/t6-tCN3E1bgcEJ7at91D",
+            value: 1.0,
+            currency: "INR",
+          });
+        }
       } catch {
         navigate("/");
       }
