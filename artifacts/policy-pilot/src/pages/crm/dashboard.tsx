@@ -272,6 +272,7 @@ export default function CrmDashboard() {
   const [drill, setDrill] = useState<DrillMode | null>(null);
 
   useEffect(() => {
+    document.title = "Dashboard | PolicyFatafat";
     if (!session) navigate("/crm");
   }, []);
 

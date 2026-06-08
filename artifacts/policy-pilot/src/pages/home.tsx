@@ -12,6 +12,7 @@ export default function Home() {
   const [, navigate] = useLocation();
 
   useEffect(() => {
+    document.title = "PolicyFatafat – Compare Car & Bike Insurance Online";
     captureUtmParams();
   }, []);
 

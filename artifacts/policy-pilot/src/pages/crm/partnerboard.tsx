@@ -259,6 +259,7 @@ export default function PartnerBoard() {
   const [showAdd, setShowAdd]   = useState(false);
 
   useEffect(() => {
+    document.title = "Partner Board | PolicyFatafat";
     if (!session) { navigate("/crm"); return; }
     load();
   }, []);

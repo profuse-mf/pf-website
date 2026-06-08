@@ -117,6 +117,7 @@ export default function UserBoard() {
   const [dlLoading, setDlLoading] = useState(false);
 
   useEffect(() => {
+    document.title = "User Board | PolicyFatafat";
     if (!session) navigate("/crm");
   }, []);
 

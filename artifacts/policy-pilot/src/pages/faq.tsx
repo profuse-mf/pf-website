@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
 import { Link } from "wouter";
@@ -89,6 +90,7 @@ const FAQ_SECTIONS = [
 ];
 
 export default function FaqPage() {
+  useEffect(() => { document.title = "FAQs | PolicyFatafat"; }, []);
   return (
     <div className="min-h-[100dvh] flex flex-col bg-muted/30">
       <Navbar />

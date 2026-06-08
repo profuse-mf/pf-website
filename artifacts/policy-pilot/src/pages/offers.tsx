@@ -15,6 +15,7 @@ export default function OffersPage() {
   const [data, setData] = useState<OffersData | null>(null);
 
   useEffect(() => {
+    document.title = "Your Insurance Offers | PolicyFatafat";
     const raw = sessionStorage.getItem("offersData");
     if (raw) {
       try {

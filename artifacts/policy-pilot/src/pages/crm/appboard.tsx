@@ -117,6 +117,7 @@ export default function AppBoard() {
   const [dlLoading, setDlLoading] = useState(false);
 
   useEffect(() => {
+    document.title = "App Board | PolicyFatafat";
     if (!session) navigate("/crm");
   }, []);
 

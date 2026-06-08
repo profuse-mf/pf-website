@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation } from "wouter";
 import PolicyHeroForm from "@/components/home/policy-hero-form";
 import Navbar from "@/components/layout/navbar";
@@ -13,6 +13,7 @@ type InstantValues = {
 };
 
 export default function InstantApplyPage() {
+  useEffect(() => { document.title = "Instant Apply | PolicyFatafat"; }, []);
   const [, navigate] = useLocation();
 
   const handleFormSubmit = (data: InstantValues) => {
