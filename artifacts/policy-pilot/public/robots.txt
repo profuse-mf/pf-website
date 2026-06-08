@@ -1,2 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /crm
+Disallow: /crm/
+
+Sitemap: https://policyfatafat.com/sitemap.xml
