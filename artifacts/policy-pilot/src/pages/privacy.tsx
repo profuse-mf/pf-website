@@ -30,13 +30,12 @@ export default function PrivacyPage() {
             <h2 className="text-xl font-bold mb-3">1. Who We Are</h2>
             <p className="text-muted-foreground leading-relaxed">
               PolicyFatafat is an online platform that helps users discover, compare, understand,
-              and connect with insurance products, financial products, lending solutions, and related
-              services offered by insurance companies, financial institutions, banks, NBFCs, and
-              other authorized service providers.
+              and connect with insurance products and related services offered by insurance companies
+              and other authorized insurance service providers.
             </p>
             <p className="text-muted-foreground leading-relaxed mt-2">
               PolicyFatafat may act as a technology platform, lead-generation platform, comparison
-              platform, or marketing partner for financial service providers.
+              platform, or marketing partner for insurance service providers.
             </p>
             <p className="text-muted-foreground leading-relaxed mt-2">
               PolicyFatafat is not an insurance company and does not issue, underwrite, or service
@@ -133,7 +132,6 @@ export default function PrivacyPage() {
               <li>Generating insurance quotes</li>
               <li>Facilitating policy comparisons</li>
               <li>Connecting users with insurance providers</li>
-              <li>Connecting users with financial institutions</li>
               <li>Processing inquiries and requests</li>
               <li>Customer support and issue resolution</li>
               <li>Fraud prevention and risk management</li>
@@ -156,10 +154,6 @@ export default function PrivacyPage() {
               <li>Insurance companies</li>
               <li>Insurance brokers</li>
               <li>Insurance aggregators</li>
-              <li>Banks</li>
-              <li>NBFCs</li>
-              <li>Financial service providers</li>
-              <li>Lending partners</li>
               <li>Technology service providers</li>
               <li>CRM and customer support platforms</li>
             </ul>
@@ -297,8 +291,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-xl font-bold mb-3">10. Third-Party Websites</h2>
             <p className="text-muted-foreground leading-relaxed mb-2">
-              Our website may contain links to third-party websites, insurance providers, financial
-              institutions, or partner platforms.
+              Our website may contain links to third-party websites, insurance providers, or partner platforms.
             </p>
             <p className="text-muted-foreground leading-relaxed">
               We do not control and are not responsible for the privacy practices, content, or
