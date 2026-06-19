@@ -292,30 +292,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold mb-3">11. Children's Privacy</h2>
-            <p className="text-muted-foreground leading-relaxed mb-2">
-              Our services are not intended for individuals under the age of 18 years.
-            </p>
-            <p className="text-muted-foreground leading-relaxed">
-              We do not knowingly collect personal information from minors. If we become aware that
-              personal information has been collected from a minor without appropriate consent, we
-              will take reasonable steps to delete such information.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold mb-3">12. International Data Transfers</h2>
-            <p className="text-muted-foreground leading-relaxed mb-2">
-              Your information may be processed, stored, or transferred to servers located in India
-              or other jurisdictions where our service providers operate.
-            </p>
-            <p className="text-muted-foreground leading-relaxed">
-              By using our services, you consent to such transfers where permitted by law.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold mb-3">13. Compliance With Applicable Laws</h2>
+            <h2 className="text-xl font-bold mb-3">11. Compliance With Applicable Laws</h2>
             <p className="text-muted-foreground leading-relaxed mb-2">
               We aim to comply with applicable privacy and data protection laws, including:
             </p>
@@ -328,7 +305,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold mb-3">14. Changes to This Privacy Policy</h2>
+            <h2 className="text-xl font-bold mb-3">12. Changes to This Privacy Policy</h2>
             <p className="text-muted-foreground leading-relaxed mb-2">
               We may update this Privacy Policy from time to time.
             </p>
@@ -340,7 +317,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold mb-3">15. Contact Us</h2>
+            <h2 className="text-xl font-bold mb-3">13. Contact Us</h2>
             <p className="text-muted-foreground leading-relaxed mb-2">
               If you have any questions, concerns, requests, or complaints regarding this Privacy
               Policy or our data handling practices, please contact us:
