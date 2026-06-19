@@ -163,7 +163,7 @@ export default function Footer() {
           <div className="mt-5 rounded-xl border border-amber-500/30 bg-amber-500/5 p-3.5">
             <p className="text-[11px] text-amber-300/80 leading-relaxed">
               <span className="font-semibold text-amber-300">Disclaimer: </span>
-              PolicyFatafat is not an insurance company and does not issue, underwrite, or service insurance policies. We connect users with licensed insurance providers and intermediaries.
+              PolicyFatafat is not an insurance company and does not issue, underwrite, or service insurance policies. We operate as a digital facilitation platform that connects users with licensed insurance providers and/or registered insurance intermediaries. All policy issuance, underwriting, premium determination, servicing, and claims are handled solely by the respective licensed provider or intermediary, subject to their terms and applicable regulations.
             </p>
           </div>
         </div>

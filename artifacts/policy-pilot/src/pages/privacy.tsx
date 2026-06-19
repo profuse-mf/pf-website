@@ -30,9 +30,11 @@ export default function PrivacyPage() {
             <h2 className="text-xl font-bold mb-3">1. Who We Are</h2>
             <p className="text-muted-foreground leading-relaxed">
               PolicyFatafat is not an insurance company and does not issue, underwrite, or service
-              insurance policies. We act as a comparison, lead-generation, and technology platform
-              that connects users with licensed insurance providers and intermediaries that we
-              reasonably believe are authorized to offer the relevant services.
+              insurance policies. We operate as a digital facilitation platform that connects users
+              with licensed insurance providers and/or registered insurance intermediaries. All policy
+              issuance, underwriting, premium determination, servicing, and claims are handled solely
+              by the respective licensed provider or intermediary, subject to their terms and
+              applicable regulations.
             </p>
           </section>
 
