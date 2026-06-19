@@ -29,15 +29,6 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-xl font-bold mb-3">1. Who We Are</h2>
             <p className="text-muted-foreground leading-relaxed">
-              PolicyFatafat is an online platform that helps users discover, compare, understand,
-              and connect with insurance products and related services offered by insurance companies
-              and other authorized insurance service providers.
-            </p>
-            <p className="text-muted-foreground leading-relaxed mt-2">
-              PolicyFatafat may act as a technology platform, lead-generation platform, comparison
-              platform, or marketing partner for insurance service providers.
-            </p>
-            <p className="text-muted-foreground leading-relaxed mt-2">
               PolicyFatafat is not an insurance company and does not issue, underwrite, or service
               insurance policies. We act as a comparison, lead-generation, and technology platform
               that connects users with licensed insurance providers and intermediaries that we
