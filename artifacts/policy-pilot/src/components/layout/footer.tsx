@@ -140,7 +140,7 @@ export default function Footer() {
               <div>
                 <p className="text-white font-semibold mb-0.5">Registered Address</p>
                 <address className="not-italic text-gray-400 leading-relaxed">
-                  Policy Fatafat<br />
+                  Profuse Services Pvt. Ltd.<br />
                   5th Floor, 175, Spring Board, 91,<br />
                   Bannerghatta Road, JP Nagar 4th Phase,<br />
                   Dollar Layout, Phase 4, J. P. Nagar,<br />
