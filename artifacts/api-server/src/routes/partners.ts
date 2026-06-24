@@ -35,6 +35,14 @@ const SUPPLEMENT = [
     tagline: "Direct insurer with zero paperwork",
     highlight: null,
   },
+  {
+    matches: (n: string) => n.toLowerCase().includes("hdfc"),
+    id: "hdfc-ergo",
+    vehicleTypes: ["car", "bike"],
+    logoUrl: "/logos/hdfc-ergo.png",
+    tagline: "Trusted protection from India's leading insurer",
+    highlight: null,
+  },
 ];
 
 function getSupp(name: string, dbId: number, redirectUrl: string) {
