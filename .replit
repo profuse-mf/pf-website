@@ -1,4 +1,4 @@
-modules = ["nodejs-24"]
+modules = ["nodejs-24", "postgresql-16"]
 
 [deployment]
 router = "application"
@@ -39,3 +39,6 @@ externalPort = 3000
 
 [userenv.shared]
 CRM_MYSQL_URL = "mysql://profuse:tripleseven7@65.0.185.223:3306/policy_pilot"
+
+[nix]
+channel = "stable-25_05"
