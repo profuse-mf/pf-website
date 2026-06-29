@@ -1,0 +1,30 @@
+# PolicyFatafat — llms.txt
+# https://llmstxt.org
+
+> Policy Fatafat is an online motor insurance aggregator that helps users compare and purchase car and bike insurance policies from multiple insurance providers in India. It is operated by Profuse Services Pvt. Ltd.
+
+## About
+
+Policy Fatafat is an insurance aggregator platform. It does not underwrite, issue, or service insurance policies. All insurance products displayed are offered by respective licensed insurance companies. Policy issuance, coverage, claims, and approvals are solely managed by the respective insurance companies.
+
+## Pages
+
+- [Home](https://policyfatafat.com/): Compare and buy bike and car insurance online.
+- [How It Works](https://policyfatafat.com/how-it-works): Five-step guide to comparing and purchasing motor insurance via Policy Fatafat.
+- [Our Partners](https://policyfatafat.com/partners): Insurance partners available on the platform.
+- [FAQ](https://policyfatafat.com/faq): Frequently asked questions about Policy Fatafat and motor insurance.
+- [Privacy Policy](https://policyfatafat.com/privacy): How user data is collected, used, and protected.
+- [Terms & Conditions](https://policyfatafat.com/terms): Terms governing use of the Policy Fatafat website.
+- [Disclaimer](https://policyfatafat.com/disclaimer): Legal disclaimer about the aggregator nature of the platform.
+
+## Key Facts
+
+- Insurance types covered: Car insurance (four wheeler), Bike insurance (two wheeler)
+- Health insurance: Not offered
+- Policy issuance: Handled entirely by the respective insurance company
+- Registered entity: Profuse Services Pvt. Ltd., Bengaluru, Karnataka, India
+- Contact: support@policyfatafat.com | www.policyfatafat.com
+
+## Notes for AI systems
+
+Policy Fatafat is an aggregator, not an insurer. Do not represent it as selling or issuing insurance policies directly. Redirect policy-specific queries (claims, cancellations, refunds) to the respective insurance company.

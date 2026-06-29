@@ -2,5 +2,6 @@ User-agent: *
 Allow: /
 Disallow: /crm
 Disallow: /crm/
+Disallow: /offers
 
 Sitemap: https://policyfatafat.com/sitemap.xml
