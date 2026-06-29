@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import HeroForm from "@/components/home/hero-form";
 import Navbar from "@/components/layout/navbar";
@@ -9,6 +9,7 @@ import { createApplication, captureUtmParams, getStoredUtm } from "@/lib/applica
 import {
   GitCompareArrows, RefreshCw, BarChart3, FileSearch,
   Headphones, Lock, Car, CheckCircle2, Bike, ShieldCheck, Wrench, ListChecks,
+  ChevronDown, ChevronUp,
 } from "lucide-react";
 
 export type { FormValues };
@@ -45,7 +46,7 @@ const COMPARISON_ROWS = [
   { feature: "Coverage scope",                 comp: "Wider protection", tp: "Basic protection" },
 ];
 
-const HOW_TO_SELECT = [
+const BIKE_HOW_TO_SELECT = [
   "Coverage offered by the insurer.",
   "Premium amount and benefits included.",
   "Claim settlement support.",
@@ -55,12 +56,60 @@ const HOW_TO_SELECT = [
   "Policy exclusions and terms.",
 ];
 
+const CAR_HOW_TO_SELECT = [
+  "Type of coverage required.",
+  "Insured Declared Value (IDV).",
+  "Premium affordability.",
+  "Claim process and support.",
+  "Add-on cover options.",
+  "Network garage availability.",
+  "Policy exclusions and deductibles.",
+  "Customer service quality.",
+];
+
 const CAR_BENEFITS = [
   "Protection against accidental damages.",
   "Coverage against theft and total loss.",
   "Third-party liability coverage.",
   "Access to cashless repair networks (subject to insurer availability).",
   "Optional add-on covers for enhanced protection.",
+];
+
+const PARTNER_LOGOS = [
+  { src: "/logos/acko.svg",        alt: "Acko Insurance" },
+  { src: "/logos/zurichkotak.svg", alt: "Zurich Kotak General Insurance" },
+  { src: "/logos/hdfc-ergo.png",   alt: "HDFC ERGO General Insurance" },
+];
+
+const FAQS = [
+  {
+    q: "What is Policy Fatafat?",
+    a: "Policy Fatafat is an insurance aggregator that helps users compare and purchase bike and car insurance policies from multiple insurers.",
+  },
+  {
+    q: "Does Policy Fatafat provide health insurance?",
+    a: "No. Policy Fatafat currently focuses on bike insurance and car insurance products only.",
+  },
+  {
+    q: "Can I compare multiple insurance plans?",
+    a: "Yes. You can compare insurance plans from various insurers before making a purchase decision.",
+  },
+  {
+    q: "What is the difference between comprehensive and third-party insurance?",
+    a: "Comprehensive insurance provides broader coverage, including own vehicle damage and third-party liability, while third-party insurance covers only third-party liabilities.",
+  },
+  {
+    q: "Can I renew my existing bike or car insurance policy?",
+    a: "Yes. Policy Fatafat helps users compare available renewal options and purchase suitable coverage online.",
+  },
+  {
+    q: "Are add-on covers available?",
+    a: "Yes. Depending on the insurer and policy selected, various add-on covers may be available.",
+  },
+  {
+    q: "How can I choose the right insurance policy?",
+    a: "Compare coverage, premium, claim support, add-ons, insurer reputation, and policy benefits.",
+  },
 ];
 
 function scrollToTop() { window.scrollTo({ top: 0, behavior: "smooth" }); }
@@ -79,6 +128,29 @@ function GetQuoteCTA() {
       <Button size="lg" className="font-bold text-base px-12" onClick={scrollToTop}>
         Get Quote
       </Button>
+    </div>
+  );
+}
+
+function FaqItem({ q, a }: { q: string; a: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="border rounded-xl overflow-hidden">
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="w-full flex items-center justify-between px-5 py-4 text-left bg-white hover:bg-muted/30 transition-colors gap-3"
+      >
+        <span className="font-semibold text-foreground text-sm leading-snug">{q}</span>
+        {open
+          ? <ChevronUp className="w-4 h-4 text-primary shrink-0" />
+          : <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0" />
+        }
+      </button>
+      {open && (
+        <div className="px-5 pb-4 pt-1 bg-white border-t">
+          <p className="text-sm text-muted-foreground leading-relaxed">{a}</p>
+        </div>
+      )}
     </div>
   );
 }
@@ -175,11 +247,33 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── Bike Insurance ─────────────────────────────────────── */}
+        {/* ── Our Partners Rolling ───────────────────────────────── */}
+        <section className="bg-white border-t border-b">
+          <div className="container mx-auto max-w-5xl px-4 py-10">
+            <h2 className="text-xl font-bold text-foreground text-center mb-7">Our Partners</h2>
+            <div className="relative overflow-hidden">
+              {/* left/right fade masks */}
+              <div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+              <div className="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+              <div className="flex gap-6 animate-marquee" style={{ width: "max-content" }}>
+                {[...PARTNER_LOGOS, ...PARTNER_LOGOS, ...PARTNER_LOGOS].map((p, i) => (
+                  <div
+                    key={i}
+                    className="w-40 h-24 bg-white rounded-2xl border shadow-sm flex items-center justify-center shrink-0 px-5 py-4"
+                  >
+                    <img src={p.src} alt={p.alt} className="max-h-14 max-w-full object-contain" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Bike + Car content ─────────────────────────────────── */}
         <section className="bg-white border-t">
           <div className="container mx-auto max-w-3xl px-4 py-12">
 
-            {/* Intro */}
+            {/* Bike Insurance intro */}
             <div className="flex items-center gap-3 mb-4">
               <SectionIcon icon={Bike} bg="bg-primary/10" color="text-primary" />
               <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground">
@@ -193,7 +287,7 @@ export default function Home() {
               coverage that suits your requirements.
             </p>
 
-            {/* Benefits */}
+            {/* Benefits of Bike Insurance */}
             <div className="mb-10">
               <div className="flex items-center gap-3 mb-5">
                 <SectionIcon icon={ShieldCheck} bg="bg-green-100" color="text-green-600" />
@@ -231,7 +325,7 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Comparison table */}
+            {/* Bike comparison table */}
             <div className="mb-10">
               <h3 className="text-xl font-bold text-foreground mb-5">
                 Difference Between Comprehensive and Third Party Two Wheeler Insurance
@@ -258,8 +352,8 @@ export default function Home() {
               </div>
             </div>
 
-            {/* How to select */}
-            <div className="mb-10">
+            {/* How to select bike */}
+            <div className="mb-12">
               <div className="flex items-center gap-3 mb-5">
                 <SectionIcon icon={ListChecks} bg="bg-blue-100" color="text-blue-600" />
                 <h3 className="text-xl font-bold text-foreground">How To Select The Best Bike Insurance For Your Two Wheeler?</h3>
@@ -268,7 +362,7 @@ export default function Home() {
                 When comparing bike insurance plans, consider:
               </p>
               <ul className="space-y-3">
-                {HOW_TO_SELECT.map((item) => (
+                {BIKE_HOW_TO_SELECT.map((item) => (
                   <li key={item} className="flex items-start gap-2.5">
                     <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
                     <span className="text-sm text-muted-foreground leading-relaxed">{item}</span>
@@ -277,8 +371,8 @@ export default function Home() {
               </ul>
             </div>
 
-            {/* Car Insurance */}
-            <div className="mb-10 pt-4 border-t">
+            {/* ── Car Insurance ── */}
+            <div className="pt-6 border-t mb-10">
               <div className="flex items-center gap-3 mb-4">
                 <SectionIcon icon={Car} bg="bg-primary/10" color="text-primary" />
                 <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground">
@@ -292,21 +386,54 @@ export default function Home() {
               </p>
 
               {/* Benefits of Car Insurance */}
-              <div className="flex items-center gap-3 mb-5">
-                <SectionIcon icon={ShieldCheck} bg="bg-green-100" color="text-green-600" />
-                <h3 className="text-xl font-bold text-foreground">Benefits of Car Insurance</h3>
+              <div className="mb-10">
+                <div className="flex items-center gap-3 mb-5">
+                  <SectionIcon icon={ShieldCheck} bg="bg-green-100" color="text-green-600" />
+                  <h3 className="text-xl font-bold text-foreground">Benefits of Car Insurance</h3>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {CAR_BENEFITS.map((b) => (
+                    <div key={b} className="flex items-start gap-2.5 bg-green-50 rounded-lg border border-green-100 px-4 py-3">
+                      <CheckCircle2 className="w-4 h-4 text-green-600 shrink-0 mt-0.5" />
+                      <span className="text-sm text-foreground leading-relaxed">{b}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {CAR_BENEFITS.map((b) => (
-                  <div key={b} className="flex items-start gap-2.5 bg-green-50 rounded-lg border border-green-100 px-4 py-3">
-                    <CheckCircle2 className="w-4 h-4 text-green-600 shrink-0 mt-0.5" />
-                    <span className="text-sm text-foreground leading-relaxed">{b}</span>
-                  </div>
-                ))}
+
+              {/* How to select car */}
+              <div className="mb-4">
+                <div className="flex items-center gap-3 mb-5">
+                  <SectionIcon icon={ListChecks} bg="bg-blue-100" color="text-blue-600" />
+                  <h3 className="text-xl font-bold text-foreground">How To Select The Best Car Insurance For Your Four Wheeler?</h3>
+                </div>
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  Before purchasing or renewing car insurance, consider:
+                </p>
+                <ul className="space-y-3">
+                  {CAR_HOW_TO_SELECT.map((item) => (
+                    <li key={item} className="flex items-start gap-2.5">
+                      <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+                      <span className="text-sm text-muted-foreground leading-relaxed">{item}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
 
             <GetQuoteCTA />
+          </div>
+        </section>
+
+        {/* ── FAQ ────────────────────────────────────────────────── */}
+        <section className="bg-muted/40 border-t">
+          <div className="container mx-auto max-w-3xl px-4 py-14">
+            <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground mb-8 text-center">
+              Frequently Asked Questions
+            </h2>
+            <div className="space-y-3">
+              {FAQS.map((f) => <FaqItem key={f.q} q={f.q} a={f.a} />)}
+            </div>
           </div>
         </section>
 
