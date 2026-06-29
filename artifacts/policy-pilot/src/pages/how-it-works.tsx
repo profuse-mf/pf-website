@@ -7,101 +7,86 @@ import {
   ClipboardList,
   SlidersHorizontal,
   BadgeCheck,
-  ShieldCheck,
-  Zap,
-  Lock,
-  ThumbsUp,
+  ExternalLink,
+  FileCheck,
   ArrowRight,
+  Info,
 } from "lucide-react";
 
 const STEPS = [
   {
     number: "01",
     icon: ClipboardList,
-    title: "Enter your vehicle details",
+    title: "Enter Your Vehicle Details",
     description:
-      "Tell us your registration number, year of manufacture, pin code, and mobile number. Select your car or bike brand, model, and exact variant — takes under 60 seconds.",
-    detail: "Your data is encrypted in transit and never sold to third parties.",
+      "Provide basic information about your car or bike, such as the registration number and policy details, to get started.",
   },
   {
     number: "02",
     icon: SlidersHorizontal,
-    title: "We compare plans for you",
+    title: "Compare Insurance Plans",
     description:
-      "PolicyFatafat instantly fetches quotes from 6+ top IRDAI-approved insurers — Acko, HDFC ERGO, Bajaj Allianz, Policybazaar, Kotak, ICICI Lombard, and more.",
-    detail: "All comparisons are unbiased. We don't favour any insurer.",
+      "View motor insurance plans from our partner insurance providers. Compare coverage options, premiums, and benefits to find a plan that suits your requirements.",
   },
   {
     number: "03",
     icon: BadgeCheck,
-    title: "Pick your plan & buy instantly",
+    title: "Choose a Plan",
     description:
-      "Choose the insurer and plan that fits your budget and needs. We redirect you directly to the insurer's secure checkout — no middlemen, no hidden charges.",
-    detail: "Policy is issued instantly. Digital copy sent to your email/WhatsApp.",
-  },
-];
-
-const BENEFITS = [
-  {
-    icon: Zap,
-    title: "Under 2 minutes",
-    description: "From entering your details to viewing quotes — faster than a coffee run.",
+      "Select the insurance plan that best matches your needs and budget.",
   },
   {
-    icon: ShieldCheck,
-    title: "IRDAI-approved partners only",
-    description: "Every insurer we work with is fully licensed and regulated by IRDAI.",
+    number: "04",
+    icon: ExternalLink,
+    title: "Complete Your Purchase",
+    description:
+      "Once you choose a plan, you will be redirected to the respective insurance partner's website to complete the application and purchase process securely.",
   },
   {
-    icon: Lock,
-    title: "Zero data selling",
-    description: "We never sell or share your personal information with anyone.",
-  },
-  {
-    icon: ThumbsUp,
-    title: "Completely free to use",
-    description: "PolicyFatafat is 100% free. Insurers pay us a small commission on policies.",
+    number: "05",
+    icon: FileCheck,
+    title: "Get Your Policy",
+    description:
+      "After successful completion of the purchase on the insurer's website, your policy will be issued by the insurance provider as per their terms and conditions.",
   },
 ];
 
 export default function HowItWorksPage() {
   useEffect(() => { document.title = "How It Works | PolicyFatafat"; }, []);
+
   return (
     <div className="min-h-[100dvh] flex flex-col bg-muted/30">
       <Navbar />
 
       <main className="flex-1">
-        {/* Hero */}
-        <section className="container mx-auto max-w-4xl px-4 pt-16 pb-12">
-          <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
-            <Zap className="w-3.5 h-3.5" />
-            Simple. Fast. Transparent.
-          </div>
-          <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">
-            How PolicyFatafat works
+
+        {/* ── Hero ── */}
+        <section className="container mx-auto max-w-4xl px-4 pt-16 pb-10">
+          <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl mb-4">
+            How It Works
           </h1>
-          <p className="mt-4 text-lg text-muted-foreground type-body max-w-2xl">
-            Finding the right motor insurance should take minutes, not hours. Here's exactly
-            how we help you get the best quote — at no cost to you.
+          <p className="text-lg text-muted-foreground max-w-2xl leading-relaxed">
+            Getting the right motor insurance is simple with Policy Fatafat.
+            Follow these five easy steps to compare and purchase your policy.
           </p>
         </section>
 
-        {/* Steps */}
-        <section className="container mx-auto max-w-4xl px-4 pb-16">
-          <div className="flex flex-col gap-6">
+        {/* ── Steps ── */}
+        <section className="container mx-auto max-w-4xl px-4 pb-12">
+          <div className="flex flex-col gap-5">
             {STEPS.map((step, idx) => {
               const Icon = step.icon;
               return (
                 <div
                   key={step.number}
-                  className="relative flex flex-col sm:flex-row gap-6 rounded-2xl border bg-card p-7 shadow-sm"
+                  className="relative flex flex-col sm:flex-row gap-5 rounded-2xl border bg-white p-7 shadow-sm"
                 >
                   {/* Connector line */}
                   {idx < STEPS.length - 1 && (
-                    <div className="hidden sm:block absolute left-[2.6rem] top-full h-6 w-px bg-border" />
+                    <div className="hidden sm:block absolute left-[2.6rem] top-full h-5 w-px bg-border z-10" />
                   )}
 
-                  {/* Step number circle */}
+                  {/* Step number */}
                   <div className="shrink-0 flex flex-col items-center gap-2">
                     <div className="flex h-11 w-11 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold text-sm">
                       {step.number}
@@ -110,13 +95,9 @@ export default function HowItWorksPage() {
                   </div>
 
                   {/* Content */}
-                  <div>
-                    <h2 className="text-xl mb-2">{step.title}</h2>
-                    <p className="text-muted-foreground leading-relaxed type-body">{step.description}</p>
-                    <p className="mt-3 text-xs text-primary type-notes flex items-center gap-1.5">
-                      <ShieldCheck className="w-3.5 h-3.5" />
-                      {step.detail}
-                    </p>
+                  <div className="flex-1">
+                    <h2 className="text-xl font-bold text-foreground mb-2">{step.title}</h2>
+                    <p className="text-muted-foreground leading-relaxed">{step.description}</p>
                   </div>
                 </div>
               );
@@ -124,51 +105,33 @@ export default function HowItWorksPage() {
           </div>
         </section>
 
-        {/* Why PolicyFatafat */}
-        <section className="bg-card border-y">
-          <div className="container mx-auto max-w-4xl px-4 py-16">
-            <h2 className="text-2xl tracking-tight mb-2">Why choose PolicyFatafat?</h2>
-            <p className="text-muted-foreground type-body mb-10">
-              We're built for the Indian vehicle owner — straightforward, unbiased, and completely free.
+        {/* ── Disclaimer note ── */}
+        <section className="container mx-auto max-w-4xl px-4 pb-12">
+          <div className="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 px-5 py-4">
+            <Info className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+            <p className="text-sm text-amber-800 leading-relaxed">
+              Policy Fatafat is an insurance aggregator that helps users compare motor insurance
+              plans offered by partner insurance companies. Policy issuance is subject to the
+              insurer's underwriting guidelines and policy terms.
             </p>
-            <div className="grid sm:grid-cols-2 gap-5">
-              {BENEFITS.map((b) => {
-                const Icon = b.icon;
-                return (
-                  <div
-                    key={b.title}
-                    className="flex gap-4 items-start rounded-xl border bg-background p-5"
-                  >
-                    <div className="shrink-0 flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                      <Icon className="w-4.5 h-4.5" />
-                    </div>
-                    <div>
-                      <h3 className="text-sm">{b.title}</h3>
-                      <p className="text-xs text-muted-foreground type-notes mt-1 leading-relaxed">
-                        {b.description}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
           </div>
         </section>
 
-        {/* CTA */}
-        <section className="container mx-auto max-w-4xl px-4 py-16 text-center">
-          <h2 className="text-2xl tracking-tight mb-3">
+        {/* ── CTA ── */}
+        <section className="container mx-auto max-w-4xl px-4 pb-16 text-center">
+          <h2 className="text-2xl font-bold tracking-tight mb-3">
             Ready to find the right plan?
           </h2>
-          <p className="text-muted-foreground type-body mb-6">
-            Compare quotes from 6+ insurers in under 2 minutes — completely free.
+          <p className="text-muted-foreground mb-6">
+            Compare motor insurance plans from our partner insurers in minutes.
           </p>
           <Link href="/">
-            <Button size="lg" className="gap-2 px-8 rounded-xl font-semibold">
-              Get free quotes <ArrowRight className="w-4 h-4" />
+            <Button size="lg" className="gap-2 px-8 font-semibold">
+              Get Quote <ArrowRight className="w-4 h-4" />
             </Button>
           </Link>
         </section>
+
       </main>
 
       <Footer />
