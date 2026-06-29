@@ -208,7 +208,9 @@ export default function Home() {
       <main className="flex-1 flex flex-col">
 
         {/* ── Hero form ──────────────────────────────────────────── */}
-        <HeroForm onSubmit={handleFormSubmit} defaultValues={utmDefaults} />
+        <div id="hero-form">
+          <HeroForm onSubmit={handleFormSubmit} defaultValues={utmDefaults} />
+        </div>
 
         {/* ── H1 + intro ─────────────────────────────────────────── */}
         <section className="bg-white border-t">
@@ -246,6 +248,15 @@ export default function Home() {
                 );
               })}
             </div>
+          </div>
+
+          {/* CTA below Why Choose */}
+          <div className="flex justify-center pb-10">
+            <a href="#hero-form" onClick={(e) => { e.preventDefault(); document.getElementById("hero-form")?.scrollIntoView({ behavior: "smooth" }); }}>
+              <Button size="lg" className="px-10 text-base font-semibold shadow-md">
+                Get Quote
+              </Button>
+            </a>
           </div>
         </section>
 
@@ -325,6 +336,15 @@ export default function Home() {
               <p className="text-xs text-muted-foreground italic">
                 Availability of add-ons may vary by insurer and policy type.
               </p>
+
+              {/* CTA below Add-Ons */}
+              <div className="flex justify-center mt-7">
+                <a href="#hero-form" onClick={(e) => { e.preventDefault(); document.getElementById("hero-form")?.scrollIntoView({ behavior: "smooth" }); }}>
+                  <Button size="lg" className="px-10 text-base font-semibold shadow-md">
+                    Get Quote
+                  </Button>
+                </a>
+              </div>
             </div>
 
             {/* Bike comparison table */}
