@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useMeta } from "@/lib/use-meta";
 import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
 import { Info } from "lucide-react";
@@ -15,7 +16,10 @@ const PARAGRAPHS = [
 ];
 
 export default function DisclaimerPage() {
-  useEffect(() => { document.title = "Disclaimer | PolicyFatafat"; }, []);
+  useMeta(
+    "Disclaimer | Policy Fatafat",
+    "Read the disclaimer for Policy Fatafat, an insurance aggregator platform connecting users with motor insurance providers in India."
+  );
 
   return (
     <div className="min-h-[100dvh] flex flex-col bg-muted/30">

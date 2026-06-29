@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useMeta } from "@/lib/use-meta";
 import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
 import { Link } from "wouter";
@@ -52,7 +53,10 @@ const STEPS = [
 ];
 
 export default function HowItWorksPage() {
-  useEffect(() => { document.title = "How It Works | PolicyFatafat"; }, []);
+  useMeta(
+    "How Policy Fatafat Works | Compare Motor Insurance",
+    "See how Policy Fatafat helps you compare motor insurance plans, choose coverage, and connect with insurance partners to complete your purchase."
+  );
 
   return (
     <div className="min-h-[100dvh] flex flex-col bg-muted/30">

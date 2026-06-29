@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useMeta } from "@/lib/use-meta";
 import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
 
@@ -81,7 +82,10 @@ const SECTIONS = [
 ];
 
 export default function TermsPage() {
-  useEffect(() => { document.title = "Terms & Conditions | PolicyFatafat"; }, []);
+  useMeta(
+    "Terms & Conditions | Policy Fatafat",
+    "Read the terms and conditions governing the use of Policy Fatafat's motor insurance comparison platform and related services."
+  );
 
   return (
     <div className="min-h-[100dvh] flex flex-col bg-muted/30">

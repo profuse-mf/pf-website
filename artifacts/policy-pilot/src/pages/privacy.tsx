@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useMeta } from "@/lib/use-meta";
 import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
 
@@ -116,7 +117,10 @@ const SECTIONS = [
 ];
 
 export default function PrivacyPage() {
-  useEffect(() => { document.title = "Privacy Policy | PolicyFatafat"; }, []);
+  useMeta(
+    "Privacy Policy | Policy Fatafat",
+    "Learn how Policy Fatafat collects, uses, stores, and protects your personal information while using our insurance comparison services."
+  );
 
   return (
     <div className="min-h-[100dvh] flex flex-col bg-muted/30">

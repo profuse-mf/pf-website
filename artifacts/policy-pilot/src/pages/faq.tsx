@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useMeta } from "@/lib/use-meta";
 import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
 import { Link } from "wouter";
@@ -90,7 +91,10 @@ const FAQ_SECTIONS = [
 ];
 
 export default function FaqPage() {
-  useEffect(() => { document.title = "FAQs | PolicyFatafat"; }, []);
+  useMeta(
+    "Frequently Asked Questions | Policy Fatafat",
+    "Find answers to common questions about Policy Fatafat's motor insurance comparison platform, car insurance, bike insurance, and policy-related queries."
+  );
   return (
     <div className="min-h-[100dvh] flex flex-col bg-muted/30">
       <Navbar />

@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useMeta } from "@/lib/use-meta";
 import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
 import { ALL_PARTNERS } from "@/data/partners";
@@ -7,7 +8,10 @@ import { ExternalLink } from "lucide-react";
 import BrandLogo from "@/components/ui/brand-logo";
 
 export default function OurPartnersPage() {
-  useEffect(() => { document.title = "Our Partners | PolicyFatafat"; }, []);
+  useMeta(
+    "Our Partners | Policy Fatafat",
+    "View the insurance companies partnered with Policy Fatafat to offer car and bike insurance plans for comparison and purchase."
+  );
   return (
     <div className="min-h-[100dvh] flex flex-col bg-muted/30">
       <Navbar />

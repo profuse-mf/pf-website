@@ -6,6 +6,7 @@ import Footer from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import type { FormValues } from "@/lib/form-schema";
 import { createApplication, captureUtmParams, getStoredUtm } from "@/lib/application-api";
+import { useMeta } from "@/lib/use-meta";
 import {
   GitCompareArrows, RefreshCw, BarChart3, FileSearch,
   Headphones, Lock, Car, CheckCircle2, Bike, ShieldCheck, Wrench, ListChecks,
@@ -158,10 +159,11 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 export default function Home() {
   const [, navigate] = useLocation();
 
-  useEffect(() => {
-    document.title = "PolicyFatafat – Compare Car & Bike Insurance Online";
-    captureUtmParams();
-  }, []);
+  useMeta(
+    "Car Insurance Online || Bike Insurance Online || Motor Insurance Aggregator",
+    "Compare car insurance and bike insurance online with Policy Fatafat. Explore motor insurance plans, compare premiums, and renew policies easily."
+  );
+  useEffect(() => { captureUtmParams(); }, []);
 
   const utmDefaults = useMemo<FormValues | null>(() => {
     const params = new URLSearchParams(window.location.search);
