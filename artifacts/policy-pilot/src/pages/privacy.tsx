@@ -2,361 +2,215 @@ import { useEffect } from "react";
 import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
 
+const SECTIONS = [
+  {
+    title: "About Us",
+    content: "Policy Fatafat is an online insurance aggregation and facilitation platform operated by Profuse Services, helping users compare, explore, and purchase insurance products digitally through partnered insurers and intermediaries.",
+  },
+  {
+    title: "Information We Collect",
+    subsections: [
+      {
+        label: "Personal Information",
+        bullets: [
+          "Full Name", "Mobile Number", "Email Address", "Address and City",
+          "Date of Birth", "Vehicle Details", "Insurance Requirements",
+          "KYC-related details (if required)", "IP Address and Device Information",
+        ],
+      },
+      {
+        label: "Non-Personal Information",
+        bullets: [
+          "Browser Type", "Operating System", "Referral Source",
+          "Website Usage Data", "Cookies and Analytics Data",
+        ],
+      },
+    ],
+  },
+  {
+    title: "How We Use Your Information",
+    intro: "Your information may be used for the following purposes:",
+    bullets: [
+      "To provide insurance comparison and policy assistance services",
+      "To generate insurance quotations",
+      "To connect you with insurance providers and partners",
+      "To improve website functionality and customer experience",
+      "To send policy reminders, updates, offers, and service communications",
+      "To verify identity and prevent fraudulent activities",
+      "To comply with legal and regulatory obligations",
+    ],
+  },
+  {
+    title: "Information Sharing & Disclosure",
+    intro: "We may share your information only with:",
+    bullets: [
+      "Insurance companies and insurance partners",
+      "Third-party service providers assisting in operations",
+      "Verification and KYC agencies",
+      "Regulatory authorities where required by law",
+      "Technology and analytics partners for platform improvement",
+    ],
+    footer: "We do not sell, rent, or trade your personal information to third parties for independent marketing purposes.",
+  },
+  {
+    title: "Cookies & Tracking Technologies",
+    intro: "Our website may use cookies, pixels, and similar tracking technologies to:",
+    bullets: [
+      "Enhance user experience",
+      "Understand website traffic and behavior",
+      "Personalize content and advertisements",
+      "Improve platform performance",
+    ],
+    footer: "Users may disable cookies through browser settings; however, some website features may not function properly.",
+  },
+  {
+    title: "Data Security",
+    content: "We implement appropriate technical and organizational security measures to protect your personal information against unauthorized access, misuse, alteration, disclosure, or destruction. While we strive to use commercially acceptable means to protect your information, no digital platform can guarantee absolute security.",
+  },
+  {
+    title: "Third-Party Links",
+    content: "Our platform may contain links to third-party websites or insurance partner portals. We are not responsible for the privacy practices, policies, or content of such external websites. Users are encouraged to review the respective privacy policies of third-party platforms before sharing information.",
+  },
+  {
+    title: "User Consent",
+    intro: "By using Policy Fatafat and submitting your information, you consent to:",
+    bullets: [
+      "Collection and processing of your information",
+      "Receiving calls, SMS, WhatsApp messages, and emails related to insurance services",
+      "Communication from our authorized representatives and partners",
+    ],
+  },
+  {
+    title: "Data Retention",
+    intro: "We retain user information only for as long as necessary to:",
+    bullets: [
+      "Provide services",
+      "Fulfill legal obligations",
+      "Resolve disputes",
+      "Enforce agreements and compliance requirements",
+    ],
+  },
+  {
+    title: "Your Rights",
+    intro: "You may request to:",
+    bullets: [
+      "Access your personal information",
+      "Correct inaccurate data",
+      "Withdraw consent where applicable",
+      "Request deletion of information subject to legal obligations",
+    ],
+    footer: "For such requests, users may contact us using the details provided below.",
+  },
+  {
+    title: "Children's Privacy",
+    content: "Our services are intended for individuals above 18 years of age. We do not knowingly collect personal information from minors.",
+  },
+  {
+    title: "Changes to This Privacy Policy",
+    content: "We reserve the right to modify or update this Privacy Policy at any time without prior notice. Updated versions will be posted on this page with the revised effective date.",
+  },
+  {
+    title: "Contact Us",
+    contactBlock: true,
+  },
+];
+
 export default function PrivacyPage() {
   useEffect(() => { document.title = "Privacy Policy | PolicyFatafat"; }, []);
+
   return (
     <div className="min-h-[100dvh] flex flex-col bg-muted/30">
       <Navbar />
       <main className="flex-1 container mx-auto max-w-3xl px-4 py-16">
-        <h1 className="text-4xl font-extrabold tracking-tight mb-2">Privacy Policy</h1>
-        <p className="text-muted-foreground text-sm mb-10">Last Updated: June 1, 2026</p>
 
-        <div className="prose prose-sm max-w-none space-y-8 text-foreground">
-          <p className="text-muted-foreground leading-relaxed">
-            Welcome to PolicyFatafat ("PolicyFatafat", "we", "our", or "us").
+        <h1 className="text-4xl font-extrabold tracking-tight mb-1">Privacy Policy</h1>
+        <p className="text-muted-foreground text-sm">Policy Fatafat</p>
+        <p className="text-muted-foreground text-sm mb-8">Effective Date: June 1, 2026</p>
+
+        {/* Intro block */}
+        <div className="bg-white rounded-xl border p-5 shadow-sm mb-6 text-sm text-muted-foreground leading-relaxed space-y-2">
+          <p>Welcome to Policy Fatafat.</p>
+          <p>
+            Policy Fatafat ("Company", "we", "our", "us") is committed to protecting and
+            respecting your privacy. This Privacy Policy explains how we collect, use, store,
+            share, and safeguard your information when you visit our website and use our
+            insurance-related services.
           </p>
-          <p className="text-muted-foreground leading-relaxed">
-            At PolicyFatafat, we value your privacy and are committed to protecting your personal
-            information. This Privacy Policy explains how we collect, use, process, store, disclose,
-            and safeguard your information when you access or use our website, mobile applications,
-            products, services, and related platforms.
-          </p>
-          <p className="text-muted-foreground leading-relaxed">
-            By accessing or using PolicyFatafat, you agree to the collection and use of information
-            in accordance with this Privacy Policy.
-          </p>
-
-          <section>
-            <h2 className="text-xl font-bold mb-3">1. Who We Are</h2>
-            <p className="text-muted-foreground leading-relaxed">
-              PolicyFatafat is not an insurance company and does not issue, underwrite, or service
-              insurance policies. We operate as a digital facilitation platform that connects users
-              with licensed insurance providers and/or registered insurance intermediaries. All policy
-              issuance, underwriting, premium determination, servicing, and claims are handled solely
-              by the respective licensed provider or intermediary, subject to their terms and
-              applicable regulations.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold mb-3">2. Information We Collect</h2>
-
-            <h3 className="text-base font-semibold mt-4 mb-2">A. Personal Information</h3>
-            <p className="text-muted-foreground leading-relaxed mb-2">
-              When you use our services, submit forms, request quotes, compare policies, or contact
-              us, we may collect:
-            </p>
-            <ul className="list-disc list-inside text-muted-foreground space-y-1">
-              <li>Mobile number</li>
-              <li>Email address</li>
-              <li>City and state</li>
-              <li>PIN code</li>
-              <li>Insurance preferences</li>
-              <li>Vehicle information</li>
-              <li>Health-related information (when relevant for insurance inquiries)</li>
-              <li>Any other information voluntarily submitted by you</li>
-            </ul>
-
-            <h3 className="text-base font-semibold mt-4 mb-2">B. Technical Information</h3>
-            <p className="text-muted-foreground leading-relaxed mb-2">
-              We may automatically collect:
-            </p>
-            <ul className="list-disc list-inside text-muted-foreground space-y-1">
-              <li>IP address</li>
-              <li>Device identifiers</li>
-              <li>Browser type</li>
-              <li>Device model</li>
-              <li>Operating system</li>
-              <li>Language preferences</li>
-              <li>Screen resolution</li>
-              <li>Referring URLs</li>
-              <li>Clickstream data</li>
-              <li>Website interaction data</li>
-              <li>Session information</li>
-            </ul>
-
-            <h3 className="text-base font-semibold mt-4 mb-2">C. Location Information</h3>
-            <p className="text-muted-foreground leading-relaxed mb-2">We may collect:</p>
-            <ul className="list-disc list-inside text-muted-foreground space-y-1">
-              <li>Approximate location based on IP address</li>
-              <li>City-level location information</li>
-              <li>State and country information</li>
-            </ul>
-            <p className="text-muted-foreground leading-relaxed mt-2">
-              We do not collect precise GPS location unless explicitly authorized by you.
-            </p>
-
-            <h3 className="text-base font-semibold mt-4 mb-2">D. Communication Information</h3>
-            <p className="text-muted-foreground leading-relaxed mb-2">
-              When you communicate with us, we may collect:
-            </p>
-            <ul className="list-disc list-inside text-muted-foreground space-y-1">
-              <li>Support requests</li>
-              <li>Feedback</li>
-              <li>Survey responses</li>
-              <li>Email communications</li>
-              <li>Chat interactions</li>
-              <li>Customer service conversations</li>
-            </ul>
-
-            <h3 className="text-base font-semibold mt-4 mb-2">E. Marketing and Lead Information</h3>
-            <p className="text-muted-foreground leading-relaxed mb-2">
-              When you submit a quote request, application inquiry, callback request, or lead form,
-              we may collect:
-            </p>
-            <ul className="list-disc list-inside text-muted-foreground space-y-1">
-              <li>Product preferences</li>
-              <li>Coverage requirements</li>
-              <li>Budget preferences</li>
-              <li>Policy renewal details</li>
-              <li>Vehicle registration details</li>
-              <li>Insurance history</li>
-              <li>Financial product interests</li>
-            </ul>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold mb-3">3. How We Use Your Information</h2>
-            <p className="text-muted-foreground leading-relaxed mb-2">
-              We may use your information for the following purposes:
-            </p>
-            <ul className="list-disc list-inside text-muted-foreground space-y-1">
-              <li>Providing requested services</li>
-              <li>Generating insurance quotes</li>
-              <li>Facilitating policy comparisons</li>
-              <li>Connecting users with insurance providers</li>
-              <li>Processing inquiries and requests</li>
-              <li>Customer support and issue resolution</li>
-              <li>Fraud prevention and risk management</li>
-              <li>Website analytics and performance monitoring</li>
-              <li>Improving user experience</li>
-              <li>Personalizing recommendations</li>
-              <li>Marketing communications</li>
-              <li>Product development</li>
-              <li>Compliance with legal obligations</li>
-              <li>Internal reporting and business operations</li>
-            </ul>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold mb-3">4. Lead Sharing and Partner Disclosure</h2>
-            <p className="text-muted-foreground leading-relaxed mb-2">
-              PolicyFatafat may share user information with:
-            </p>
-            <ul className="list-disc list-inside text-muted-foreground space-y-1 mb-4">
-              <li>Insurance companies</li>
-              <li>Insurance brokers</li>
-              <li>Insurance aggregators</li>
-              <li>Technology service providers</li>
-              <li>CRM and customer support platforms</li>
-            </ul>
-            <p className="text-muted-foreground leading-relaxed mb-2">
-              Such sharing is performed only for purposes related to providing quotations, policy
-              information, product recommendations, customer support, underwriting processes,
-              application processing, and related services.
-            </p>
-            <p className="text-muted-foreground leading-relaxed mb-2">
-              By submitting your information through PolicyFatafat, you expressly consent to being
-              contacted by our partners through:
-            </p>
-            <ul className="list-disc list-inside text-muted-foreground space-y-1 mb-2">
-              <li>Phone calls</li>
-              <li>SMS</li>
-              <li>WhatsApp</li>
-              <li>Email</li>
-              <li>Push notifications</li>
-            </ul>
-            <p className="text-muted-foreground leading-relaxed">
-              even if your number is registered under DND or NDNC registries, where legally
-              permissible.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold mb-3">5. Cookies and Tracking Technologies</h2>
-            <p className="text-muted-foreground leading-relaxed mb-2">
-              We use cookies and similar technologies including:
-            </p>
-            <ul className="list-disc list-inside text-muted-foreground space-y-1 mb-4">
-              <li>Browser cookies</li>
-              <li>Session cookies</li>
-              <li>Persistent cookies</li>
-              <li>Pixel tags</li>
-              <li>Web beacons</li>
-              <li>Analytics scripts</li>
-            </ul>
-            <p className="text-muted-foreground leading-relaxed mb-2">
-              These technologies help us:
-            </p>
-            <ul className="list-disc list-inside text-muted-foreground space-y-1 mb-4">
-              <li>Improve website performance</li>
-              <li>Remember user preferences</li>
-              <li>Measure campaign effectiveness</li>
-              <li>Understand user behavior</li>
-              <li>Deliver relevant advertisements</li>
-            </ul>
-            <p className="text-muted-foreground leading-relaxed">
-              You may disable cookies through your browser settings. However, some features of the
-              website may not function properly.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold mb-3">6. Analytics and Advertising</h2>
-            <p className="text-muted-foreground leading-relaxed mb-2">
-              We may use third-party analytics and advertising services such as:
-            </p>
-            <ul className="list-disc list-inside text-muted-foreground space-y-1 mb-4">
-              <li>Google Analytics</li>
-              <li>Google Ads</li>
-              <li>Google Tag Manager</li>
-              <li>Meta Pixel</li>
-              <li>Microsoft Clarity</li>
-              <li>Firebase Analytics</li>
-              <li>Other analytics and marketing platforms</li>
-            </ul>
-            <p className="text-muted-foreground leading-relaxed">
-              These services may collect information regarding your usage of the website to help us
-              improve our services and marketing effectiveness.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold mb-3">7. Data Security</h2>
-            <p className="text-muted-foreground leading-relaxed mb-2">
-              We implement reasonable technical, administrative, and organizational safeguards to
-              protect your information.
-            </p>
-            <p className="text-muted-foreground leading-relaxed mb-2">
-              Security measures may include:
-            </p>
-            <ul className="list-disc list-inside text-muted-foreground space-y-1 mb-4">
-              <li>SSL encryption</li>
-              <li>Secure server infrastructure</li>
-              <li>Access controls</li>
-              <li>Firewalls</li>
-              <li>Monitoring systems</li>
-              <li>Data minimization practices</li>
-            </ul>
-            <p className="text-muted-foreground leading-relaxed">
-              While we strive to protect your information, no internet transmission or storage
-              system can be guaranteed to be 100% secure.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold mb-3">8. Data Retention</h2>
-            <p className="text-muted-foreground leading-relaxed mb-2">
-              We retain personal information only for as long as necessary to:
-            </p>
-            <ul className="list-disc list-inside text-muted-foreground space-y-1 mb-2">
-              <li>Provide services</li>
-              <li>Fulfill legal obligations</li>
-              <li>Resolve disputes</li>
-              <li>Enforce agreements</li>
-              <li>Maintain business records</li>
-            </ul>
-            <p className="text-muted-foreground leading-relaxed mt-2">
-              Retention periods may vary depending on the nature of the information and applicable
-              legal requirements.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold mb-3">9. Your Rights</h2>
-            <p className="text-muted-foreground leading-relaxed mb-2">
-              Depending on applicable laws, you may have rights to:
-            </p>
-            <ul className="list-disc list-inside text-muted-foreground space-y-1 mb-4">
-              <li>Access your information</li>
-              <li>Correct inaccurate information</li>
-              <li>Request deletion of information</li>
-              <li>Withdraw consent</li>
-              <li>Object to certain processing activities</li>
-              <li>Request restriction of processing</li>
-              <li>Request data portability</li>
-            </ul>
-            <p className="text-muted-foreground leading-relaxed">
-              To exercise these rights, please contact us using the details provided below.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold mb-3">10. Third-Party Websites</h2>
-            <p className="text-muted-foreground leading-relaxed mb-2">
-              Our website may contain links to third-party websites, insurance providers, or partner platforms.
-            </p>
-            <p className="text-muted-foreground leading-relaxed">
-              We do not control and are not responsible for the privacy practices, content, or
-              security of third-party websites. Users should review the privacy policies of such
-              websites independently.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold mb-3">11. Compliance With Applicable Laws</h2>
-            <p className="text-muted-foreground leading-relaxed mb-2">
-              We aim to comply with applicable privacy and data protection laws, including:
-            </p>
-            <ul className="list-disc list-inside text-muted-foreground space-y-1">
-              <li>Information Technology Act, 2000</li>
-              <li>Information Technology Rules applicable in India</li>
-              <li>Digital Personal Data Protection Act (DPDP Act), where applicable</li>
-              <li>Other relevant regulatory requirements</li>
-            </ul>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold mb-3">12. Changes to This Privacy Policy</h2>
-            <p className="text-muted-foreground leading-relaxed mb-2">
-              We may update this Privacy Policy from time to time.
-            </p>
-            <p className="text-muted-foreground leading-relaxed">
-              Any modifications will be posted on this page along with the updated effective date.
-              Continued use of our services after such updates constitutes acceptance of the revised
-              Privacy Policy.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold mb-3">13. Contact Us</h2>
-            <p className="text-muted-foreground leading-relaxed mb-2">
-              If you have any questions, concerns, requests, or complaints regarding this Privacy
-              Policy or our data handling practices, please contact us:
-            </p>
-            <p className="text-muted-foreground leading-relaxed">
-              <strong>PolicyFatafat</strong>
-              <br />
-              Website:{" "}
-              <a href="https://policyfatafat.com" className="text-primary hover:underline">
-                https://policyfatafat.com
-              </a>
-              <br />
-              Email:{" "}
-              <a href="mailto:support@policyfatafat.com" className="text-primary hover:underline">
-                support@policyfatafat.com
-              </a>
-              <br />
-              Contact Page:{" "}
-              <a href="https://policyfatafat.com/contact" className="text-primary hover:underline">
-                https://policyfatafat.com/contact
-              </a>
-            </p>
-            <p className="text-muted-foreground leading-relaxed mt-2">
-              We will make reasonable efforts to respond to your inquiries within an appropriate
-              timeframe.
-            </p>
-          </section>
-
-          <section className="border-t pt-6">
-            <h2 className="text-xl font-bold mb-3">Consent</h2>
-            <p className="text-muted-foreground leading-relaxed">
-              By accessing or using PolicyFatafat, submitting information through our forms,
-              requesting quotes, comparing products, or interacting with our services, you
-              acknowledge that you have read, understood, and agreed to this Privacy Policy.
-            </p>
-          </section>
+          <p>By accessing or using our platform, you agree to the terms outlined in this Privacy Policy.</p>
         </div>
+
+        {/* Sections */}
+        <div className="space-y-4">
+          {SECTIONS.map((sec, i) => (
+            <section key={sec.title} className="bg-white rounded-xl border p-6 shadow-sm">
+              <h2 className="text-lg font-bold text-foreground mb-4">{i + 1}. {sec.title}</h2>
+
+              {"intro" in sec && sec.intro && (
+                <p className="text-muted-foreground text-sm leading-relaxed mb-3">{sec.intro}</p>
+              )}
+
+              {"content" in sec && sec.content && (
+                <p className="text-muted-foreground text-sm leading-relaxed">{sec.content}</p>
+              )}
+
+              {"bullets" in sec && sec.bullets && (
+                <ul className="space-y-2">
+                  {(sec.bullets as string[]).map((b) => (
+                    <li key={b} className="flex items-start gap-2.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0 mt-[7px]" />
+                      <span className="text-muted-foreground text-sm leading-relaxed">{b}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              {"subsections" in sec && sec.subsections && (
+                <div className="space-y-5">
+                  {sec.subsections.map((sub) => (
+                    <div key={sub.label}>
+                      <p className="text-sm font-semibold text-foreground mb-2">{sub.label}</p>
+                      <ul className="space-y-1.5">
+                        {sub.bullets.map((b) => (
+                          <li key={b} className="flex items-start gap-2.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0 mt-[7px]" />
+                            <span className="text-muted-foreground text-sm">{b}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {"footer" in sec && sec.footer && (
+                <p className="text-muted-foreground text-sm leading-relaxed mt-3 pt-3 border-t">{sec.footer}</p>
+              )}
+
+              {"contactBlock" in sec && sec.contactBlock && (
+                <div className="text-sm text-muted-foreground space-y-1">
+                  <p>For questions, concerns, or requests regarding this Privacy Policy, please contact:</p>
+                  <div className="mt-3 space-y-1">
+                    <p className="font-semibold text-foreground">Policy Fatafat</p>
+                    <p>Website: <a href="https://www.policyfatafat.com" className="text-primary hover:underline">www.policyfatafat.com</a></p>
+                    <p>Email: <a href="mailto:support@policyfatafat.com" className="text-primary hover:underline">support@policyfatafat.com</a></p>
+                    <p>Company: Profuse Services</p>
+                  </div>
+                </div>
+              )}
+            </section>
+          ))}
+        </div>
+
+        {/* Disclaimer note */}
+        <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 px-5 py-4">
+          <p className="text-sm text-amber-800 leading-relaxed">
+            <span className="font-semibold">Disclaimer: </span>
+            Policy Fatafat is an insurance aggregation and facilitation platform and does not
+            underwrite insurance policies directly. Insurance products are offered by respective
+            insurance companies subject to their terms, conditions, and approvals.
+          </p>
+        </div>
+
       </main>
       <Footer />
     </div>
