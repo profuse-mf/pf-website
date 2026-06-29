@@ -1,12 +1,24 @@
 import React, { useEffect, useMemo } from "react";
-import { useLocation } from "wouter";
+import { Link, useLocation } from "wouter";
 import HeroForm from "@/components/home/hero-form";
 import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
+import { Button } from "@/components/ui/button";
 import type { FormValues } from "@/lib/form-schema";
 import { createApplication, captureUtmParams, getStoredUtm } from "@/lib/application-api";
+import { CheckCircle2 } from "lucide-react";
 
 export type { FormValues };
+
+const WHY_CHOOSE = [
+  "Compare insurance plans from multiple insurers.",
+  "Easy online policy purchase and renewal process.",
+  "Transparent premium comparisons.",
+  "Quick access to policy details and coverage options.",
+  "Support throughout the insurance selection process.",
+  "Secure and hassle-free experience.",
+  "Options for both comprehensive and third-party vehicle insurance.",
+];
 
 export default function Home() {
   const [, navigate] = useLocation();
@@ -65,7 +77,47 @@ export default function Home() {
     <div className="min-h-[100dvh] flex flex-col bg-muted/30">
       <Navbar />
       <main className="flex-1 flex flex-col">
+        {/* Hero form */}
         <HeroForm onSubmit={handleFormSubmit} defaultValues={utmDefaults} />
+
+        {/* H1 + intro description */}
+        <section className="bg-white border-t">
+          <div className="container mx-auto max-w-3xl px-4 py-12 text-center">
+            <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground mb-6">
+              Compare &amp; Buy Bike and Car Insurance Online with Policy Fatafat
+            </h1>
+            <p className="text-muted-foreground leading-relaxed text-base md:text-lg">
+              Policy Fatafat is a trusted insurance aggregator that helps customers compare and
+              purchase bike and car insurance policies from multiple insurance providers in one
+              place. Whether you're looking to renew your policy or buy insurance for a new
+              vehicle, Policy Fatafat makes the process simple, transparent, and convenient.
+            </p>
+          </div>
+        </section>
+
+        {/* Why Choose Policy Fatafat */}
+        <section className="bg-muted/40 border-t">
+          <div className="container mx-auto max-w-3xl px-4 py-12">
+            <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground mb-8 text-center">
+              Why Choose Policy Fatafat?
+            </h2>
+            <ul className="space-y-4 mb-10">
+              {WHY_CHOOSE.map((item) => (
+                <li key={item} className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                  <span className="text-muted-foreground leading-relaxed">{item}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="flex justify-center">
+              <Link href="#top" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+                <Button size="lg" className="font-bold text-base px-10">
+                  Get Quote
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
       </main>
       <Footer />
     </div>
