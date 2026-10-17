@@ -177,27 +177,43 @@ export default function Home() {
     };
   }, []);
 
-  const handleFormSubmit = (data: FormValues) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleFormSubmit = async (data: FormValues) => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     const utm = getStoredUtm();
-    createApplication({
-      vehicle_type: data.insuranceType === "car" ? "Car" : "Bike",
-      reg_no: data.registrationNumber || null,
-      pincode: data.pinCode || null,
-      reg_year: data.registrationYear ? parseInt(data.registrationYear) : null,
-      model: data.carModel || null, brand: null,
-      mobile_no: data.mobileNumber || null,
-      expiry_date: data.policyExpiryDate || null,
-      email: data.email || null,
-      utm_source: utm.utm_source, utm_medium: utm.utm_medium,
-      utm_partner: utm.utm_partner, utm_channel: utm.utm_channel,
-    });
-    sessionStorage.setItem("offersData", JSON.stringify({
-      vehicleType: data.insuranceType,
-      registrationNumber: data.registrationNumber,
-      model: data.carModel ?? "",
-    }));
-    navigate("/offers");
-    scrollToTop();
+    try {
+      const result = await createApplication({
+        vehicle_type: data.insuranceType === "car" ? "Car" : "Bike",
+        reg_no: data.registrationNumber || null,
+        pincode: data.pinCode || null,
+        reg_year: data.registrationYear ? parseInt(data.registrationYear) : null,
+        model: data.carModel || null, brand: null,
+        mobile_no: data.mobileNumber || null,
+        expiry_date: data.policyExpiryDate || null,
+        email: data.email || null,
+        utm_source: utm.utm_source, utm_medium: utm.utm_medium,
+        utm_partner: utm.utm_partner, utm_channel: utm.utm_channel,
+      });
+
+      // Policybazaar CreateLead success → redirect to PB quotes URL
+      if (result.redirect_url) {
+        window.location.href = result.redirect_url;
+        return;
+      }
+
+      // Else fall back to partner offers (Trackier links)
+      sessionStorage.setItem("offersData", JSON.stringify({
+        vehicleType: data.insuranceType,
+        registrationNumber: data.registrationNumber,
+        model: data.carModel ?? "",
+      }));
+      navigate("/offers");
+      scrollToTop();
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const lastIsOdd = WHY_CHOOSE.length % 3 !== 0;
@@ -209,7 +225,11 @@ export default function Home() {
 
         {/* ── Hero form ──────────────────────────────────────────── */}
         <div id="hero-form">
-          <HeroForm onSubmit={handleFormSubmit} defaultValues={utmDefaults} />
+          <HeroForm
+            onSubmit={handleFormSubmit}
+            defaultValues={utmDefaults}
+            isSubmitting={isSubmitting}
+          />
         </div>
 
         {/* ── H1 + intro ─────────────────────────────────────────── */}

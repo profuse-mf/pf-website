@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Car, Bike, ShieldCheck, Zap, Users, CheckCircle2, Star } from "lucide-react";
+import { Car, Bike, ShieldCheck, Zap, Users, CheckCircle2, Star, Loader2 } from "lucide-react";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -17,8 +17,9 @@ const instantSchema = z.object({
 type InstantValues = z.infer<typeof instantSchema>;
 
 interface PolicyHeroFormProps {
-  onSubmit: (data: InstantValues) => void;
+  onSubmit: (data: InstantValues) => void | Promise<void>;
   defaultValues?: Partial<InstantValues> | null;
+  isSubmitting?: boolean;
 }
 
 const COVERAGE_ITEMS = [
@@ -65,7 +66,7 @@ function WhatsAppIcon() {
   );
 }
 
-export default function PolicyHeroForm({ onSubmit, defaultValues }: PolicyHeroFormProps) {
+export default function PolicyHeroForm({ onSubmit, defaultValues, isSubmitting = false }: PolicyHeroFormProps) {
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [wantsWhatsApp, setWantsWhatsApp] = useState(true);
   const [termsError, setTermsError] = useState(false);
@@ -228,13 +229,22 @@ export default function PolicyHeroForm({ onSubmit, defaultValues }: PolicyHeroFo
                       type="button"
                       size="lg"
                       className="w-full text-base h-12 font-semibold shadow-lg shadow-primary/20"
+                      disabled={isSubmitting}
                       onClick={() => {
+                        if (isSubmitting) return;
                         if (!agreedToTerms) { setTermsError(true); return; }
                         setTermsError(false);
                         form.handleSubmit(onSubmit)();
                       }}
                     >
-                      View Insurance Plans
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                          Getting your quotes...
+                        </>
+                      ) : (
+                        "View Insurance Plans"
+                      )}
                     </Button>
                   </form>
                 </Form>

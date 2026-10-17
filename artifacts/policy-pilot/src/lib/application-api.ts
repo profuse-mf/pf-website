@@ -16,6 +16,13 @@ export interface ApplicationPayload {
   utm_channel: string | null;
 }
 
+export interface CreateApplicationResult {
+  success: boolean;
+  redirect_url: string | null;
+  application_id?: number;
+  user_id?: number;
+}
+
 async function encryptPayload(
   payload: ApplicationPayload
 ): Promise<Record<string, string | null>> {
@@ -28,16 +35,44 @@ async function encryptPayload(
   return Object.fromEntries(entries);
 }
 
-export async function createApplication(payload: ApplicationPayload): Promise<void> {
+/**
+ * Submits lead to pp-api (via local proxy).
+ * On Policybazaar CreateLead success, returns redirect_url.
+ * Caller should redirect to that URL, else fall back to Trackier/offers.
+ */
+export async function createApplication(
+  payload: ApplicationPayload
+): Promise<CreateApplicationResult> {
   try {
     const encrypted = await encryptPayload(payload);
-    await fetch("/api/application/create", {
+    const response = await fetch("/api/application/create", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(encrypted),
     });
+
+    const data = (await response.json().catch(() => null)) as {
+      success?: boolean;
+      redirect_url?: string | null;
+      pb_lead?: { success?: boolean; redirect_url?: string | null };
+      application_id?: number;
+      user_id?: number;
+    } | null;
+
+    const redirectUrl =
+      data?.redirect_url ||
+      data?.pb_lead?.redirect_url ||
+      null;
+
+    return {
+      success: Boolean(data?.success ?? response.ok),
+      redirect_url: redirectUrl,
+      application_id: data?.application_id,
+      user_id: data?.user_id,
+    };
   } catch (err) {
     console.error("[application-api] failed to submit:", err);
+    return { success: false, redirect_url: null };
   }
 }
 

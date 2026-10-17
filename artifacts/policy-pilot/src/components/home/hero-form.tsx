@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion, AnimatePresence } from "framer-motion";
-import { Car, Bike, ShieldCheck, Zap, Users, CheckCircle2, ChevronDown, AlertCircle } from "lucide-react";
+import { Car, Bike, ShieldCheck, Zap, Users, CheckCircle2, ChevronDown, AlertCircle, Loader2 } from "lucide-react";
 import { FormValues, formSchema } from "@/lib/form-schema";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -61,13 +61,14 @@ function DateDropdowns({ value, onChange, startYear }: { value: string; onChange
 }
 
 interface HeroFormProps {
-  onSubmit: (data: FormValues) => void;
+  onSubmit: (data: FormValues) => void | Promise<void>;
   defaultValues: FormValues | null;
+  isSubmitting?: boolean;
 }
 
 const CURRENT_YEAR = new Date().getFullYear();
 
-export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
+export default function HeroForm({ onSubmit, defaultValues, isSubmitting = false }: HeroFormProps) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: defaultValues || {
@@ -456,10 +457,26 @@ export default function HeroForm({ onSubmit, defaultValues }: HeroFormProps) {
                   )}
                 </div>
 
-                <Button type="button" size="lg" className="w-full text-lg h-14 font-semibold shadow-xl shadow-primary/20"
-                  onClick={() => { if (!agreedToTerms) { setTermsError(true); return; } setTermsError(false); handleFormSubmit(); }}
+                <Button
+                  type="button"
+                  size="lg"
+                  className="w-full text-lg h-14 font-semibold shadow-xl shadow-primary/20"
+                  disabled={isSubmitting}
+                  onClick={() => {
+                    if (isSubmitting) return;
+                    if (!agreedToTerms) { setTermsError(true); return; }
+                    setTermsError(false);
+                    handleFormSubmit();
+                  }}
                 >
-                  View Insurance Plans
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                      Getting your quotes...
+                    </>
+                  ) : (
+                    "View Insurance Plans"
+                  )}
                 </Button>
               </form>
             </Form>
