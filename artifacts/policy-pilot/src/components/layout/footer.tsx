@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { MapPin, Phone, Shield } from "lucide-react";
+import { MapPin, Shield } from "lucide-react";
 
 function FacebookIcon() {
   return (
@@ -50,14 +50,11 @@ const SOCIAL_LINKS = [
 ];
 
 const QUICK_LINKS = [
-  { label: "About Us",          to: "/about" },
-  { label: "Contact Us",        to: "/contact" },
   { label: "How It Works",      to: "/how-it-works" },
   { label: "Blog",              to: "/blog" },
   { label: "Privacy Policy",    to: "/privacy" },
   { label: "Terms & Conditions",to: "/terms" },
   { label: "FAQ",               to: "/faq" },
-  { label: "Disclaimer",        to: "/disclaimer" },
 ];
 
 const OUR_SERVICES = [
@@ -99,19 +96,13 @@ export default function Footer() {
             <div>
               <p className="text-white font-semibold mb-1">Registered Address</p>
               <address className="not-italic text-gray-400 leading-relaxed text-xs">
-                Money Fatafat<br />
+                Policy Fatafat<br />
                 5th Floor, 175, Spring Board, 91,<br />
                 Bannerghatta Road, JP Nagar 4th Phase,<br />
                 Dollar Layout, Phase 4, J. P. Nagar,<br />
                 Bengaluru, Karnataka – 560078
               </address>
             </div>
-          </div>
-
-          {/* Mobile */}
-          <div className="flex items-center gap-2.5 text-sm">
-            <Phone className="w-4 h-4 shrink-0 text-primary" />
-            <span className="text-gray-400 text-xs">Mobile Number: —</span>
           </div>
         </div>
 
@@ -170,11 +161,10 @@ export default function Footer() {
 
       {/* ── Bottom bar ── */}
       <div className="border-t border-white/5">
-        <div className="container mx-auto max-w-6xl px-4 py-4 flex flex-wrap items-center justify-between gap-2 text-xs text-gray-600">
+        <div className="container mx-auto max-w-6xl px-4 py-4 text-xs text-gray-600">
           <span>
             Powered By © {new Date().getFullYear()} Profuse Services Pvt. Ltd. All Rights Reserved.
           </span>
-          <span>CIN: [Mention Profuse Services CIN]</span>
         </div>
       </div>
 

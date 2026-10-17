@@ -38,7 +38,7 @@ externalPort = 3000
 [userenv]
 
 [userenv.shared]
-CRM_MYSQL_URL = "mysql://profuse:tripleseven7@65.0.185.223:3306/policy_pilot"
+CRM_MYSQL_URL = "mysql://profuse:tripleseven7@43.205.117.243:3306/policy_pilot"
 
 [nix]
 channel = "stable-25_05"
