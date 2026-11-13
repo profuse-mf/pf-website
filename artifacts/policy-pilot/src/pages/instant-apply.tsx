@@ -67,6 +67,7 @@ export default function InstantApplyPage() {
 
       const result = await createApplication({
         vehicle_type: "Car",
+        // utm_channel on inbound WA links carries the reg number — use it only as reg_no
         reg_no: utmChannel,
         pincode: null,
         reg_year: null,
@@ -78,7 +79,8 @@ export default function InstantApplyPage() {
         utm_source: utmSource,
         utm_medium: params.get("utm_medium") || "WA_Red",
         utm_partner: params.get("utm_partner") || "dummy",
-        utm_channel: utmChannel,
+        // Do not forward reg number as utm_channel/utm_term to Policybazaar
+        utm_channel: null,
       });
 
       if (cancelled) return;
